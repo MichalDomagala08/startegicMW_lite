@@ -102,10 +102,10 @@ class createOutputs:
 
         # Check if conversion was successful
         if result.returncode == 0:
-            print(f"✅ EDF converted successfully: {ascii_file}")
+            self.write(f"EDF converted successfully: {ascii_file}")
             return ascii_file
         else:
-            print(f"⚠️ Error converting EDF: {result.stderr}")
+            self.write(f"Error converting EDF: {result.stderr}")
             return None
 
 

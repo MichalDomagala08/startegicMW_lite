@@ -64,7 +64,7 @@ class audioTrial:
             if self.verbose:
                 self.output_control.write(f"   Key {key} pressed at: {self.pausedTime - self.initialTime:.3f}; Reaction Time: {(self.pausedTime - self.probeOnset):.3f}")
 
-            self.output_control.writeToEyeLink(message=f"KEYPRESS {key}")              # Write KeyPress to Eyelink                  
+            self.output_control.writeToEyeLink(message=f"\tKEYPRESS\t{key}\t0")              # Write KeyPress to Eyelink                  
             self.timingLog.append(["KEYPRESS",self.pausedTime  - self.initialTime ,(self.pausedTime - self.probeOnset),self.actual_duration])
             self.responsesTiming.append((keyname , self.pausedTime  - self.initialTime))
             
@@ -75,7 +75,7 @@ class audioTrial:
         message = f"\n   Beginning Part: {self.storyParts[self.currentStoryPart]:12} at exp Time {time.perf_counter()- self.initialTime:9.3f}";
         self.output_control.write(message)
 
-        self.output_control.writeToEyeLink(message=f"PART {self.storyParts[self.currentStoryPart]:12} BEG")
+        self.output_control.writeToEyeLink(message=f"\tPART\t{self.storyParts[self.currentStoryPart]:12}\tBEG")
 
     def log_part_end(self):
         self.timingLog.append(["PROBE",(time.perf_counter() - self.initialTime),0,self.actual_duration])              
@@ -84,7 +84,7 @@ class audioTrial:
         message = f"   Part ended:     {self.storyParts[self.currentStoryPart]:12} at exp Time {time.perf_counter()- self.initialTime:9.3f} (Duration: {self.actual_duration:.3f})"
         self.output_control.write(message)
 
-        self.output_control.writeToEyeLink(message=f"PART {self.storyParts[self.currentStoryPart]:12} END")
+        self.output_control.writeToEyeLink(message=f"\tPART\t{self.storyParts[self.currentStoryPart]:12}\tEND")
         # Write to Psychopy
     def display_fixation_cross(self):
         """

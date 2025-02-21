@@ -4,7 +4,7 @@ import pandas as pd
 import pyaudio, wave
 import pylink
 import time
-from tests.testFunctions import testTiming
+from tests.testFunctions import testTiming,compareEyeTrackingWithBeh,prepareEyeTrackingTiming
 from fileIDInput import createOutputs
 from CalibrationGraphivs import CalibrationGraphics
 from welcomeMessage import welcomeMessage
@@ -13,6 +13,7 @@ from Audio import storyTimeDict1,storyTimeDict2
 from recallTrial import recallTrial
 from welcomeMessage import WelcomeMessage1,WelcomeMessage2,WelcomeMessage3,secondStoryMessage1,secondStoryMessage2,exitMessage1,WelcomeMessage21, secondStoryMessage3
 
+import pickle
 import sys,os,subprocess
 
 #### ----- Setups ------ ####
@@ -42,7 +43,7 @@ font = pygame.font.Font(None, 30)
 
 # story Global parameters Setup:
 storyPart = "welcome1"  # Controlling the experiment flow
-dummyMode = True
+dummyMode = False
 
 outputControll.write("  Experiment Config: ")
 outputControll.write(f"      dummyMode:  {dummyMode}\n")
@@ -114,8 +115,8 @@ while running:
 
                 pylink.openGraphicsEx(genv)  # Register CalibrationGraphics
 
-                el_tracker.sendCommand("automatic_calibration_pacing = 1000")  # Pacing of Targets - allow for automaticity
-                el_tracker.doTrackerSetup()  # Calibration Setup 
+                #el_tracker.sendCommand("automatic_calibration_pacing = 1000")  # Pacing of Targets - allow for automaticity
+                #el_tracker.doTrackerSetup()  # Calibration Setup 
 
                 pylink.pumpDelay(50)            
             except RuntimeError as err:
@@ -147,12 +148,12 @@ while running:
             pylink.pumpDelay(100)  # Small delay to ensure recording starts
 
             outputControll.write(f"\nStarting Audio Trial 1 ({time.time():.3f}) *** ")
-            outputControll.writeToEyeLink("STORY 1 LISTENNG STARTS")
+            outputControll.writeToEyeLink("\tLISTEN\tSTORY_1\tBEG")
             begBlockFlag = False
 
         storyPart = Story1.run()
         if storyPart != "story1":
-            outputControll.writeToEyeLink("STORY 1 LISTENNG ENDS")
+            outputControll.writeToEyeLink("\tLISTEN\tSTORY_1\tEND")
             outputControll.write("\nAnswer Timing Log:")
             outputControll.write(pd.DataFrame(Story1.timingLog,columns=["Event","StoryTime","RT","partDuration"]).to_string())
             begBlockFlag = True
@@ -162,13 +163,13 @@ while running:
         if begBlockFlag:
             outputControll.write(f"\nRecall of Audio  1 ({time.time():.3f} *** \n")
 
-            outputControll.writeToEyeLink("RECALL OF STORY 1 STARTS")
+            outputControll.writeToEyeLink("\tRECALL\tSTORY_1\tBEG")
             begBlockFlag = False
 
         storyPart = recall1.run()
 
         if storyPart != "recall1":
-            outputControll.writeToEyeLink("RECALL OF STORY 1 ENDS")
+            outputControll.writeToEyeLink("\tRECALL\tSTORY_1\tEND")
             begBlockFlag = True
     elif storyPart == "prepstory2":
         if begBlockFlag:
@@ -186,8 +187,8 @@ while running:
             try:
                 pylink.pumpDelay(50)
 
-                el_tracker.sendCommand("automatic_calibration_pacing = 1000")  # Pacing of Targets - allow for automaticity
-                el_tracker.doTrackerSetup()  # Calibration Setup 
+                #el_tracker.sendCommand("automatic_calibration_pacing = 1000")  # Pacing of Targets - allow for automaticity
+                #el_tracker.doTrackerSetup()  # Calibration Setup 
             except RuntimeError as err:
                 print('ERROR:', err)
                 el_tracker.exitCalibration() 
@@ -201,13 +202,13 @@ while running:
 
     elif storyPart == "beforeStoryMessage2":
         if begBlockFlag:
-            outputControll.writeToEyeLink("MESSAGE TO STORY 2 STARTS")
+            outputControll.writeToEyeLink("\t START\t STORY_2\tBEG")
             begBlockFlag = False
 
         storyPart = secondStoryMessage2.run()
 
         if storyPart != "beforeStoryMessage2":
-            outputControll.writeToEyeLink("MESSAGE TO STORY 2 ENDS")
+            outputControll.writeToEyeLink("\tSTART\tSTORY_2\tEND")
             begBlockFlag = True
     elif storyPart == "story2":
 
@@ -217,13 +218,13 @@ while running:
             pylink.pumpDelay(100)  # Small delay to ensure recording starts
             outputControll.write(f"\nStarting Audio Trial 2 ({time.time():.3f} *** \n")
 
-            outputControll.writeToEyeLink("STORY 2 LISTENNG STARTS")
+            outputControll.writeToEyeLink("\tLISTEN\tSTORY_2\tBEG")
             begBlockFlag = False
 
         storyPart = Story2.run()
 
         if storyPart != "story2":
-            outputControll.writeToEyeLink("STORY 2 LISTENNG ENDS")
+            outputControll.writeToEyeLink("\tLISTEN\tSTORY_2\tEND")
             outputControll.write("\nAnswer Timing Log:")
             outputControll.write(pd.DataFrame(Story2.timingLog,columns=["Event","StoryTime","RT","partDuration"]).to_string())
             begBlockFlag = True
@@ -233,21 +234,21 @@ while running:
         if begBlockFlag:
             outputControll.write(f"\nRecall of Audio  1 ({time.time():.3f} *** \n")
 
-            outputControll.writeToEyeLink("RECALL OF STORY 1 STARTS")
+            outputControll.writeToEyeLink("\tRECALL\tSTORY_2\tBEG")
 
             begBlockFlag = False
 
         storyPart = recall2.run()   
 
         if storyPart != "recall2":
-            outputControll.writeToEyeLink("RECALL OF STORY 1 ENDS")
+            outputControll.writeToEyeLink("\tRECALL\tSTORY_2\tEND")
 
             begBlockFlag = True     
     elif storyPart == "exit":
         if begBlockFlag:
             outputControll.write(f"\nEND OF A PROCEDURE ({time.time():.3f}) *** \n")
 
-            outputControll.writeToEyeLink("END OF PROCEDURE")
+            outputControll.writeToEyeLink("\tPROCEDURE\t0\tEND")
 
             begBlockFlag = False
 
@@ -266,11 +267,25 @@ if not dummyMode:
     if not os.path.exists(edf_path):
         os.makedirs(edf_path)  # ✅ Create folder if it doesn’t exist
 
+    # Save Data to a pickle
+    logs = {'story1_beh': pd.DataFrame(Story1.timingLog,columns=["Event","StoryTime","RT","partDuration"]),
+            'story2_beh': pd.DataFrame(Story2.timingLog,columns=["Event","StoryTime","RT","partDuration"])}
+    with open(os.path.join(edf_path,f'{outputControll.ID}.pickle'), 'wb') as handle:
+        pickle.dump(logs, handle, protocol=pickle.HIGHEST_PROTOCOL)
     filePath = os.path.join(edf_path,f'{outputControll.ID}.edf');
     el_tracker.closeDataFile()  # Close the EDF file
     el_tracker.receiveDataFile(f'{outputControll.ID}.edf',os.path.join(edf_path,f'{outputControll.ID}.edf'))
     outputControll.write(f"Eye Tracking data saved to: {filePath}")
     asciiFilePath = outputControll.edf2ascii(filePath);
+
+    ### TESTS
+    EyetrackerDF = prepareEyeTrackingTiming(os.path.join(edf_path,f'{outputControll.ID}.asc'),outputControll)
+    compareEyeTrackingWithBeh(EyetrackerDF,logs['story1_beh'],logs['story2_beh'],outputControll)
+    outputControll.write("Testing EDF file Timing")
+    outputControll.write("   Story1: ")
+    testTiming(EyetrackerDF['story1'].to_numpy(),outputControll)
+    outputControll.write("   Story2: ")
+    testTiming(EyetrackerDF['story2'].to_numpy(),outputControll)
 
     el_tracker.close()  # Disconnect from EyeLink
 

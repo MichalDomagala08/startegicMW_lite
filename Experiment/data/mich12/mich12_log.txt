@@ -1,0 +1,144 @@
+
+       ###### STRATEGIC MW EXPERIMENT v0.98 ######    
+
+  Currently Processing Subject N.: mich12
+  Current Display Information: 
+      Width:  1920
+      Height: 1080
+
+  Experiment Config: 
+      dummyMode:  False
+
+Link established
+Failed to load audio: No file 'type.wav' found in working directory 'C:\Users\Lab\Documents\StrategicMW_lite'.
+
+
+
+EXPERIMENTS STARTS
+
+Calibration of EyeTracker (1740157892.304)
+
+   Calibration Ended (Duration: 0.12133312225341797)
+
+Starting Audio Trial 1 (1740157894.559) *** 
+
+   Beginning Part: INTRODUCTION at exp Time     0.008
+Actual playback duration: 35.284 sec
+   Part ended:     INTRODUCTION at exp Time    35.293 (Duration: 35.284)
+   Key 100 pressed at: 40.919; Reaction Time: 5.627
+
+Story Ends.
+
+Answer Timing Log:
+      Event  StoryTime        RT  partDuration
+0     BEGIN   0.008458  0.000000      0.000000
+1     PROBE  35.292693  0.000000     35.283575
+2  KEYPRESS  40.919242  5.626552     35.283575
+Check Timing:
+Error Below 5 ms: for PROBE in 1 and BEGIN in 0 (0.0007)
+Error Below 5 ms: for KEYPRESS in 2 and PROBE in 1 (-0.0000)
+Difference Between Summed StoryTimes and Summed Event Clock: 0.0091
+
+Recall of Audio  1 (1740157935.483 *** 
+
+Recording Started: (Duration: 47.0137677192688)
+Recording saved as: .\Experiment\data\mich12\Recalls\story1.wav
+Recording Ended:   (Duration: 50.12482285499573)
+
+Calibration of EyeTracker (1740157942.232) *** 
+
+   Calibration Ended (Duration: 0.06046175956726074)
+
+Starting Audio Trial 2 (1740157943.507 *** 
+
+
+   Beginning Part: INTRODUCTION at exp Time     0.007
+Actual playback duration: 40.528 sec
+   Part ended:     INTRODUCTION at exp Time    40.536 (Duration: 40.528)
+   Key 97 pressed at: 43.836; Reaction Time: 3.300
+
+Story Ends.
+
+Answer Timing Log:
+      Event  StoryTime        RT  partDuration
+0     BEGIN   0.007227  0.000000      0.000000
+1     PROBE  40.535890  0.000000     40.527955
+2  KEYPRESS  43.836018  3.300131     40.527955
+Check Timing:
+Error Below 5 ms: for PROBE in 1 and BEGIN in 0 (0.0007)
+Error Below 5 ms: for KEYPRESS in 2 and PROBE in 1 (-0.0000)
+Difference Between Summed StoryTimes and Summed Event Clock: 0.0079
+
+Recall of Audio  1 (1740157987.346 *** 
+
+Recording Started: (Duration: 97.86131381988525)
+Recording saved as: .\Experiment\data\mich12\Recalls\story2.wav
+Recording Ended:   (Duration: 100.94076418876648)
+
+END OF A PROCEDURE (1740157991.374) *** 
+
+Eye Tracking data saved to: C:\Users\Lab\Documents\StrategicMW_lite\Experiment\data\mich12\mich12.edf
+Error converting EDF: 
+Extracted Event Data: 
+        Event          Type Status      Time  Duration
+0      LISTEN       STORY_1    BEG  4662489        0.0
+1        PART  INTRODUCTION    BEG  4662498        9.0
+2        PART  INTRODUCTION    END  4697782    35284.0
+3    KEYPRESS           100      0  4703408     5626.0
+4      LISTEN       STORY_1    END  4703408        0.0
+5      RECALL       STORY_1    BEG  4703412        4.0
+6      RECALL       STORY_1    END  4708486     5074.0
+7       START       STORY_2    BEG  4710224     1738.0
+8       START       STORY_2    END  4711318     1094.0
+9      LISTEN       STORY_2    BEG  4711435      117.0
+10       PART  INTRODUCTION    BEG  4711443        8.0
+11       PART  INTRODUCTION    END  4751971    40528.0
+12   KEYPRESS            97      0  4755271     3300.0
+13     LISTEN       STORY_2    END  4755271        0.0
+14     RECALL       STORY_2    BEG  4755274        3.0
+15     RECALL       STORY_2    END  4759301     4027.0
+16  PROCEDURE             0    END  4759302        1.0
+ 
+      Event  StoryTime     RT  partDuration
+0     BEGIN      0.009  0.000         0.000
+1     PROBE     35.293  0.000        35.284
+2  KEYPRESS     40.919  5.626        35.284
+      Event  StoryTime   RT  partDuration
+0     BEGIN      0.008  0.0         0.000
+1     PROBE     40.536  0.0        40.528
+2  KEYPRESS     43.836  3.3        40.528
+Adjusted EyeTracking DF for Story 1: 
+      Event  StoryTime        RT  partDuration
+0     BEGIN   0.000542  0.000000      0.000000
+1     PROBE   0.000307  0.000000      0.000425
+2  KEYPRESS  -0.000242 -0.000552      0.000425
+Adjusted EyeTracking DF for Story 2: 
+      Event  StoryTime        RT  partDuration
+0     BEGIN  -0.000458  0.000000      0.000000
+1     PROBE   5.243307  0.000000      5.244425
+2  KEYPRESS   2.916758 -2.326552      5.244425
+
+ Differnce in Story 1 Check: 
+   Delay is in norm for row 0 (BEGIN) on Event (Delay: 0.00054)
+   Delay is in norm for row 1 (PROBE) on Event (Delay: 0.00031)
+   Delay is in norm for row 2 (KEYPRESS) on Event (Delay: -0.00024)
+   Delay is in norm for row 0 (BEGIN) on StoryTime (Delay: 0.00000)
+   Delay is in norm for row 1 (PROBE) on StoryTime (Delay: 0.00000)
+   Delay is in norm for row 2 (KEYPRESS) on StoryTime (Delay: -0.00055)
+   Delay is in norm for row 0 (BEGIN) on RT (Delay: 0.00000)
+   Delay is in norm for row 1 (PROBE) on RT (Delay: 0.00043)
+   Delay is in norm for row 2 (KEYPRESS) on RT (Delay: 0.00043)
+
+ Differnce in Story 2 Check: 
+   Delay is in norm for row 0 (BEGIN) on Event (Delay: -0.00046)
+   WARNING! Exceeding 5ms delay threshold between EyeLink and behavior in row 1 (PROBE) on Event (Delay: 0.00031)
+   WARNING! Exceeding 5ms delay threshold between EyeLink and behavior in row 2 (KEYPRESS) on Event (Delay: -0.00024)
+   Delay is in norm for row 0 (BEGIN) on StoryTime (Delay: 0.00000)
+   Delay is in norm for row 1 (PROBE) on StoryTime (Delay: 0.00000)
+   Delay is in norm for row 2 (KEYPRESS) on StoryTime (Delay: -2.32655)
+   Delay is in norm for row 0 (BEGIN) on RT (Delay: 0.00000)
+   WARNING! Exceeding 5ms delay threshold between EyeLink and behavior in row 1 (PROBE) on RT (Delay: 0.00043)
+   WARNING! Exceeding 5ms delay threshold between EyeLink and behavior in row 2 (KEYPRESS) on RT (Delay: 0.00043)
+Testing EDF file Timing
+   Story1: 
+Check Timing:

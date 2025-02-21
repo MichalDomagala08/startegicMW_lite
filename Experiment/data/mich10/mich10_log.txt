@@ -1,0 +1,80 @@
+
+       ###### STRATEGIC MW EXPERIMENT v0.98 ######    
+
+  Currently Processing Subject N.: mich10
+  Current Display Information: 
+      Width:  1920
+      Height: 1080
+
+  Experiment Config: 
+      dummyMode:  False
+
+Link established
+Failed to load audio: No file 'type.wav' found in working directory 'C:\Users\Lab\Documents\StrategicMW_lite'.
+
+
+
+EXPERIMENTS STARTS
+
+Calibration of EyeTracker (1740157490.480)
+
+   Calibration Ended (Duration: 0.12108278274536133)
+
+Starting Audio Trial 1 (1740157491.327) *** 
+
+   Beginning Part: INTRODUCTION at exp Time     0.007
+Actual playback duration: 35.289 sec
+   Part ended:     INTRODUCTION at exp Time    35.299 (Duration: 35.289)
+   Key 100 pressed at: 36.528; Reaction Time: 1.229
+
+Story Ends.
+
+Answer Timing Log:
+      Event  StoryTime        RT  partDuration
+0     BEGIN   0.007042  0.000000      0.000000
+1     PROBE  35.298574  0.000000     35.289401
+2  KEYPRESS  36.527525  1.228954     35.289401
+Check Timing:
+Error Below 5 ms: for PROBE in 1 and BEGIN in 0 (0.0021)
+Error Below 5 ms: for KEYPRESS in 2 and PROBE in 1 (-0.0000)
+Difference Between Summed StoryTimes and Summed Event Clock: 0.0092
+
+Recall of Audio  1 (1740157527.860 *** 
+
+Recording Started: (Duration: 42.288782358169556)
+Recording saved as: .\Experiment\data\mich10\Recalls\story1.wav
+Recording Ended:   (Duration: 44.871872425079346)
+
+Calibration of EyeTracker (1740157533.903) *** 
+
+   Calibration Ended (Duration: 0.060434579849243164)
+
+Starting Audio Trial 2 (1740157537.033 *** 
+
+
+   Beginning Part: INTRODUCTION at exp Time     0.007
+Actual playback duration: 40.524 sec
+   Part ended:     INTRODUCTION at exp Time    40.532 (Duration: 40.524)
+   Key 97 pressed at: 41.877; Reaction Time: 1.345
+
+Story Ends.
+
+Answer Timing Log:
+      Event  StoryTime        RT  partDuration
+0     BEGIN   0.006785  0.000000      0.000000
+1     PROBE  40.532062  0.000000     40.523745
+2  KEYPRESS  41.877107  1.345047     40.523745
+Check Timing:
+Error Below 5 ms: for PROBE in 1 and BEGIN in 0 (0.0015)
+Error Below 5 ms: for KEYPRESS in 2 and PROBE in 1 (-0.0000)
+Difference Between Summed StoryTimes and Summed Event Clock: 0.0083
+
+Recall of Audio  1 (1740157578.913 *** 
+
+Recording Started: (Duration: 92.59241056442261)
+Recording saved as: .\Experiment\data\mich10\Recalls\story2.wav
+Recording Ended:   (Duration: 95.93659257888794)
+
+END OF A PROCEDURE (1740157583.767) *** 
+
+Eye Tracking data saved to: C:\Users\Lab\Documents\StrategicMW_lite\Experiment\data\mich10\mich10.edf
