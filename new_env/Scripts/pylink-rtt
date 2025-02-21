@@ -1,0 +1,4 @@
+#!C:\Users\barak\Documents\GitHub\strategicMW\new_env\Scripts\python.exe
+# EASY-INSTALL-SCRIPT: 'pylink-square==1.4.0','pylink-rtt'
+__requires__ = 'pylink-square==1.4.0'
+__import__('pkg_resources').run_script('pylink-square==1.4.0', 'pylink-rtt')

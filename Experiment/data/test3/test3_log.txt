@@ -1,0 +1,78 @@
+
+       ###### STRATEGIC MW EXPERIMENT v0.98 ######    
+
+  Currently Processing Subject N.: test3
+  Current Display Information: 
+      Width:  1920
+      Height: 1080
+
+  Experiment Config: 
+      dummyMode:  False
+
+Link established
+Failed to load audio: No file 'type.wav' found in working directory 'C:\Users\Lab\Desktop\StrategicMW_lite'.
+
+
+
+EXPERIMENTS STARTS
+
+Calibration of EyeTracker (1739893203.441)
+
+   Calibration Ended (Duration: 50.28001642227173)
+
+Starting Audio Trial 1 (1739893254.996) *** 
+
+   Beginning Part: INTRODUCTION at exp Time     0.008
+Actual playback duration: 35.284 sec
+   Part ended:     INTRODUCTION at exp Time    35.295 (Duration: 35.284)
+   Key 97 pressed at: 37.027; Reaction Time: 1.732
+
+Story Ends.
+
+Answer Timing Log:
+      Event  StoryTime       RT  partDuration
+0     BEGIN   0.007510  0.00000      0.000000
+1     PROBE  35.294762  0.00000     35.284102
+2  KEYPRESS  37.026710  1.73195     35.284102
+Check Timing:
+Error Below 5 ms: for PROBE in 1 and BEGIN in 0 (0.0032)
+Error Below 5 ms: for KEYPRESS in 2 and PROBE in 1 (-0.0000)
+Difference Between Summed StoryTimes and Summed Event Clock: 0.0107
+
+Recall of Audio  1 (1739893292.028 *** 
+
+Recording Started: (Duration: 92.83709812164307)
+Recording Ended:   (Duration: 95.82861852645874)
+
+Calibration of EyeTracker (1739893298.969) *** 
+
+   Calibration Ended (Duration: 108.34264159202576)
+
+Starting Audio Trial 2 (1739893408.481 *** 
+
+
+   Beginning Part: INTRODUCTION at exp Time     0.007
+Actual playback duration: 40.529 sec
+   Part ended:     INTRODUCTION at exp Time    40.539 (Duration: 40.529)
+   Key 97 pressed at: 41.974; Reaction Time: 1.434
+
+Story Ends.
+
+Answer Timing Log:
+      Event  StoryTime        RT  partDuration
+0     BEGIN   0.007211  0.000000      0.000000
+1     PROBE  40.539256  0.000000     40.528899
+2  KEYPRESS  41.973531  1.434277     40.528899
+Check Timing:
+Error Below 5 ms: for PROBE in 1 and BEGIN in 0 (0.0031)
+Error Below 5 ms: for KEYPRESS in 2 and PROBE in 1 (-0.0000)
+Difference Between Summed StoryTimes and Summed Event Clock: 0.0104
+
+Recall of Audio  1 (1739893450.458 *** 
+
+Recording Started: (Duration: 250.213148355484)
+Recording Ended:   (Duration: 253.5818965435028)
+
+END OF A PROCEDURE (1739893454.584) *** 
+
+Eye Tracking data saved to: C:\Users\Lab\Desktop\StrategicMW_lite\Experiment\data\test3\test3.edf

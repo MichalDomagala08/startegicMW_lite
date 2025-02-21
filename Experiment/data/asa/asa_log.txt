@@ -1,0 +1,30 @@
+
+       ###### STRATEGIC MW EXPERIMENT v0.98 ######    
+
+  Currently Processing Subject N.: asa
+  Current Display Information: 
+      Width:  1920
+      Height: 1080
+
+  Experiment Config: 
+      dummyMode:  False
+
+
+EXPERIMENTS STARTS
+
+Calibration of EyeTracker (1739879656.112)
+
+   Calibration Ended (Duration: 4.4932427406311035)
+
+Starting Audio Trial 1 (1739879661.489) *** 
+
+   Beginning Part: INTRODUCTION at exp Time     0.012
+
+Answer Timing Log:
+   Event  StoryTime  RT  partDuration
+0  BEGIN   0.012028   0             0
+Check Timing:
+Difference Between Summed StoryTimes and Summed Event Clock: 0.0120
+
+END OF A PROCEDURE (1739879664.961) *** 
+

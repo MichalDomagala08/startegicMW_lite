@@ -1,0 +1,67 @@
+
+       ###### STRATEGIC MW EXPERIMENT v0.98 ######    
+
+  Currently Processing Subject N.: test2
+  Current Display Information: 
+      Width:  1920
+      Height: 1080
+
+  Experiment Config: 
+      dummyMode:  False
+
+Link established
+Failed to load audio: No file 'type.wav' found in working directory 'C:\Users\Lab\Desktop\StrategicMW_lite'.
+
+
+
+EXPERIMENTS STARTS
+
+Calibration of EyeTracker (1739891996.601)
+
+   Calibration Ended (Duration: 38.37456560134888)
+
+Starting Audio Trial 1 (1739892036.128) *** 
+
+   Beginning Part: INTRODUCTION at exp Time     0.008
+Actual playback duration: 35.284 sec
+   Part ended:     INTRODUCTION at exp Time    35.299 (Duration: 35.284)
+   Key 97 pressed at: 36.672; Reaction Time: 1.374
+
+Story Ends.
+
+Answer Timing Log:
+      Event  StoryTime        RT  partDuration
+0     BEGIN   0.007815  0.000000      0.000000
+1     PROBE  35.298738  0.000000     35.284289
+2  KEYPRESS  36.672240  1.373504     35.284289
+Check Timing:
+Error Below 5 ms: for KEYPRESS in 2 and PROBE in 1 (-0.0000)
+Difference Between Summed StoryTimes and Summed Event Clock: 0.0144
+
+Recall of Audio  1 (1739892072.806 *** 
+
+Recording Started: (Duration: 81.86706304550171)
+Recording Ended:   (Duration: 85.65102505683899)
+
+Calibration of EyeTracker (1739892079.599) *** 
+
+   Calibration Ended (Duration: 41.57956385612488)
+
+Starting Audio Trial 2 (1739892123.209 *** 
+
+
+   Beginning Part: INTRODUCTION at exp Time     0.010
+Actual playback duration: 40.525 sec
+   Part ended:     INTRODUCTION at exp Time    40.537 (Duration: 40.525)
+   Key 97 pressed at: 41.529; Reaction Time: 0.993
+
+Story Ends.
+
+Recall of Audio  1 (1739892164.841 *** 
+
+Recording Started: (Duration: 173.4590015411377)
+Recording Ended:   (Duration: 176.91395831108093)
+
+END OF A PROCEDURE (1739892168.999) *** 
+
+Eye Tracking data saved to: C:\Users\Lab\Desktop\StrategicMW_lite\Experiment\data\test2\test2.edf
