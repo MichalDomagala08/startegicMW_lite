@@ -15,6 +15,8 @@ class audioTrial:
 
         ### Screen
         self.font = font
+        self.crossFont = pygame.font.Font(None, 100)
+
         self.screen = screen
         self.width = screen.get_size()[0]
         self.height = screen.get_size()[1]
@@ -57,10 +59,19 @@ class audioTrial:
             return [os.path.join(self.audio_folder, f) for f in files]
     
     def log_keypress(self,key):
-            if key == pygame.K_a:
-                keyname = "A"
+            
+            if key == pygame.K_1:
+                keyname = "1"
+            elif key == pygame.K_2:
+                keyname = "2"
+            elif key == pygame.K_3:
+                keyname = "3"
+            elif key == pygame.K_4:
+                keyname = "4"
             else:
-                keyname = "D"
+                keyname = "d"
+
+                self.output_control.write(f"WARNING SOMETHING ELSE WAS PRESSED {key}")
             if self.verbose:
                 self.output_control.write(f"   Key {key} pressed at: {self.pausedTime - self.initialTime:.3f}; Reaction Time: {(self.pausedTime - self.probeOnset):.3f}")
 
@@ -91,19 +102,42 @@ class audioTrial:
         Displays a '+' symbol in the center of the screen.
         """
         self.screen.fill((255 / 2, 255 / 2, 255 / 2))  # Gray background
-        text_surface = self.font.render("+", True, (255, 255, 255))  # White "+"
+        text_surface = self.crossFont.render("+", True, (255, 255, 255))  # White "+"
         text_rect = text_surface.get_rect(center=(self.width // 2, self.height // 2))
         self.screen.blit(text_surface, text_rect)
         pygame.display.flip()
 
-    def display_thought_probe(self):
+    def display_thought_probe(self,line_height=50):
         """
-        Displays a thought probe question.
+            Render multi-line text with dynamic left margin (in pixels) and special centering for lines with '# #'.
         """
-        self.screen.fill((255 / 2, 255 / 2, 255 / 2))  # Gray background
-        text_surface = self.font.render("Czy byłeś skupiony na historii?", True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=(self.width // 2, self.height // 2))
-        self.screen.blit(text_surface, text_rect)
+        # Determine the width of the longest line in pixels
+        max_line_pixel_width = max(self.font.size(line.replace("#", "").strip())[0] for line in Question)
+
+        # Calculate the dynamic left margin as a proportion of the unused space
+        margin = (self.width - max_line_pixel_width) // 2
+
+        # Calculate the Y position to center the entire block vertically
+        total_text_height = len(Question) * line_height
+        y_offset = (self.height - total_text_height) // 2
+
+        for i, line in enumerate(Question):
+            # Check if the line should be centered (contains '# #')
+            if line.startswith("#") and line.endswith("#"):
+                clean_line = line.replace("#", "")  # Remove '# #' for rendering
+                text_surface = self.font.render(clean_line, True, (255, 255, 255))
+                text_rect = text_surface.get_rect(center=(self.width // 2, y_offset + i * line_height))
+                self.screen.blit(text_surface, text_rect)
+
+            elif line.startswith("%") and line.endswith("%"):
+                clean_line = line.replace("%", "")  # Remove '# #' for rendering
+                text_surface = self.font.render(clean_line, True, (255, 255, 255))
+                text_rect = text_surface.get_rect(topleft=(self.width // 3, y_offset + i * line_height))
+                self.screen.blit(text_surface, text_rect)
+            else:
+                # Left-aligned text at the dynamic margin
+                text_surface = self.font.render(line, True, (255, 255, 255))
+                self.screen.blit(text_surface, (margin, y_offset + i * line_height))
         pygame.display.flip()
 
     def play_audio(self):
@@ -182,7 +216,7 @@ class audioTrial:
                 return "exit"
 
             if self.paused_for_input and event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_a or event.key == pygame.K_d:
+                if event.key == pygame.K_1 or event.key == pygame.K_2 or event.key == pygame.K_3 or event.key == pygame.K_4:
               
                     self.paused_for_input = False
                     self.pausedTime = time.perf_counter()  # Reset timer
@@ -204,15 +238,35 @@ class audioTrial:
 
 # A list of Timings of story 1: Used to Clock the Onset of Each Fragment: (in seconds)
 storyTimeDict2 = data = {
+    'partNames': [ 'ADAM_1', 'MARIA_1', 'ADAM_2', 'MARIA_2', 'ADAM_3', 'MARIA_3', 'ADAM_4', 'MARIA_4', 'ADAM_5', 'MARIA_5', 'ADAM_6', 'MARIA_6', 'ADAM_7', 
+                  'MARIA_7', 'ADAM_8', 'MARIA_8', 'ADAM_9', 'MARIA_9', 'ADAM_10', 'MARIA_10', 'ADAM_11', 'MARIA_11'],
+    'partTimes': [ 56.678, 56.688, 64.743, 59.355, 58.085, 56.379, 64.487, 62.353, 
+                  61.563, 57.115, 59.493, 57.019, 56.283, 59.941, 57.679, 58.043, 59.707, 60.827, 59.663, 59.109, 60.443, 58.832, ]
+}
+
+storyTimeDict1 = {
+    'partNames': [ 'KASIA_1', 'JANEK_1', 'KASIA_2', 'JANEK_2', 'KASIA_3', 'JANEK_3', 'KASIA_4', 'JANEK_4', 'KASIA_5', 'JANEK_5', 'KASIA_6', 'JANEK_6', 'KASIA_7', 
+                  'JANEK_7', 'KASIA_8', 'JANEK_8', 'KASIA_9', 'JANEK_9', 'KASIA_10', 'JANEK_10',  'KASIA_11', 'JANEK_11'],
+    'partTimes': [ 61.296, 59.525, 56.655, 59.92, 65.147, 57.574, 61.99, 65.329, 60.965, 
+                  60.454, 57.947, 64.176, 60.955, 60.241, 59.472, 57.115, 59.387, 57.306, 58.693, 62.267, 58.063, 61.295, ]
+}
+storyTimeDict2c = data = {
     'partNames': ['INTRODUCTION', 'ADAM_1', 'MARIA_1', 'ADAM_2', 'MARIA_2', 'ADAM_3', 'MARIA_3', 'ADAM_4', 'MARIA_4', 'ADAM_5', 'MARIA_5', 'ADAM_6', 'MARIA_6', 'ADAM_7', 
                   'MARIA_7', 'ADAM_8', 'MARIA_8', 'ADAM_9', 'MARIA_9', 'ADAM_10', 'MARIA_10', 'ADAM_11', 'MARIA_11', 'ENDING'],
     'partTimes': [40.505, 56.678, 56.688, 64.743, 59.355, 58.085, 56.379, 64.487, 62.353, 
                   61.563, 57.115, 59.493, 57.019, 56.283, 59.941, 57.679, 58.043, 59.707, 60.827, 59.663, 59.109, 60.443, 58.832, 64.433]
 }
 
-storyTimeDict1 = {
+storyTimeDict1c = {
     'partNames': ['INTRODUCTION', 'KASIA_1', 'JANEK_1', 'KASIA_2', 'JANEK_2', 'KASIA_3', 'JANEK_3', 'KASIA_4', 'JANEK_4', 'KASIA_5', 'JANEK_5', 'KASIA_6', 'JANEK_6', 'KASIA_7', 
                   'JANEK_7', 'KASIA_8', 'JANEK_8', 'KASIA_9', 'JANEK_9', 'KASIA_10', 'JANEK_10',  'KASIA_11', 'JANEK_11', 'ENDING'],
     'partTimes': [35.257, 61.296, 59.525, 56.655, 59.92, 65.147, 57.574, 61.99, 65.329, 60.965, 
                   60.454, 57.947, 64.176, 60.955, 60.241, 59.472, 57.115, 59.387, 57.306, 58.693, 62.267, 58.063, 61.295, 55.909]
 }
+Question =  ["Na chwilę obecną jaki jest twój stan uwagowy?",
+             "Wciśnij odpowiedni przycisk:",
+                    " ",
+                    "%1 - Jeśli jesteś całkowicie zaangażowany w słuchaną historię. %",
+                    "%2 - Jeśli myślisz o Historii ale jej nie słuchasz %",
+                    "%3 - Jeśli myślisz o czymś zupełnie innym niż Historia %",
+                    "%4 - Jeśli nie jesteś w stanie prześledzić swojego toku myśli %",]

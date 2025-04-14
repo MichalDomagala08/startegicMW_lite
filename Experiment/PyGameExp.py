@@ -11,7 +11,7 @@ from welcomeMessage import welcomeMessage
 from Audio import audioTrial
 from Audio import storyTimeDict1,storyTimeDict2
 from recallTrial import recallTrial
-from welcomeMessage import WelcomeMessage1,WelcomeMessage2,WelcomeMessage3,secondStoryMessage1,secondStoryMessage2,exitMessage1,WelcomeMessage21, secondStoryMessage3
+from welcomeMessage import WelcomeMessage1,WelcomeMessage2,WelcomeMessage3,WelcomeMessage11,secondStoryMessage1,secondStoryMessage2,exitMessage1,WelcomeMessage21, secondStoryMessage3
 
 import pickle
 import sys,os,subprocess
@@ -39,18 +39,21 @@ height =disp.height
 screen = pygame.display.set_mode((width, height))
 tempInitialTime = 0; # For Gathering Realtive Timestamps
 # Font setup
-font = pygame.font.Font(None, 30)
+font = pygame.font.Font(None, 50)
 
 # story Global parameters Setup:
 storyPart = "welcome1"  # Controlling the experiment flow
 dummyMode = False
+SCREEN_WIDTH_CM = 53 #Width
+SCREEN_HEIGHT_CM = 30 # Height 
+VIEWING_DISTANCE_CM = 93 # 
 
 outputControll.write("  Experiment Config: ")
 outputControll.write(f"      dummyMode:  {dummyMode}\n")
 ### Make Experiment Objects
 
 # Experiment  Message Initialization
-welcome = welcomeMessage([WelcomeMessage1, WelcomeMessage2, WelcomeMessage3],font,screen,"welcome1","calibration1")
+welcome = welcomeMessage([WelcomeMessage1,WelcomeMessage11, WelcomeMessage2,  WelcomeMessage3],font,screen,"welcome1","calibration1")
 welcome2 = welcomeMessage([WelcomeMessage21],font,screen,"welcome2","story1")
 
 secondStoryMessage = welcomeMessage([secondStoryMessage1, secondStoryMessage2],font,screen,"prepstory2","calibration2")
@@ -59,8 +62,8 @@ secondStoryMessage2 = welcomeMessage([secondStoryMessage3],font,screen,"beforeSt
 exitMessage = welcomeMessage([exitMessage1],font,screen,"exit","")
 
 # Audio File initialization:
-Story1 = audioTrial(r".\TextToSpeech\Story1_AIsegments1_test2",storyTimeDict1,font,screen,"story1","recall1",outputControll,verbose=2)
-Story2 = audioTrial(r".\TextToSpeech\Story2_AIsegments1_test2",storyTimeDict2,font,screen,"story2","recall2",outputControll,verbose=2)
+Story1 = audioTrial(r".\TextToSpeech\Story1_AIsegments2",storyTimeDict1,font,screen,"story1","recall1",outputControll,verbose=2)
+Story2 = audioTrial(r".\TextToSpeech\Story2_AIsegments2",storyTimeDict2,font,screen,"story2","recall2",outputControll,verbose=2)
 
 # Audio Recording Object Initialization:
 recall1 = recallTrial("story1.wav",font,screen,"recall1","prepstory2",outputControll)
@@ -78,6 +81,10 @@ if not dummyMode:
     # send over a command to let the tracker know the correct screen resolution
     scn_coords = "screen_pixel_coords = 0 0 %d %d" % (width - 1, height - 1)
     el_tracker.sendCommand(scn_coords)
+    el_tracker.sendCommand(f"screen_phys_coords = -{SCREEN_WIDTH_CM/2*10} {SCREEN_HEIGHT_CM/2*10} {SCREEN_WIDTH_CM/2*10} -{SCREEN_HEIGHT_CM/2*10}")
+
+    # Send viewing distance (in millimeters)
+    el_tracker.sendCommand(f"screen_distance = {VIEWING_DISTANCE_CM*10}")
 
     # Instantiate a graphics environment (genv) for calibration
     genv = CalibrationGraphics(el_tracker, screen)
@@ -115,8 +122,8 @@ while running:
 
                 pylink.openGraphicsEx(genv)  # Register CalibrationGraphics
 
-                #el_tracker.sendCommand("automatic_calibration_pacing = 1000")  # Pacing of Targets - allow for automaticity
-                #el_tracker.doTrackerSetup()  # Calibration Setup 
+                el_tracker.sendCommand("automatic_calibration_pacing = 1000")  # Pacing of Targets - allow for automaticity
+                el_tracker.doTrackerSetup()  # Calibration Setup 
 
                 pylink.pumpDelay(50)            
             except RuntimeError as err:
@@ -161,6 +168,8 @@ while running:
 
     elif storyPart == "recall1":
         if begBlockFlag:
+            el_tracker.stopRecording()
+
             outputControll.write(f"\nRecall of Audio  1 ({time.time():.3f} *** \n")
 
             outputControll.writeToEyeLink("\tRECALL\tSTORY_1\tBEG")
@@ -187,8 +196,8 @@ while running:
             try:
                 pylink.pumpDelay(50)
 
-                #el_tracker.sendCommand("automatic_calibration_pacing = 1000")  # Pacing of Targets - allow for automaticity
-                #el_tracker.doTrackerSetup()  # Calibration Setup 
+                el_tracker.sendCommand("automatic_calibration_pacing = 1000")  # Pacing of Targets - allow for automaticity
+                el_tracker.doTrackerSetup()  # Calibration Setup 
             except RuntimeError as err:
                 print('ERROR:', err)
                 el_tracker.exitCalibration() 
@@ -232,6 +241,7 @@ while running:
 
     elif storyPart == "recall2":
         if begBlockFlag:
+            el_tracker.stopRecording()
             outputControll.write(f"\nRecall of Audio  1 ({time.time():.3f} *** \n")
 
             outputControll.writeToEyeLink("\tRECALL\tSTORY_2\tBEG")
