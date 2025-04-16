@@ -63,24 +63,25 @@ class audioTrial:
     
     def log_keypress(self,key):
             
-            if key == pygame.K_1:
-                keyname = "1"
-            elif key == pygame.K_2:
-                keyname = "2"
-            elif key == pygame.K_3:
-                keyname = "3"
-            elif key == pygame.K_4:
-                keyname = "4"
-            else:
-                keyname = "d"
+        """    if key == pygame.K_1:
+            keyname = "1"
+        elif key == pygame.K_2:
+            keyname = "2"
+        elif key == pygame.K_3:
+            keyname = "3"
+        elif key == pygame.K_4:
+            keyname = "4"
+        else:
+            keyname = "d"
 
-                self.output_control.write(f"WARNING SOMETHING ELSE WAS PRESSED {key}")
-            if self.verbose:
-                self.output_control.write(f"   Key {key} pressed at: {self.pausedTime - self.initialTime:.3f}; Reaction Time: {(self.pausedTime - self.probeOnset):.3f}")
+            self.output_control.write(f"WARNING SOMETHING ELSE WAS PRESSED {key}")
+        if self.verbose:"""
+            
+        self.output_control.write(f"   Value Logged {key}  at: {self.pausedTime - self.initialTime:.3f}; Reaction Time: {(self.pausedTime - self.probeOnset):.3f}")
 
-            self.output_control.writeToEyeLink(message=f"\tKEYPRESS\t{key}\t0")              # Write KeyPress to Eyelink                  
-            self.timingLog.append(["KEYPRESS",self.pausedTime  - self.initialTime ,(self.pausedTime - self.probeOnset),self.actual_duration])
-            self.responsesTiming.append((keyname , self.pausedTime  - self.initialTime))
+        self.output_control.writeToEyeLink(message=f"\tKEYPRESS\t{key}\t0")              # Write KeyPress to Eyelink                  
+        self.timingLog.append(["KEYPRESS",self.pausedTime  - self.initialTime ,(self.pausedTime - self.probeOnset),self.actual_duration])
+        self.responsesTiming.append((key , self.pausedTime  - self.initialTime))
             
     def log_part_beg(self):
         self.timingLog.append(["BEGIN",(time.perf_counter() - self.initialTime),0,0])              
@@ -143,7 +144,7 @@ class audioTrial:
                     return True
 
         return False
-    def display_linear_scale_probe(self, scale_labels=["Brak skupienia","Pełne skupienie"], button_text="DALEJ"):
+    def display_linear_scale_probe(self, scale_labels=["Brak rozproszenia","Pełne rozproszenie"], button_text="DALEJ"):
         """
         Draws the linear scale, draggable point, and "DALEJ" button.
 
@@ -176,9 +177,14 @@ class audioTrial:
         self.screen.fill(background_color)
 
         # Draw the centered text
-        center_text_surface = self.font.render("Na ile oceniasz swoje skupienie na słuchanej historii? ", True, text_color)
-        center_text_rect = center_text_surface.get_rect(center=(self.width // 2, self.height // 4 + 100))
+        center_text_surface = self.font.render("Na ile w tym momencie czujesz, że jesteś rozproszony/a od słuchania historii?", True, text_color)
+        center_text_rect = center_text_surface.get_rect(center=(self.width // 2, self.height // 4))
         self.screen.blit(center_text_surface, center_text_rect)
+
+        # Draw the reminder text
+        center_text_surface2 = self.font.render("(Zaznacz myszką na poniższej skali w dowolnym miejscu)", True, text_color)
+        center_text_rect2 = center_text_surface.get_rect(center=(self.width // 2, self.height // 3.3))
+        self.screen.blit(center_text_surface2, center_text_rect2)
 
         # Draw the scale
         pygame.draw.rect(self.screen, scale_color, (self.scale_x, self.scale_y,  self.scale_width, self.scale_height))
@@ -191,8 +197,6 @@ class audioTrial:
         marking_positions = [
             self.scale_x,  # Start of the scale
             self.scale_x + self.scale_width // 2,  # Center of the scale
-            self.scale_x + self.scale_width // 4,  # Middle of the first half
-            self.scale_x + 3 * self.scale_width // 4,  # Middle of the second half
             self.scale_x + self.scale_width  # End of the scale
         ]
         for pos in marking_positions:

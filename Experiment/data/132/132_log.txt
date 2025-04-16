@@ -1,7 +1,8 @@
 
        ###### STRATEGIC MW EXPERIMENT v0.98 ######    
 
-  Currently Processing Subject N.: 123
+  Log Time: 2025-04-16 15:05:48.333568
+  Currently Processing Subject N.: 132
   Current Display Information: 
       Width:  1920
       Height: 1080
@@ -12,3 +13,5 @@
       dummyMode:             True
       Current Named Entity:  KAROLINA
       Test Mode:             False
+
+EXPERIMENTS STARTS
