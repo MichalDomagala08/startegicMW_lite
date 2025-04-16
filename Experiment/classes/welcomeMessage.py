@@ -4,7 +4,6 @@ from pygame.locals import *
 
 class welcomeMessage:
 
-
     def __init__(self, textList,font,screen,currentStage,nextStage, msgCount = 0, marginAdjust = 0,):
         self.textList  = textList
         self.msgCount = msgCount
@@ -42,7 +41,7 @@ class welcomeMessage:
             elif line.startswith("%") and line.endswith("%"):
                 clean_line = line.replace("%", "")  # Remove '# #' for rendering
                 text_surface = self.font.render(clean_line, True, (255, 255, 255))
-                text_rect = text_surface.get_rect(topleft=(self.width // 3, y_offset + i * line_height))
+                text_rect = text_surface.get_rect(topleft=(self.width // 4, y_offset + i * line_height))
                 self.screen.blit(text_surface, text_rect)
             else:
                 # Left-aligned text at the dynamic margin
@@ -78,48 +77,52 @@ def generateMessages(firstEntityName):
                                 "#Witaj w procedurze eksperymentalnej!#",
                         "",
                         "Procedura ma na celu zbadanie efektów podtrzymania uwagi w zadaniu słuchowym",
-                        "",
+                        "",     
                         "Badanie jest dobrowolne, a wszystkie dane są anonimowe i poufne.",
-                        "Możesz w każdej chwilii wycofać się z badania bez podawania przyczyny.",
+                        "Możesz w każdej chwili wycofać się z badania bez podawania przyczyny.",
                         " ",
-                                "#Naciśnij SPACJĘ aby przejść dalej #"]
-    WelcomeMessage11 = [ "Za chwilę usłyszysz historię trwającą ok 30 min.",
+                                "#Naciśnij SPACJĘ, aby przejść dalej #"]
+    WelcomeMessage11 = [ "Za chwilę usłyszysz historię trwającą ok. 30 min.",
                         "W trakcie jej słuchania, prosimy o utrzymanie wzroku",
-                        "na krzyżyku wyświetlonym na ekranie",
+                        "na krzyżyku wyświetlonym na ekranie.",
                         " ",
-                        "Po odsłuchaniu historii zostaniesz poproszony/a o jej ustne odpamiętanie.",
-                        "Będzie ono nagrywane w celu późniejszej analizy.",
+                        "Po odsłuchaniu historii zostaniesz poproszony/a ",
+                        "o jej ustne odpamiętanie (które będzie nagrywane dźwiękowo).",
                         " ",
                                 "#Naciśnij SPACJĘ aby przejść dalej #"]
 
     WelcomeMessage2 =  ["Historia będzie co jakis czas przerywana przez pytanie",
                         "wyświetlone na środku ekranu:", 
                         " ",
-                                "#\"Na ile oceniasz swoje skupienie na słuchanej historii? \"#",
+                                "#\"Na ile w tym momencie czujesz, że jesteś rozproszony/a od słuchania historii? \"#",
                         " ",
-                        "W odpowiedzi,będziesz musiał/a myszką wybrać punkt na liniowej skali w taki sposób, ", 
-                        "aby pokazywał twoją ocenę skupienia na historii.",
+                        "W odpowiedzi, będziesz musiał/a myszką wybrać punkt na liniowej skali w taki sposób, ", 
+                        "aby pokazywał twoją subiektywną ocenę rozproszenia od słuchania historii:",
 
                         " ",
-                        "% Początek skali oznacza zupełny brak skupienia na historii%",
-                        "% Koniec skali oznacza uwagę skierowaną całkowicie na historię%",
+                        "% Początek skali oznacza pełną uwagę na historii%",
+                        "% Koniec skali oznacza rozproszenie od słuchania historii%",
                         " ",
                                 "#Naciśnij SPACJĘ aby przejść dalej#"] 
 
     WelcomeMessage3 =  [f"Za chwilę przejdziesz do kalibracji okulografu.",
-                        "Kieruj wzrok w stronę obiektów wyświetlanych na ekranie",
+                        "Kieruj wzrok w stronę obiektów wyświetlanych na ekranie.",
                         "",
-                        "#Wciśnij SPACJĘ aby rozpocząć kalibrację#"]
+                        "#Naciśnij SPACJĘ aby rozpocząć kalibrację#"]
 
 
-    WelcomeMessage21alt =  [f"Za chwilę usłyszysz pierwszą historię.",
+    WelcomeMessage21alt =  [f"Za chwilę usłyszysz historię. Nałóż słuchawki i przygotuj się.",
                         "Postaraj się skupić na wszystkich odniesieniach do bohatera imieniem:",
                         "",
                                             f"#{firstEntityName}#",
                         "",
-                        "#Wciśnij SPACJĘ aby zacząć słuchać historii#"]
+                        "#Naciśnij SPACJĘ aby zacząć słuchać historii#"]
 
-
+    WelcomeMessage4 =  [f"Za chwilę przejdziesz do ponownej kalibracji okulografu.",
+                        "Tym razem, procedura będzie kontynuowana automatycznie po jej zakończeniu.",
+                        "Kieruj wzrok w stronę obiektów wyświetlanych na ekranie.",
+                        "",
+                        "#Naciśnij SPACJĘ aby rozpocząć kalibrację#"]
   
     exitMessage1 =          ["#Dziękujemy za udział w badaniu#",
                             "",
@@ -131,15 +134,15 @@ def generateMessages(firstEntityName):
       WelcomeMessage21 =  [f"Za chwilę usłyszysz pierwszą historię.",
                         "Postaraj się zapamiętać jak najwięcej szczegółów.",
                         "",
-                        "#Wciśnij SPACJĘ aby zacząć słuchać historii#"]
+                        "#Naciśnij SPACJĘ aby zacząć słuchać historii#"]
     
     secondStoryMessage1 =  ["Odpocznij przez kilka minut.",
                             "",
                             "Gdy będziesz gotowy aby przejsć dalej,",
                             "Naciśnij SPACJĘ"]
 
-    secondStoryMessage2 =  [f"Za chwilę przejdziesz do kalibracji Okulografu.",
-                        "Kieruj wzrok w stonę Obiektów na Ekranie",
+    secondStoryMessage2 =  [f"Za chwilę przejdziesz do kalibracji okulografu.",
+                        "Kieruj wzrok w stonę obiektów na ekranie",
                         "",
                         "#Wciśnij SPACJĘ aby rozpocząć kalibrację#"]
 
@@ -149,9 +152,9 @@ def generateMessages(firstEntityName):
                             "",
                                         f"#{secondEntityName}#",
                             "",
-                            "#Wciśnij SPACJĘ aby zacząć słuchać historii#"]
+                            "#Naciśnij SPACJĘ aby zacząć słuchać historii#"]
 
 
     """
     
-    return [WelcomeMessage1,WelcomeMessage2,WelcomeMessage3,WelcomeMessage11,WelcomeMessage21alt,exitMessage1]
+    return [WelcomeMessage1,WelcomeMessage11,WelcomeMessage2,WelcomeMessage3,WelcomeMessage21alt,WelcomeMessage4,exitMessage1]

@@ -1,0 +1,295 @@
+
+       ###### STRATEGIC MW EXPERIMENT v0.98 ######    
+
+  Currently Processing Subject N.: test
+  Current Display Information: 
+      Width:  1920
+      Height: 1080
+
+      Viewing Distance:  93
+
+  Experiment Config: 
+      dummyMode:             True
+      Current Named Entity:  KAROLINA
+      Test Mode:             False
+
+EXPERIMENTS STARTS
+
+Calibration of EyeTracker (1744799869.199)
+
+   Calibration Ended (Duration: 0.0004916191101074219)
+
+Starting Audio Trial 1 (1744800146.311) *** 
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: KAROLINA_1   at exp Time     0.019
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 42.577 sec
+   Part ended:     KAROLINA_1   at exp Time    42.599 (Duration: 42.577)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 36  at: 164.452; Reaction Time: 121.853
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: JANEK_1      at exp Time   164.470
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 48.299 sec
+   Part ended:     JANEK_1      at exp Time   212.769 (Duration: 48.299)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 29  at: 219.267; Reaction Time: 6.498
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: KAROLINA_2   at exp Time   219.278
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 40.639 sec
+   Part ended:     KAROLINA_2   at exp Time   259.920 (Duration: 40.639)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 70  at: 263.697; Reaction Time: 3.777
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: JANEK_2      at exp Time   263.707
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 42.521 sec
+   Part ended:     JANEK_2      at exp Time   306.230 (Duration: 42.521)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 98  at: 309.901; Reaction Time: 3.671
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: KAROLINA_3   at exp Time   309.914
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 43.534 sec
+   Part ended:     KAROLINA_3   at exp Time   353.449 (Duration: 43.534)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 70  at: 356.332; Reaction Time: 2.883
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: JANEK_3      at exp Time   356.342
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 44.196 sec
+   Part ended:     JANEK_3      at exp Time   400.539 (Duration: 44.196)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 85  at: 404.107; Reaction Time: 3.568
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: KAROLINA_4   at exp Time   404.118
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 43.271 sec
+   Part ended:     KAROLINA_4   at exp Time   447.389 (Duration: 43.271)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 19  at: 453.980; Reaction Time: 6.591
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: JANEK_4      at exp Time   453.991
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 43.406 sec
+   Part ended:     JANEK_4      at exp Time   497.400 (Duration: 43.406)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 30  at: 501.130; Reaction Time: 3.730
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: KAROLINA_5   at exp Time   501.141
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 46.197 sec
+   Part ended:     KAROLINA_5   at exp Time   547.340 (Duration: 46.197)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 29  at: 551.278; Reaction Time: 3.938
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: JANEK_5      at exp Time   551.291
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 49.997 sec
+   Part ended:     JANEK_5      at exp Time   601.289 (Duration: 49.997)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 66  at: 603.832; Reaction Time: 2.543
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: KAROLINA_6   at exp Time   603.844
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 42.484 sec
+   Part ended:     KAROLINA_6   at exp Time   646.329 (Duration: 42.484)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 30  at: 649.637; Reaction Time: 3.308
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: JANEK_6      at exp Time   649.648
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 47.359 sec
+   Part ended:     JANEK_6      at exp Time   697.009 (Duration: 47.359)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 34  at: 700.334; Reaction Time: 3.325
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: KAROLINA_7   at exp Time   700.345
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 48.093 sec
+   Part ended:     KAROLINA_7   at exp Time   748.439 (Duration: 48.093)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 88  at: 751.432; Reaction Time: 2.993
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: JANEK_7      at exp Time   751.442
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 45.596 sec
+   Part ended:     JANEK_7      at exp Time   797.039 (Duration: 45.596)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 61  at: 801.630; Reaction Time: 4.591
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: KAROLINA_8   at exp Time   801.640
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 44.157 sec
+   Part ended:     KAROLINA_8   at exp Time   845.799 (Duration: 44.157)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 78  at: 849.093; Reaction Time: 3.295
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: JANEK_8      at exp Time   849.104
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 40.034 sec
+   Part ended:     JANEK_8      at exp Time   889.140 (Duration: 40.034)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 14  at: 893.558; Reaction Time: 4.419
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: KAROLINA_9   at exp Time   893.569
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 44.959 sec
+   Part ended:     KAROLINA_9   at exp Time   938.529 (Duration: 44.959)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 81  at: 946.911; Reaction Time: 8.382
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: JANEK_9      at exp Time   946.921
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 44.476 sec
+   Part ended:     JANEK_9      at exp Time   991.398 (Duration: 44.476)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 30  at: 995.229; Reaction Time: 3.831
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: KAROLINA_10  at exp Time   995.240
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 47.117 sec
+   Part ended:     KAROLINA_10  at exp Time  1042.361 (Duration: 47.117)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 70  at: 1046.238; Reaction Time: 3.877
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: JANEK_10     at exp Time  1046.249
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 45.168 sec
+   Part ended:     JANEK_10     at exp Time  1091.420 (Duration: 45.168)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 52  at: 1096.432; Reaction Time: 5.012
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+Story Ends.
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+Answer Timing Log:
+       Event    StoryTime          RT  partDuration
+0      BEGIN     0.018718    0.000000      0.000000
+1      PROBE    42.599093    0.000000     42.576801
+2   KEYPRESS   164.452419  121.853329     42.576801
+3      BEGIN   164.469519    0.000000      0.000000
+4      PROBE   212.769024    0.000000     48.298536
+5   KEYPRESS   219.267305    6.498286     48.298536
+6      BEGIN   219.278431    0.000000      0.000000
+7      PROBE   259.920161    0.000000     40.639368
+8   KEYPRESS   263.697074    3.776916     40.639368
+9      BEGIN   263.707375    0.000000      0.000000
+10     PROBE   306.229846    0.000000     42.520502
+11  KEYPRESS   309.900804    3.670959     42.520502
+12     BEGIN   309.913912    0.000000      0.000000
+13     PROBE   353.449038    0.000000     43.534084
+14  KEYPRESS   356.331991    2.882956     43.534084
+15     BEGIN   356.342074    0.000000      0.000000
+16     PROBE   400.538650    0.000000     44.195692
+17  KEYPRESS   404.106574    3.567925     44.195692
+18     BEGIN   404.117782    0.000000      0.000000
+19     PROBE   447.389328    0.000000     43.270608
+20  KEYPRESS   453.980443    6.591116     43.270608
+21     BEGIN   453.991389    0.000000      0.000000
+22     PROBE   497.400014    0.000000     43.406281
+23  KEYPRESS   501.129841    3.729829     43.406281
+24     BEGIN   501.140688    0.000000      0.000000
+25     PROBE   547.339775    0.000000     46.197291
+26  KEYPRESS   551.278070    3.938296     46.197291
+27     BEGIN   551.290529    0.000000      0.000000
+28     PROBE   601.288861    0.000000     49.997329
+29  KEYPRESS   603.832243    2.543384     49.997329
+30     BEGIN   603.843591    0.000000      0.000000
+31     PROBE   646.328805    0.000000     42.484047
+32  KEYPRESS   649.637199    3.308394     42.484047
+33     BEGIN   649.648412    0.000000      0.000000
+34     PROBE   697.009166    0.000000     47.359193
+35  KEYPRESS   700.334282    3.325117     47.359193
+36     BEGIN   700.344884    0.000000      0.000000
+37     PROBE   748.439142    0.000000     48.092851
+38  KEYPRESS   751.432301    2.993161     48.092851
+39     BEGIN   751.442138    0.000000      0.000000
+40     PROBE   797.038715    0.000000     45.595677
+41  KEYPRESS   801.630071    4.591357     45.595677
+42     BEGIN   801.640376    0.000000      0.000000
+43     PROBE   845.798837    0.000000     44.156677
+44  KEYPRESS   849.093367    3.294531     44.156677
+45     BEGIN   849.103861    0.000000      0.000000
+46     PROBE   889.139513    0.000000     40.034014
+47  KEYPRESS   893.558290    4.418779     40.034014
+48     BEGIN   893.568912    0.000000      0.000000
+49     PROBE   938.529085    0.000000     44.958826
+50  KEYPRESS   946.910729    8.381645     44.958826
+51     BEGIN   946.921165    0.000000      0.000000
+52     PROBE   991.398193    0.000000     44.476468
+53  KEYPRESS   995.229072    3.830880     44.476468
+54     BEGIN   995.239867    0.000000      0.000000
+55     PROBE  1042.360939    0.000000     47.117487
+56  KEYPRESS  1046.237914    3.876976     47.117487
+57     BEGIN  1046.249293    0.000000      0.000000
+58     PROBE  1091.420406    0.000000     45.168271
+59  KEYPRESS  1096.432051    5.011646     45.168271
+Check Timing:
+Error Below 5 ms: for PROBE in 1 and BEGIN in 0 (0.0036)
+Error Below 5 ms: for KEYPRESS in 2 and PROBE in 1 (-0.0000)
+Error Below 5 ms: for PROBE in 4 and BEGIN in 3 (0.0010)
+Error Below 5 ms: for KEYPRESS in 5 and PROBE in 4 (-0.0000)
+Error Below 5 ms: for PROBE in 7 and BEGIN in 6 (0.0024)
+Error Below 5 ms: for KEYPRESS in 8 and PROBE in 7 (-0.0000)
+Error Below 5 ms: for PROBE in 10 and BEGIN in 9 (0.0020)
+Error Below 5 ms: for KEYPRESS in 11 and PROBE in 10 (-0.0000)
+Error Below 5 ms: for PROBE in 13 and BEGIN in 12 (0.0010)
+Error Below 5 ms: for KEYPRESS in 14 and PROBE in 13 (-0.0000)
+Error Below 5 ms: for PROBE in 16 and BEGIN in 15 (0.0009)
+Error Below 5 ms: for KEYPRESS in 17 and PROBE in 16 (-0.0000)
+Error Below 5 ms: for PROBE in 19 and BEGIN in 18 (0.0009)
+Error Below 5 ms: for KEYPRESS in 20 and PROBE in 19 (-0.0000)
+Error Below 5 ms: for PROBE in 22 and BEGIN in 21 (0.0023)
+Error Below 5 ms: for KEYPRESS in 23 and PROBE in 22 (-0.0000)
+Error Below 5 ms: for PROBE in 25 and BEGIN in 24 (0.0018)
+Error Below 5 ms: for KEYPRESS in 26 and PROBE in 25 (-0.0000)
+Error Below 5 ms: for PROBE in 28 and BEGIN in 27 (0.0010)
+Error Below 5 ms: for KEYPRESS in 29 and PROBE in 28 (-0.0000)
+Error Below 5 ms: for PROBE in 31 and BEGIN in 30 (0.0012)
+Error Below 5 ms: for KEYPRESS in 32 and PROBE in 31 (-0.0000)
+Error Below 5 ms: for PROBE in 34 and BEGIN in 33 (0.0016)
+Error Below 5 ms: for KEYPRESS in 35 and PROBE in 34 (-0.0000)
+Error Below 5 ms: for PROBE in 37 and BEGIN in 36 (0.0014)
+Error Below 5 ms: for KEYPRESS in 38 and PROBE in 37 (-0.0000)
+Error Below 5 ms: for PROBE in 40 and BEGIN in 39 (0.0009)
+Error Below 5 ms: for KEYPRESS in 41 and PROBE in 40 (-0.0000)
+Error Below 5 ms: for PROBE in 43 and BEGIN in 42 (0.0018)
+Error Below 5 ms: for KEYPRESS in 44 and PROBE in 43 (-0.0000)
+Error Below 5 ms: for PROBE in 46 and BEGIN in 45 (0.0016)
+Error Below 5 ms: for KEYPRESS in 47 and PROBE in 46 (-0.0000)
+Error Below 5 ms: for PROBE in 49 and BEGIN in 48 (0.0013)
+Error Below 5 ms: for KEYPRESS in 50 and PROBE in 49 (-0.0000)
+Error Below 5 ms: for PROBE in 52 and BEGIN in 51 (0.0006)
+Error Below 5 ms: for KEYPRESS in 53 and PROBE in 52 (-0.0000)
+Error Below 5 ms: for PROBE in 55 and BEGIN in 54 (0.0036)
+Error Below 5 ms: for KEYPRESS in 56 and PROBE in 55 (-0.0000)
+Error Below 5 ms: for PROBE in 58 and BEGIN in 57 (0.0028)
+Error Below 5 ms: for KEYPRESS in 59 and PROBE in 58 (-0.0000)
+Difference Between Summed StoryTimes and Summed Event Clock: 0.2666
+
+END OF A PROCEDURE (1744802132.274) *** 
+
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'

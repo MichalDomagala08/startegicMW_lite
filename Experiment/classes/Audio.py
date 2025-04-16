@@ -144,7 +144,7 @@ class audioTrial:
                     return True
 
         return False
-    def display_linear_scale_probe(self, scale_labels=["Brak skupienia","Pełne skupienie"], button_text="DALEJ"):
+    def display_linear_scale_probe(self, scale_labels=["Brak rozproszenia","Pełne rozproszenie"], button_text="DALEJ"):
         """
         Draws the linear scale, draggable point, and "DALEJ" button.
 
@@ -177,9 +177,14 @@ class audioTrial:
         self.screen.fill(background_color)
 
         # Draw the centered text
-        center_text_surface = self.font.render("Na ile oceniasz swoje skupienie na słuchanej historii? ", True, text_color)
-        center_text_rect = center_text_surface.get_rect(center=(self.width // 2, self.height // 4 + 100))
+        center_text_surface = self.font.render("Na ile w tym momencie czujesz, że jesteś rozproszony/a od słuchania historii?", True, text_color)
+        center_text_rect = center_text_surface.get_rect(center=(self.width // 2, self.height // 4))
         self.screen.blit(center_text_surface, center_text_rect)
+
+        # Draw the reminder text
+        center_text_surface2 = self.font.render("(Zaznacz myszką na poniższej skali w dowolnym miejscu)", True, text_color)
+        center_text_rect2 = center_text_surface.get_rect(center=(self.width // 2, self.height // 3.3))
+        self.screen.blit(center_text_surface2, center_text_rect2)
 
         # Draw the scale
         pygame.draw.rect(self.screen, scale_color, (self.scale_x, self.scale_y,  self.scale_width, self.scale_height))
@@ -192,8 +197,6 @@ class audioTrial:
         marking_positions = [
             self.scale_x,  # Start of the scale
             self.scale_x + self.scale_width // 2,  # Center of the scale
-            self.scale_x + self.scale_width // 4,  # Middle of the first half
-            self.scale_x + 3 * self.scale_width // 4,  # Middle of the second half
             self.scale_x + self.scale_width  # End of the scale
         ]
         for pos in marking_positions:

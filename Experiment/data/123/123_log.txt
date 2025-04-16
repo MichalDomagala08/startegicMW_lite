@@ -1,0 +1,55 @@
+
+       ###### STRATEGIC MW EXPERIMENT v0.98 ######    
+
+  Log Time: 2025-04-16 15:08:07.559121
+  Currently Processing Subject N.: 123
+  Current Display Information: 
+      Width:  1920
+      Height: 1080
+
+      Viewing Distance:  93
+
+  Experiment Config: 
+      dummyMode:             True
+      Current Named Entity:  KAROLINA
+      Test Mode:             False
+
+EXPERIMENTS STARTS
+
+Calibration of EyeTracker (1744808928.208)
+
+   Calibration Ended (Duration: 0.0)
+
+Starting Audio Trial 1 (1744808934.066) *** 
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: KAROLINA_1   at exp Time     0.014
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+Actual playback duration: 42.577 sec
+   Part ended:     KAROLINA_1   at exp Time    42.593 (Duration: 42.577)
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+   Value Logged 68  at: 142.189; Reaction Time: 99.596
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+Story Ends.
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+Answer Timing Log:
+      Event   StoryTime         RT  partDuration
+0     BEGIN    0.014354   0.000000      0.000000
+1     PROBE   42.593214   0.000000     42.577124
+2  KEYPRESS  142.189137  99.595927     42.577124
+Check Timing:
+Error Below 5 ms: for PROBE in 1 and BEGIN in 0 (0.0017)
+Error Below 5 ms: for KEYPRESS in 2 and PROBE in 1 (-0.0000)
+Difference Between Summed StoryTimes and Summed Event Clock: 0.0161
+
+Calibration of EyeTracker (1744809977.970)
+
+   Calibration Ended (Duration: 0.0014951229095458984)
+
+Starting Audio Trial 1 (1744809978.074) *** 
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'
+
+   Beginning Part: KAROLINA_1   at exp Time     0.013
+      [EyeLink ERROR]: 'createOutputs' object has no attribute 'el_tracker'

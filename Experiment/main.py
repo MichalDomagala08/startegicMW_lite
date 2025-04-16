@@ -16,6 +16,8 @@ from  random import uniform
 
 import pickle
 import sys,os,subprocess
+import datetime
+
 
 #### ----- Setups ------ ####
 
@@ -23,7 +25,7 @@ import sys,os,subprocess
 outputControll = createOutputs(dataPath=".\\Experiment\\data");
 outputControll.idInputwin()
 outputControll.write("\n       ###### STRATEGIC MW EXPERIMENT v0.98 ######    \n")
-
+outputControll.write(f"  Log Time: {datetime.datetime.now()}")
 outputControll.write(f"  Currently Processing Subject N.: {outputControll.ID}")
 if outputControll.ID == "" or len(outputControll.ID) < 3:
      raise ValueError("Invalid ID - Exiting PRocedure\n\n") # To Do XD 
@@ -62,16 +64,16 @@ outputControll.write(f"      Test Mode:             {TestMode}")
 ### Make Experiment Objects
 
 # Experiment  Message Initialization
-[WelcomeMessage1, WelcomeMessage11, WelcomeMessage2, WelcomeMessage3,WelcomeMessage21alt,exitMessage1] = generateMessages(entityName)
+[WelcomeMessage1, WelcomeMessage11, WelcomeMessage2, WelcomeMessage3,WelcomeMessage21alt,WelcomeMessage4,exitMessage1] = generateMessages(entityName)
                                             # Message dictionary                               Font, Screen, Next exp Part, prev exp Part
 welcome = welcomeMessage([WelcomeMessage1,WelcomeMessage11, WelcomeMessage2,  WelcomeMessage3],font,screen,"welcome1","calibration1")
 welcome2 = welcomeMessage([WelcomeMessage21alt],font,screen,"welcome2","story1")
-calib2 = welcomeMessage(WelcomeMessage3,font,screen,"calib_text","calibration2")
+calib2 = welcomeMessage([WelcomeMessage4],font,screen,"calib_text","calibration2")
 exitMessage = welcomeMessage([exitMessage1],font,screen,"exit","")
 
 # Audio File initialization:
-Story1 = audioTrial(r".\TextToSpeech\Story3_AIpart1",storyTimeDict3,font,screen,"story1","calib_text",outputControll,verbose=2)
-Story2 = audioTrial(r".\TextToSpeech\Story3_AIpart2",storyTimeDict3,font,screen,"story2","recall1",outputControll,verbose=2)
+Story1 = audioTrial(r".\TextToSpeech\Story3_AIpartTest1",storyTimeDict3,font,screen,"story1","calib_text",outputControll,verbose=2)
+Story2 = audioTrial(r".\TextToSpeech\Story3_AIpartTest2",storyTimeDict3,font,screen,"story2","recall1",outputControll,verbose=2)
 
 # Audio Recording Object Initialization:
 recall1 = recallTrial("story1.wav",font,screen,"recall1","exit",outputControll)
@@ -175,7 +177,7 @@ while running:
         if begBlockFlag:
            begBlockFlag = False
 
-        storyPart = welcome2.run()
+        storyPart = calib2.run()
 
         if storyPart != "calibration2":
            begBlockFlag = True
@@ -205,7 +207,7 @@ while running:
         screen.fill((255/2, 255/2, 255/2))  # Reset screen
         pygame.display.flip()  # Ensure Pygame updates after calibration
 
-    elif storyPart == "story1":
+    elif storyPart == "story2":
         #insert my AudioClass.run() Here!!!
         if begBlockFlag:
             el_tracker.startRecording(1, 1, 1, 1)
@@ -215,13 +217,13 @@ while running:
             outputControll.writeToEyeLink("\tLISTEN\tSTORY_1\tBEG")
             begBlockFlag = False
 
-        storyPart = Story1.run()
-        if storyPart != "story1":
+        storyPart = Story2.run()
+        if storyPart != "story2":
             outputControll.writeToEyeLink("\tLISTEN\tSTORY_1\tEND")
             outputControll.write("\nAnswer Timing Log:")
-            outputControll.write(pd.DataFrame(Story1.timingLog,columns=["Event","StoryTime","RT","partDuration"]).to_string())
+            outputControll.write(pd.DataFrame(Story2.timingLog,columns=["Event","StoryTime","RT","partDuration"]).to_string())
             begBlockFlag = True
-            testTiming(Story1.timingLog,outputControll)
+            testTiming(Story2.timingLog,outputControll)
 
     elif storyPart == "recall1":
         if begBlockFlag:
