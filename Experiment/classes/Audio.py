@@ -63,24 +63,25 @@ class audioTrial:
     
     def log_keypress(self,key):
             
-            if key == pygame.K_1:
-                keyname = "1"
-            elif key == pygame.K_2:
-                keyname = "2"
-            elif key == pygame.K_3:
-                keyname = "3"
-            elif key == pygame.K_4:
-                keyname = "4"
-            else:
-                keyname = "d"
+        """    if key == pygame.K_1:
+            keyname = "1"
+        elif key == pygame.K_2:
+            keyname = "2"
+        elif key == pygame.K_3:
+            keyname = "3"
+        elif key == pygame.K_4:
+            keyname = "4"
+        else:
+            keyname = "d"
 
-                self.output_control.write(f"WARNING SOMETHING ELSE WAS PRESSED {key}")
-            if self.verbose:
-                self.output_control.write(f"   Key {key} pressed at: {self.pausedTime - self.initialTime:.3f}; Reaction Time: {(self.pausedTime - self.probeOnset):.3f}")
+            self.output_control.write(f"WARNING SOMETHING ELSE WAS PRESSED {key}")
+        if self.verbose:"""
+            
+        self.output_control.write(f"   Value Logged {key}  at: {self.pausedTime - self.initialTime:.3f}; Reaction Time: {(self.pausedTime - self.probeOnset):.3f}")
 
-            self.output_control.writeToEyeLink(message=f"\tKEYPRESS\t{key}\t0")              # Write KeyPress to Eyelink                  
-            self.timingLog.append(["KEYPRESS",self.pausedTime  - self.initialTime ,(self.pausedTime - self.probeOnset),self.actual_duration])
-            self.responsesTiming.append((keyname , self.pausedTime  - self.initialTime))
+        self.output_control.writeToEyeLink(message=f"\tKEYPRESS\t{key}\t0")              # Write KeyPress to Eyelink                  
+        self.timingLog.append(["KEYPRESS",self.pausedTime  - self.initialTime ,(self.pausedTime - self.probeOnset),self.actual_duration])
+        self.responsesTiming.append((key , self.pausedTime  - self.initialTime))
             
     def log_part_beg(self):
         self.timingLog.append(["BEGIN",(time.perf_counter() - self.initialTime),0,0])              

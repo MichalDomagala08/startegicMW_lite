@@ -66,10 +66,12 @@ outputControll.write(f"      Test Mode:             {TestMode}")
                                             # Message dictionary                               Font, Screen, Next exp Part, prev exp Part
 welcome = welcomeMessage([WelcomeMessage1,WelcomeMessage11, WelcomeMessage2,  WelcomeMessage3],font,screen,"welcome1","calibration1")
 welcome2 = welcomeMessage([WelcomeMessage21alt],font,screen,"welcome2","story1")
+calib2 = welcomeMessage(WelcomeMessage3,font,screen,"calib_text","calibration2")
 exitMessage = welcomeMessage([exitMessage1],font,screen,"exit","")
 
 # Audio File initialization:
-Story1 = audioTrial(r".\TextToSpeech\Story3_AI",storyTimeDict3,font,screen,"story1","recall1",outputControll,verbose=2)
+Story1 = audioTrial(r".\TextToSpeech\Story3_AIpart1",storyTimeDict3,font,screen,"story1","calib_text",outputControll,verbose=2)
+Story2 = audioTrial(r".\TextToSpeech\Story3_AIpart2",storyTimeDict3,font,screen,"story2","recall1",outputControll,verbose=2)
 
 # Audio Recording Object Initialization:
 recall1 = recallTrial("story1.wav",font,screen,"recall1","exit",outputControll)
@@ -122,7 +124,6 @@ while running:
         if not dummyMode:
             try:
                 pylink.pumpDelay(50)
-
                 pylink.openGraphicsEx(genv)  # Register CalibrationGraphics
 
                 el_tracker.sendCommand("automatic_calibration_pacing = 1000")  # Pacing of Targets - allow for automaticity
@@ -151,6 +152,59 @@ while running:
         if storyPart != "welcome2":
            begBlockFlag = True
         
+    elif storyPart == "story1":
+        #insert my AudioClass.run() Here!!!
+        if begBlockFlag:
+            el_tracker.startRecording(1, 1, 1, 1)
+            pylink.pumpDelay(100)  # Small delay to ensure recording starts
+
+            outputControll.write(f"\nStarting Audio Trial 1 ({time.time():.3f}) *** ")
+            outputControll.writeToEyeLink("\tLISTEN\tSTORY_1\tBEG")
+            begBlockFlag = False
+
+        storyPart = Story1.run()
+        if storyPart != "story1":
+            outputControll.writeToEyeLink("\tLISTEN\tSTORY_1\tEND")
+            outputControll.write("\nAnswer Timing Log:")
+            outputControll.write(pd.DataFrame(Story1.timingLog,columns=["Event","StoryTime","RT","partDuration"]).to_string())
+            begBlockFlag = True
+            testTiming(Story1.timingLog,outputControll)
+
+    elif storyPart == "calib_text":
+       
+        if begBlockFlag:
+           begBlockFlag = False
+
+        storyPart = welcome2.run()
+
+        if storyPart != "calibration2":
+           begBlockFlag = True
+        
+    elif storyPart == "calibration2":
+        tempInitialTime = time.time();
+        outputControll.write(f"\nCalibration of EyeTracker ({time.time():.3f})\n")
+
+        if not dummyMode:
+            try:
+                pylink.pumpDelay(50)
+                pylink.openGraphicsEx(genv)  # Register CalibrationGraphics
+
+                el_tracker.sendCommand("automatic_calibration_pacing = 1000")  # Pacing of Targets - allow for automaticity
+                el_tracker.doTrackerSetup()  # Calibration Setup 
+
+                pylink.pumpDelay(50)            
+            except RuntimeError as err:
+                print('ERROR:', err)
+                el_tracker.exitCalibration()     
+
+        outputControll.write(f"   Calibration Ended (Duration: {time.time()-tempInitialTime})")
+
+        storyPart = "story2"
+        begBlockFlag = True
+
+        screen.fill((255/2, 255/2, 255/2))  # Reset screen
+        pygame.display.flip()  # Ensure Pygame updates after calibration
+
     elif storyPart == "story1":
         #insert my AudioClass.run() Here!!!
         if begBlockFlag:
