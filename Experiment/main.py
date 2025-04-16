@@ -39,23 +39,25 @@ width = disp.width
 height =disp.height
 screen = pygame.display.set_mode((width, height))
 tempInitialTime = 0; # For Gathering Realtive Timestamps
-# Font setup
+# PyGame setups
 font = pygame.font.Font(None, 50)
+pygame.mouse.set_visible(False)
+pygame.display.set_caption("Strategic MW Experiment")
 
 # story Global parameters Setup:
 storyPart = "welcome1"  # Controlling the experiment flow
 dummyMode = True
+TestMode = False
 SCREEN_WIDTH_CM = 53 #Width
 SCREEN_HEIGHT_CM = 30 # Height 
 VIEWING_DISTANCE_CM = 93 # 
 entityName = [storyTimeDict3["partNames"][0][:-2], storyTimeDict3["partNames"][1][:-2]][int(uniform(0, 1))]
+outputControll.write(f"      Viewing Distance:  {VIEWING_DISTANCE_CM}\n")
 
 outputControll.write("  Experiment Config: ")
-outputControll.write(f"      dummyMode:  {dummyMode}\n")
-outputControll.write(f"      Current Named Entity:  {entityName}\n")
-outputControll.write(f"      Screen width:  {SCREEN_WIDTH_CM}\n")
-outputControll.write(f"      Screen Height:  {SCREEN_HEIGHT_CM}\n")
-outputControll.write(f"      Viewing Distance:  {VIEWING_DISTANCE_CM}\n")
+outputControll.write(f"      dummyMode:             {dummyMode}")
+outputControll.write(f"      Current Named Entity:  {entityName}")
+outputControll.write(f"      Test Mode:             {TestMode}")
 
 ### Make Experiment Objects
 

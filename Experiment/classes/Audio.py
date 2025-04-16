@@ -332,6 +332,7 @@ class audioTrial:
             self.display_linear_scale_probe()
         else:
             self.display_fixation_cross()
+        pygame.mouse.set_visible(self.paused_for_input)
 
         # Check if the audio has finished
         if not self.audio_playing:
