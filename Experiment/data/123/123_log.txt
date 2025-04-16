@@ -1,0 +1,14 @@
+
+       ###### STRATEGIC MW EXPERIMENT v0.98 ######    
+
+  Currently Processing Subject N.: 123
+  Current Display Information: 
+      Width:  1920
+      Height: 1080
+
+      Viewing Distance:  93
+
+  Experiment Config: 
+      dummyMode:             True
+      Current Named Entity:  KAROLINA
+      Test Mode:             False

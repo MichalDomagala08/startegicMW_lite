@@ -1,0 +1,551 @@
+               ==========================================================
+               =====                PREPROC LOG FILE               ===== 
+               ==========================================================
+
+
+===# Load and Prepare Data #=== 
+
+    Loading Participant Data... done 
+    Getting Events...           done 
+    Changing Timing....         done 
+    Getting Own Events...       done 
+
+            Events DataFrame:       
+                beg           end       keytime
+count  4.400000e+01  4.400000e+01  4.400000e+01
+mean   1.772348e+06  1.832153e+06  1.834942e+06
+std    1.183639e+06  1.183103e+06  1.182649e+06
+min    1.210000e+02  6.145000e+04  7.373600e+04
+25%    6.885702e+05  7.512142e+05  7.574412e+05
+50%    1.774804e+06  1.833812e+06  1.837482e+06
+75%    2.864588e+06  2.923486e+06  2.925460e+06
+max    3.519646e+06  3.578504e+06  3.580422e+06
+
+    Splitting by events...      done 
+
+===# Stats and Checks for Unfiltered Data #=== 
+
+ 
+(1) Check mean Gaze Center
+                              X           Y
+Middle Screen Coordinates:  959.5       539.5
+Mean Eye Coordinates:      979.6       608.8
+
+(2) Check Missing Pupil Data as a proxy for missing!
+Number of NoGaze Data: 
+(Left: 62965, Right: 72256), Both: 61567
+
+----------------------------------------------------------------------------------------------------
+
+ (3) Pupil Difference Test 
+    Percentage Difference: 0.028857425958463162
+
+===# Preprocessing the Data #=== 
+
+     Preproc Parameters: General: 
+        Verbose:              1
+        Resampling Rate:      100
+        DGV from Center:      5
+
+    Preproc Parameters: Blinks: 
+        Blink Interpolation:  0
+        Maximum Blink Length: 500
+        Blink Interp Bound:   75
+        Blink Begining Bound: 1000
+
+    Preproc Parameters: Smooth: 
+        Window size:          10
+        Minimal Cluster len:  2000
+        Maximal Gap Length:   500
+
+    ### Analysing: STORY_1 // KASIA_1 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 148.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 0 (duration: 0)
+            Blinks interp:  12 (duration: 2964.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:6133.0
+        (5) Replacing Zeros: 
+            Zeros: N: 1.0
+        (6) Smoothin Out the Data: 
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count   6133.000000  6098.000000  6098.000000  5719.000000  6074.000000  6074.000000  6082.000000
+		mean   30790.000000  1015.926435   582.429862  5913.106976   998.601646   529.814422  5762.573660
+		std    17705.889322   209.585755   112.459400   248.880708   202.621804   115.760101   235.360128
+		min      130.000000   -75.300000   -69.500000  5228.400000   139.700000   -72.800000  4965.000000
+		25%    15460.000000   963.000000   560.500000  5767.200000   947.400000   498.900000  5629.000000
+		50%    30790.000000   978.500000   574.300000  5938.200000   960.000000   520.700000  5797.000000
+		75%    46120.000000   995.000000   588.600000  6067.950000   971.200000   538.500000  5911.000000
+		max    61450.000000  2761.600000  1785.200000  6488.500000  2479.900000  1898.600000  6302.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 5719 (0.9324963313223544 %)
+    ### Analysing: STORY_1 // JANEK_1 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 347.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 0 (duration: 0)
+            Blinks interp:  30 (duration: 6936.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:5956.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothin Out the Data: 
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    5956.000000  5892.000000  5892.000000  5817.000000  5833.000000  5833.000000  5956.000000
+		mean   103535.000000   971.538527   582.908724  5841.167923   941.379736   548.278690  5677.710880
+		std     17194.934332   103.165434    77.361512   265.799671   102.585781    62.185592   266.336943
+		min     73760.000000   184.900000   344.700000  5136.600000   151.400000   288.400000  4984.000000
+		25%     88647.500000   967.200000   558.600000  5660.400000   933.500000   523.200000  5485.000000
+		50%    103535.000000   978.500000   571.600000  5849.300000   948.100000   539.900000  5706.000000
+		75%    118422.500000   990.500000   584.200000  6058.800000   959.100000   559.400000  5896.000000
+		max    133310.000000  1682.600000  1627.400000  6375.800000  1704.800000  1556.600000  6210.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 5817 (0.9766621893888516 %)
+    ### Analysing: STORY_1 // KASIA_2 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 238.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 1 (duration: 482.0)
+            Blinks interp:  16 (duration: 3808.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:5669.0
+        (5) Replacing Zeros: 
+            Zeros: N:14.0
+        (6) Smoothin Out the Data: 
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    5669.000000  5586.000000  5586.000000  5302.000000  5555.000000  5555.000000  5585.000000
+		mean   164360.000000  1009.590154   564.471822  5607.179529   985.760738   531.923996  5458.477081
+		std     16366.436692   163.911938   103.867191   225.503358   170.017534    95.488676   269.775626
+		min    136020.000000   303.700000  -218.400000  5003.000000   654.400000  -185.200000  4527.000000
+		25%    150190.000000   972.200000   561.000000  5456.050000   946.200000   522.900000  5277.000000
+		50%    164360.000000   984.300000   571.500000  5626.100000   956.500000   536.100000  5485.000000
+		75%    178530.000000   995.600000   581.775000  5782.875000   969.100000   553.400000  5669.000000
+		max    192700.000000  2281.100000  1582.000000  6171.800000  2326.300000  1437.700000  6046.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 5302 (0.9352619509613689 %)
+    ### Analysing: STORY_1 // JANEK_2 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 292.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 1 (duration: 394.0)
+            Blinks interp:  18 (duration: 5072.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:5994.0
+        (5) Replacing Zeros: 
+            Zeros: N:25.0
+        (6) Smoothin Out the Data: 
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    5994.000000  5848.000000  5848.000000  5805.000000  5834.000000  5834.000000  5917.000000
+		mean   224195.000000  1000.936012   563.125222  5798.690414   967.775489   567.371649  5726.839023
+		std     17304.630883    93.606212   137.173726   405.502088    98.326780   121.312011   421.960569
+		min    194230.000000   225.800000  -651.200000  4616.000000   456.100000  -468.500000  4524.000000
+		25%    209212.500000   971.200000   551.175000  5558.300000   927.725000   550.200000  5462.000000
+		50%    224195.000000   995.400000   568.400000  5839.100000   967.500000   566.100000  5782.000000
+		75%    239177.500000  1029.700000   586.000000  5999.400000   988.100000   578.900000  5949.000000
+		max    254160.000000  2209.500000  1497.000000  6559.800000  2256.200000  1480.900000  6519.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 5805 (0.9684684684684685 %)
+    ### Analysing: STORY_1 // KASIA_3 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 353.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 2 (duration: 556.0)
+            Blinks interp:  24 (duration: 5932.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:6517.0
+        (5) Replacing Zeros: 
+            Zeros: N: 9.0
+        (6) Smoothin Out the Data: 
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    6517.000000  6403.000000  6403.000000  6403.000000  6363.000000  6363.000000  6406.000000
+		mean   288350.000000   967.075683   578.610479  5423.948177   941.212023   571.829876  5329.731111
+		std     18814.401842    41.032909    63.909550   338.108447    31.766874    47.109850   382.782833
+		min    255770.000000   248.700000   470.500000  4592.000000   708.000000   447.800000  4377.000000
+		25%    272060.000000   955.800000   558.400000  5171.000000   923.600000   553.400000  4994.000000
+		50%    288350.000000   969.000000   571.100000  5446.000000   941.900000   569.700000  5371.000000
+		75%    304640.000000   979.900000   583.450000  5622.100000   954.100000   579.600000  5594.000000
+		max    320930.000000  1111.500000  1539.800000  6203.000000  1619.900000  1492.600000  6165.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 6403 (0.9825072886297376 %)
+    ### Analysing: STORY_1 // JANEK_3 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 139.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 0 (duration: 0)
+            Blinks interp:  12 (duration: 2776.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:5761.0
+        (5) Replacing Zeros: 
+            Zeros: N:43.0
+        (6) Smoothin Out the Data: 
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    5761.000000  5692.000000  5692.000000  5636.000000  5661.000000  5661.000000  5668.000000
+		mean   351430.000000   974.121785   582.704339  5248.298845   948.145840   574.865836  5130.263938
+		std     16632.017817    68.487383    57.092197   281.619171    60.563752    32.705185   343.541667
+		min    322630.000000   313.500000   295.900000  4437.000000   474.800000   283.300000  4325.000000
+		25%    337030.000000   963.500000   567.500000  5110.296429   930.900000   562.300000  4922.000000
+		50%    351430.000000   974.000000   577.400000  5266.100000   945.600000   573.300000  5147.000000
+		75%    365830.000000   984.300000   584.800000  5405.000000   957.900000   582.800000  5345.000000
+		max    380230.000000  2120.400000  1446.000000  6061.000000  2032.300000  1373.200000  6102.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 5636 (0.9783023780593647 %)
+    ### Analysing: STORY_1 // KASIA_4 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 340.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 1 (duration: 212.0)
+            Blinks interp:  24 (duration: 6432.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:6202.0
+        (5) Replacing Zeros: 
+            Zeros: N:11.0
+        (6) Smoothin Out the Data: 
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    6202.000000  6088.000000  6088.000000  6106.000000  6042.000000  6042.000000  6134.000000
+		mean   412785.000000   982.515489   595.064849  5087.090698   960.991725   585.988762  4857.607679
+		std     17905.075165   103.925184    85.124379   325.054911   105.020915    63.066792   426.187010
+		min    381780.000000   324.400000  -308.500000  4238.000000   463.100000  -293.400000  3925.000000
+		25%    397282.500000   964.400000   573.000000  4851.000000   938.600000   573.800000  4526.000000
+		50%    412785.000000   980.300000   584.800000  5061.100000   953.100000   586.300000  4818.500000
+		75%    428287.500000   993.000000   607.000000  5366.275000   966.200000   597.875000  5229.000000
+		max    443790.000000  2323.900000  1643.100000  5802.500000  2412.700000  1378.900000  5664.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 6106 (0.9845211222186392 %)
+    ### Analysing: STORY_1 // JANEK_4 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 376.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 1 (duration: 234.0)
+            Blinks interp:  28 (duration: 7064.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:6536.0
+        (5) Replacing Zeros: 
+            Zeros: N:50.0
+        (6) Smoothin Out the Data: 
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    6536.000000  6367.000000  6367.000000  6403.000000  6331.000000  6331.000000  6414.000000
+		mean   477645.000000   967.182284   605.223449  5435.838815   956.324799   588.853356  5331.225678
+		std     18869.250118    48.071442    74.292826   334.120368    40.634480    57.813245   394.710070
+		min    444970.000000   272.100000   444.700000  4654.000000   758.900000   456.200000  4356.000000
+		25%    461307.500000   957.100000   584.900000  5147.000000   942.100000   561.400000  5003.000000
+		50%    477645.000000   967.400000   595.300000  5439.000000   958.100000   585.800000  5397.000000
+		75%    493982.500000   976.500000   606.500000  5648.000000   968.900000   604.900000  5608.000000
+		max    510320.000000  1506.000000  1767.900000  6271.000000  1621.700000  1594.300000  6143.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 6403 (0.9796511627906976 %)
+    ### Analysing: STORY_1 // KASIA_5 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 260.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 1 (duration: 190.0)
+            Blinks interp:  16 (duration: 4832.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:6099.0
+        (5) Replacing Zeros: 
+            Zeros: N:60.0
+        (6) Smoothin Out the Data: 
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    6099.000000  5952.000000  5952.000000  5518.000000  5908.000000  5908.000000  5970.000000
+		mean   542650.000000  1014.927856   649.909661  5056.047912   989.216080   663.939336  4904.310553
+		std     17607.739775   160.597873   217.989016   444.060242   143.222617   240.573483   567.480770
+		min    512160.000000   135.600000  -360.200000  4136.400000   504.200000  -263.100000  3823.000000
+		25%    527405.000000   957.300000   576.600000  4707.125000   938.700000   585.300000  4436.000000
+		50%    542650.000000   975.700000   588.600000  4979.100000   949.400000   599.300000  4798.000000
+		75%    557895.000000   990.000000   604.300000  5488.600000   961.500000   615.225000  5456.000000
+		max    573140.000000  2070.500000  1901.400000  5878.400000  1832.300000  2048.100000  6068.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 5518 (0.9047384817183145 %)
+    ### Analysing: STORY_1 // JANEK_5 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 111.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 2 (duration: 2276.0)
+            Blinks interp:  10 (duration: 2204.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:6048.0
+        (5) Replacing Zeros: 
+            Zeros: N:41.0
+        (6) Smoothin Out the Data: 
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    6048.000000  5780.000000  5780.000000  5287.000000  5760.000000  5760.000000  5728.000000
+		mean   605025.000000  1005.903824   666.239239  5677.334415   984.514844   650.343750  5457.430517
+		std     17460.515456   150.953271   189.391335   576.698023   143.571963   229.915975   596.188608
+		min    574790.000000   855.900000   474.700000  4275.200000   878.300000   456.400000  4149.000000
+		25%    589907.500000   952.600000   591.700000  5218.050000   930.275000   540.275000  5009.000000
+		50%    605025.000000   963.600000   610.600000  5833.700000   944.900000   581.450000  5538.000000
+		75%    620142.500000   984.025000   635.800000  6182.769565   961.525000   648.725000  5976.000000
+		max    635260.000000  3009.300000  1859.700000  6499.000000  2968.800000  1981.900000  6384.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 5287 (0.8741732804232805 %)
+    ### Analysing: STORY_1 // KASIA_6 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 371.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 2 (duration: 588.0)
+            Blinks interp:  26 (duration: 6268.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:5796.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothin Out the Data: 
+            Warning - [] cluster is empty
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    5796.000000  5673.000000  5673.000000  5441.000000  5644.000000  5644.000000  5736.000000
+		mean   671825.000000   983.577825   607.670104  6033.675412   955.964564   556.363767  5945.542800
+		std     16733.054115    83.395941   122.202538   245.475145    87.193346   134.944902   265.638069
+		min    642850.000000   398.500000   491.500000  5244.000000   262.900000   474.300000  4296.000000
+		25%    657337.500000   960.400000   569.900000  5884.000000   934.975000   517.400000  5808.000000
+		50%    671825.000000   973.100000   581.700000  6069.500000   946.200000   530.400000  5999.000000
+		75%    686312.500000   988.500000   599.100000  6239.900000   958.600000   543.400000  6156.000000
+		max    700800.000000  1610.200000  1942.700000  6518.400000  1546.200000  2042.100000  6358.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 5441 (0.9387508626639062 %)
+    ### Analysing: STORY_1 // JANEK_6 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 420.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 1 (duration: 622.0)
+            Blinks interp:  30 (duration: 7184.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:6420.0
+        (5) Replacing Zeros: 
+            Zeros: N: 2.0
+        (6) Smoothin Out the Data: 
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    6420.00000  6263.000000  6263.000000  6208.000000  6265.000000  6265.000000  6327.000000
+		mean   735915.00000   943.829986   589.523040  5664.603256   916.447279   562.175626  5640.125020
+		std     18534.38696    92.610970   102.109761   296.356731   105.115926   119.914210   331.633565
+		min    703820.00000    15.400000   340.000000  4772.700000    -1.400000  -564.700000  4800.000000
+		25%    719867.50000   950.000000   561.950000  5469.000000   920.900000   538.100000  5418.454545
+		50%    735915.00000   958.400000   572.700000  5690.550000   933.600000   549.700000  5657.000000
+		75%    751962.50000   966.800000   584.050000  5900.175000   942.700000   566.800000  5899.000000
+		max    768010.00000  1040.900000  1626.900000  6177.900000  1599.600000  1442.100000  6278.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 6208 (0.9669781931464174 %)
+    ### Analysing: STORY_1 // KASIA_7 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 153.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 1 (duration: 330.0)
+            Blinks interp:  10 (duration: 2380.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:6098.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothin Out the Data: 
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    6098.000000  6052.000000  6052.000000  5845.000000  6038.000000  6038.000000  6065.000000
+		mean   805825.000000   967.153371   587.791028  5637.333479   947.488208   573.304439  5542.855730
+		std     17604.853024    85.894495   117.322791   378.902660    80.562430   134.900833   442.315873
+		min    775340.000000   267.500000   442.500000  4543.000000   410.900000   482.300000  4342.000000
+		25%    790582.500000   943.800000   555.600000  5293.900000   925.925000   536.225000  5178.000000
+		50%    805825.000000   956.700000   567.600000  5689.100000   938.400000   553.600000  5606.000000
+		75%    821067.500000   967.325000   581.100000  5928.700000   946.800000   570.400000  5934.000000
+		max    836310.000000  1650.800000  1942.800000  6292.700000  1657.100000  2108.000000  6245.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 5845 (0.9585109872089209 %)
+    ### Analysing: STORY_1 // JANEK_7 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 342.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 1 (duration: 934.0)
+            Blinks interp:  16 (duration: 4956.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:6028.0
+        (5) Replacing Zeros: 
+            Zeros: N:64.0
+        (6) Smoothin Out the Data: 
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    6028.000000  5811.000000  5811.000000  5699.000000  5786.000000  5786.000000  5821.000000
+		mean   867675.000000   963.878489   599.244794  5416.470549   939.276184   607.874922  5285.200223
+		std     17402.780429    84.025437   119.929507   352.186416    74.758938   132.577661   389.055767
+		min    837540.000000   272.200000   410.900000  4468.500000   681.700000   367.800000  4227.000000
+		25%    852607.500000   937.550000   558.800000  5223.750000   914.900000   551.800000  4993.000000
+		50%    867675.000000   954.800000   576.100000  5423.900000   927.500000   587.900000  5341.000000
+		75%    882742.500000   970.700000   603.900000  5635.000000   943.400000   621.900000  5604.000000
+		max    897810.000000  1494.500000  1586.900000  6105.600000  1495.000000  1626.000000  5984.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 5699 (0.9454213669542136 %)
+    ### Analysing: STORY_1 // KASIA_8 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 190.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 0 (duration: 0)
+            Blinks interp:  12 (duration: 3820.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:5949.0
+        (5) Replacing Zeros: 
+            Zeros: N:25.0
+        (6) Smoothin Out the Data: 
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    5949.000000  5846.000000  5846.000000  5745.000000  5819.000000  5819.000000  5874.000000
+		mean   929060.000000   966.368029   582.193260  5371.101637   943.196993   579.134216  5271.671859
+		std     17174.727072    73.787196   120.689735   379.470376    68.083725   130.754596   465.938958
+		min    899320.000000   344.800000   432.900000  4339.200000   704.400000   441.400000  4028.000000
+		25%    914190.000000   947.600000   549.100000  5099.600000   921.700000   540.150000  4909.000000
+		50%    929060.000000   961.750000   560.700000  5359.700000   939.100000   559.500000  5257.000000
+		75%    943930.000000   983.200000   575.200000  5722.000000   956.400000   573.800000  5714.000000
+		max    958800.000000  1470.200000  1713.500000  6009.700000  1427.300000  2122.900000  6048.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 5745 (0.9657085224407463 %)
+    ### Analysing: STORY_1 // JANEK_8 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 307.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 2 (duration: 476.0)
+            Blinks interp:  18 (duration: 5148.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:5715.0
+        (5) Replacing Zeros: 
+            Zeros: N:24.0
+        (6) Smoothin Out the Data: 
+            Warning - [] cluster is empty
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  5.715000e+03  5560.000000  5560.000000  4998.000000  5563.000000  5563.000000  5609.000000
+		mean   9.899600e+05   960.518435   618.963579  5336.178808   939.579633   614.756786  5238.930201
+		std    1.649923e+04    95.515787   180.865035   329.520184    89.073657   207.023779   420.877955
+		min    9.613900e+05   309.900000   382.600000  4306.100000   576.700000   388.400000  4002.000000
+		25%    9.756750e+05   921.200000   557.500000  5164.000000   910.250000   542.100000  4988.000000
+		50%    9.899600e+05   957.600000   571.500000  5369.800000   936.100000   563.100000  5295.000000
+		75%    1.004245e+06   975.700000   591.000000  5523.950000   955.200000   588.450000  5514.000000
+		max    1.018530e+06  1442.900000  1903.300000  6139.700000  1424.200000  2085.600000  6105.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4998 (0.8745406824146982 %)
+    ### Analysing: STORY_1 // KASIA_9 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 225.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 2 (duration: 1496.0)
+            Blinks interp:  12 (duration: 3204.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:5941.0
+        (5) Replacing Zeros: 
+            Zeros: N:57.0
+        (6) Smoothin Out the Data: 
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  5.941000e+03  5727.000000  5727.000000  5450.000000  5689.000000  5689.000000  5684.000000
+		mean   1.051570e+06   968.338275   606.491531  5429.049191   946.615205   586.473879  5332.559641
+		std    1.715163e+04   107.756309   153.284997   351.398450    93.389616   160.052681   424.792569
+		min    1.021870e+06   256.100000   388.400000  4330.700000   382.800000   380.000000  4088.000000
+		25%    1.036720e+06   940.200000   562.700000  5253.000000   913.700000   532.800000  5105.000000
+		50%    1.051570e+06   957.500000   572.900000  5515.250000   930.300000   554.500000  5433.000000
+		75%    1.066420e+06   969.400000   584.500000  5680.375000   949.300000   575.400000  5655.000000
+		max    1.081270e+06  1618.200000  1578.800000  6080.800000  1535.400000  1442.200000  6026.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 5450 (0.9173539808113113 %)
+    ### Analysing: STORY_1 // JANEK_9 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 241.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 2 (duration: 526.0)
+            Blinks interp:  12 (duration: 3796.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:5733.0
+        (5) Replacing Zeros: 
+            Zeros: N: 4.0
+        (6) Smoothin Out the Data: 
+            Warning - [] cluster is empty
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  5.733000e+03  5637.000000  5637.000000  5506.000000  5606.000000  5606.000000  5627.000000
+		mean   1.114340e+06   960.734540   589.114316  5266.633767   953.791937   567.087174  5143.226497
+		std    1.655119e+04    69.037925   114.027994   278.097889    65.604405   116.240511   351.990212
+		min    1.085680e+06   282.000000   149.200000  4629.700000   394.600000   139.600000  4346.000000
+		25%    1.100010e+06   946.200000   561.800000  5047.700000   931.425000   540.000000  4846.000000
+		50%    1.114340e+06   957.500000   573.200000  5266.356250   951.200000   553.800000  5167.000000
+		75%    1.128670e+06   977.300000   585.300000  5506.900000   972.100000   564.700000  5460.000000
+		max    1.143000e+06  1373.700000  1635.300000  5760.000000  1591.600000  1956.700000  5766.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 5506 (0.9604046746903889 %)
+    ### Analysing: STORY_1 // KASIA_10 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 139.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 0 (duration: 0)
+            Blinks interp:  10 (duration: 2764.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:5872.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothin Out the Data: 
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  5.872000e+03  5829.000000  5829.000000  5301.000000  5807.000000  5807.000000  5872.000000
+		mean   1.175295e+06  1001.574730   643.502711  5188.066781   993.432065   643.125366  5080.654632
+		std    1.695245e+04   148.638582   227.924932   262.797539   137.181768   254.003175   408.648509
+		min    1.145940e+06   297.000000   445.100000  4234.300000   829.600000   469.200000  3914.000000
+		25%    1.160618e+06   949.300000   554.400000  5051.000000   937.000000   542.500000  4847.000000
+		50%    1.175295e+06   964.200000   567.300000  5196.800000   955.700000   559.900000  5058.500000
+		75%    1.189972e+06   982.100000   581.600000  5321.100000   976.800000   579.100000  5208.250000
+		max    1.204650e+06  1604.400000  1907.400000  6421.142857  1568.700000  1926.700000  6397.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 5301 (0.902758855585831 %)
+    ### Analysing: STORY_1 // JANEK_10 ###
+        (1) Downsampling to rate 100.0
+        (2) Removing Points from Outside of the Gaze by 5 dg (221.4 px) 
+            N: 268.0;  
+        (3) Interpolating Blinks: 
+            Blinks removed: 1 (duration: 232.0)
+            Blinks interp:  18 (duration: 4880.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:6228.0
+        (5) Replacing Zeros: 
+            Zeros: N:41.0
+        (6) Smoothin Out the Data: 
+
+        Final Data Stats: 
