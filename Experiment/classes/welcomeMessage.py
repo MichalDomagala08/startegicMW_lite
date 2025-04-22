@@ -86,8 +86,10 @@ def generateMessages(firstEntityName):
                         "W trakcie jej słuchania, prosimy o utrzymanie wzroku",
                         "na krzyżyku wyświetlonym na ekranie.",
                         " ",
-                        "Po odsłuchaniu historii zostaniesz poproszony/a ",
-                        "o jej ustne odpamiętanie (które będzie nagrywane dźwiękowo).",
+                        "Dodatkowo poprosimy Cię o zwracanie szczególnej uwagi na losy konkretnego bohatera.",
+                        " ",
+                        "Po odsłuchaniu, zostaniesz poproszony/a o ustne",
+                        " odpamiętani całości historii (które będzie nagrywane dźwiękowo).",
                         " ",
                                 "#Naciśnij SPACJĘ aby przejść dalej #"]
 

@@ -124,7 +124,7 @@ class recallTrial:
     def run(self):
 
         if self.welcome_screen:
-            self.display_message(["Poczekaj teraz na eksperymentatora, aż ustawi sprzęt potrzebny do nagrywania.", " ", "Gdy wszystko będzie gotowe, naciśnij SPACJĘ by nagrać "," ustne odpamiętanie historii","","Aby zakończyć nagrywanie i przejść dalej wciśnij ENTER"])
+            self.display_message(["Poczekaj teraz na eksperymentatora, aż ustawi sprzęt potrzebny do nagrywania.", " ", "Gdy wszystko będzie gotowe, naciśnij SPACJĘ by nagrać "," ustne odpamiętanie historii"])
         elif self.recording and self.assurance == False:
             self.display_message(["Nagrywanie... ","","Naciśniej ENTER by zakończyć nagrywanie "])
         elif self.recording and self.assurance:
