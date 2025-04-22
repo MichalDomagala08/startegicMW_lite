@@ -1,0 +1,31 @@
+
+       ###### STRATEGIC MW EXPERIMENT v0.98 ######    
+
+  Log Time: 2025-04-22 11:59:25.930397
+  Currently Processing Subject N.: 123
+  Current Display Information: 
+      Width:  1920
+      Height: 1080
+
+      Viewing Distance:  93
+
+  Experiment Config: 
+      dummyMode:             False
+      Current Named Entity:  KAROLINA
+      Test Mode:             True
+Link established
+Failed to load audio: No file 'type.wav' found in working directory 'C:\Users\Lab\Documents\startegicMW_lite2'.
+
+
+
+EXPERIMENTS STARTS
+
+END OF A PROCEDURE (1745315973.282) *** 
+
+Eye Tracking data saved to: C:\Users\Lab\Documents\startegicMW_lite2\Experiment\data\123\123.edf
+Error converting EDF: 
+Extracted Event Data: 
+Empty DataFrame
+Columns: [Event, Type, Status, Time, Duration]
+Index: []
+ 

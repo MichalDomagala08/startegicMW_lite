@@ -12,7 +12,7 @@ from classes.Audio import storyTimeDict3
 from classes.recallTrial import recallTrial
 from classes.welcomeMessage import welcomeMessage
 from classes.welcomeMessage import generateMessages
-from  random import uniform
+from  random import choice
 
 import pickle
 import sys,os,subprocess
@@ -48,12 +48,12 @@ pygame.display.set_caption("Strategic MW Experiment")
 
 # story Global parameters Setup:
 storyPart = "welcome1"  # Controlling the experiment flow
-dummyMode = True
+dummyMode = False
 TestMode = True
 SCREEN_WIDTH_CM = 53 #Width
 SCREEN_HEIGHT_CM = 30 # Height 
 VIEWING_DISTANCE_CM = 93 # 
-entityName = [storyTimeDict3["partNames"][0][:-2], storyTimeDict3["partNames"][1][:-2]][int(uniform(0, 1))]
+entityName = [storyTimeDict3["partNames"][0][:-2], storyTimeDict3["partNames"][1][:-2]][int(choice([0, 1]))]
 outputControll.write(f"      Viewing Distance:  {VIEWING_DISTANCE_CM}\n")
 
 outputControll.write("  Experiment Config: ")
@@ -72,7 +72,7 @@ calib2 = welcomeMessage([WelcomeMessage4],font,screen,"calib_text","calibration2
 exitMessage = welcomeMessage([exitMessage1],font,screen,"exit","")
 
 # Audio File initialization:
-if TestMode == False:
+if TestMode:
     Story1 = audioTrial(r".\TextToSpeech\Story3_AIpartTest1",storyTimeDict3,font,screen,"story1","calib_text",outputControll,verbose=2)
     Story2 = audioTrial(r".\TextToSpeech\Story3_AIpartTest2",storyTimeDict3,font,screen,"story2","recall1",outputControll,verbose=2)
 else:
@@ -128,6 +128,8 @@ while running:
 
         if not dummyMode:
             try:
+                pylink.closeGraphics()
+
                 pylink.pumpDelay(50)
                 pylink.openGraphicsEx(genv)  # Register CalibrationGraphics
 
@@ -176,7 +178,8 @@ while running:
             testTiming(Story1.timingLog,outputControll)
 
     elif storyPart == "calib_text":
-       
+        pygame.mouse.set_visible(False)
+
         if begBlockFlag:
            begBlockFlag = False
 
@@ -191,9 +194,7 @@ while running:
 
         if not dummyMode:
             try:
-                pylink.pumpDelay(50)
-                pylink.openGraphicsEx(genv)  # Register CalibrationGraphics
-
+              
                 el_tracker.sendCommand("automatic_calibration_pacing = 1000")  # Pacing of Targets - allow for automaticity
                 el_tracker.doTrackerSetup()  # Calibration Setup 
 
@@ -229,6 +230,8 @@ while running:
             testTiming(Story2.timingLog,outputControll)
 
     elif storyPart == "recall1":
+        pygame.mouse.set_visible(False)
+
         if begBlockFlag:
             el_tracker.stopRecording()
 

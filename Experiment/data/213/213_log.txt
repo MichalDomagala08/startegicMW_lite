@@ -1,0 +1,101 @@
+
+       ###### STRATEGIC MW EXPERIMENT v0.98 ######    
+
+  Log Time: 2025-04-22 11:59:42.411214
+  Currently Processing Subject N.: 213
+  Current Display Information: 
+      Width:  1920
+      Height: 1080
+
+      Viewing Distance:  93
+
+  Experiment Config: 
+      dummyMode:             False
+      Current Named Entity:  JANEK
+      Test Mode:             True
+Link established
+Failed to load audio: No file 'type.wav' found in working directory 'C:\Users\Lab\Documents\startegicMW_lite2'.
+
+
+
+EXPERIMENTS STARTS
+
+Calibration of EyeTracker (1745316022.890)
+
+   Calibration Ended (Duration: 31.157310009002686)
+
+Starting Audio Trial 1 (1745316059.242) *** 
+
+   Beginning Part: KAROLINA_1   at exp Time     0.007
+Actual playback duration: 42.575 sec
+   Part ended:     KAROLINA_1   at exp Time    42.584 (Duration: 42.575)
+   Value Logged 18  at: 45.478; Reaction Time: 2.895
+
+Story Ends.
+
+Answer Timing Log:
+      Event  StoryTime        RT  partDuration
+0     BEGIN   0.006915  0.000000       0.00000
+1     PROBE  42.583569  0.000000      42.57508
+2  KEYPRESS  45.478071  2.894504      42.57508
+Check Timing:
+Error Below 5 ms: for PROBE in 1 and BEGIN in 0 (0.0016)
+Error Below 5 ms: for KEYPRESS in 2 and PROBE in 1 (-0.0000)
+Difference Between Summed StoryTimes and Summed Event Clock: 0.0085
+
+Calibration of EyeTracker (1745316109.059)
+
+   Calibration Ended (Duration: 46.53260016441345)
+
+Starting Audio Trial 1 (1745316155.715) *** 
+
+   Beginning Part: KAROLINA_1   at exp Time     0.008
+Actual playback duration: 41.181 sec
+   Part ended:     KAROLINA_1   at exp Time    41.190 (Duration: 41.181)
+   Value Logged 31  at: 136.439; Reaction Time: 95.248
+
+Story Ends.
+
+Answer Timing Log:
+      Event   StoryTime         RT  partDuration
+0     BEGIN    0.007603   0.000000      0.000000
+1     PROBE   41.190456   0.000000     41.181315
+2  KEYPRESS  136.438763  95.248309     41.181315
+Check Timing:
+Error Below 5 ms: for PROBE in 1 and BEGIN in 0 (0.0015)
+Error Below 5 ms: for KEYPRESS in 2 and PROBE in 1 (-0.0000)
+Difference Between Summed StoryTimes and Summed Event Clock: 0.0091
+
+Recall of Audio  1 (1745316292.166 *** 
+
+Recording Started: (Duration: 314.4605062007904)
+Recording saved as: .\Experiment\data\213\Recalls\story1.wav
+Recording Ended:   (Duration: 324.49991941452026)
+
+END OF A PROCEDURE (1745316307.042) *** 
+
+Eye Tracking data saved to: C:\Users\Lab\Documents\startegicMW_lite2\Experiment\data\213\213.edf
+Error converting EDF: 
+Extracted Event Data: 
+        Event          Type Status      Time  Duration
+0      LISTEN       STORY_1    BEG  5284133        0.0
+1        PART  KAROLINA_1      BEG  5284140        7.0
+2        PART  KAROLINA_1      END  5326716    42576.0
+3    KEYPRESS            18      0  5329610     2894.0
+4      LISTEN       STORY_1    END  5329611        1.0
+5      LISTEN       STORY_1    BEG  5380604    50993.0
+6        PART  KAROLINA_1      BEG  5380612        8.0
+7        PART  KAROLINA_1      END  5421794    41182.0
+8    KEYPRESS            31      0  5517041    95247.0
+9      LISTEN       STORY_1    END  5517042        1.0
+10     RECALL       STORY_1    BEG  5517054       12.0
+11     RECALL       STORY_1    END  5531927    14873.0
+12  PROCEDURE             0    END  5531929        2.0
+ 
+      Event   StoryTime      RT  partDuration
+0     BEGIN    0.007000   0.000         0.000
+1     PROBE   42.583000   0.000        42.576
+2  KEYPRESS   45.477000   2.894        42.576
+3     BEGIN   96.472007   0.000         0.000
+4     PROBE  137.661000   0.000        41.182
+5  KEYPRESS  232.908000  95.247        41.182
