@@ -49,7 +49,7 @@ pygame.display.set_caption("Strategic MW Experiment")
 # story Global parameters Setup:
 storyPart = "welcome1"  # Controlling the experiment flow
 dummyMode = False
-TestMode = True
+TestMode = False
 SCREEN_WIDTH_CM = 53 #Width
 SCREEN_HEIGHT_CM = 30 # Height 
 VIEWING_DISTANCE_CM = 93 # 
