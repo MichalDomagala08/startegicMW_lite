@@ -1,0 +1,9 @@
+Wrong Trials 
+
+DS01 : Potentially Wrong - Many Saccades (Saccade rate Waay out of normal proportions: 3,  25, 26, 27,28, 30, 31, 33, 37, 38 ,   
+Trial 13 - Potentially to few at the end 
+Trial 19 - Wrong Algortyihm at the beginning 
+
+DS02: 
+
+Trial 2 - Wrong Interpolation! --> CHange boundary to 75ms probably

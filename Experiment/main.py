@@ -1,9 +1,9 @@
 import pygame
 from pygame.locals import * 
-import pandas as pd
 import pyaudio, wave
 import pylink
 import time
+
 from tests.testFunctions import testTiming,compareEyeTrackingWithBeh,prepareEyeTrackingTiming
 from classes.fileIDInput import createOutputs
 from classes.CalibrationGraphivs import CalibrationGraphics
@@ -12,8 +12,9 @@ from classes.Audio import storyTimeDict3
 from classes.recallTrial import recallTrial
 from classes.welcomeMessage import welcomeMessage
 from classes.welcomeMessage import generateMessages
-from  random import choice
 
+from  random import choice
+import pandas as pd
 import pickle
 import sys,os,subprocess
 import datetime
@@ -33,6 +34,7 @@ if outputControll.ID == "" or len(outputControll.ID) < 3:
 # Display Information
 pygame.init()
 disp = pylink.getDisplayInformation()
+print(disp)
 outputControll.write("  Current Display Information: ")
 outputControll.write(f"      Width:  {disp.width}")
 outputControll.write(f"      Height: {disp.height}\n")
@@ -48,7 +50,7 @@ pygame.display.set_caption("Strategic MW Experiment")
 
 # story Global parameters Setup:
 storyPart = "welcome1"  # Controlling the experiment flow
-dummyMode = False
+dummyMode = True
 TestMode = False
 SCREEN_WIDTH_CM = 53 #Width
 SCREEN_HEIGHT_CM = 30 # Height 
