@@ -1,7 +1,7 @@
 import numpy as np
 import os 
 import pandas as pd  # Assuming pandas is used for DataFrame creation
-from scipy.interpolate import CubicSpline
+from scipy.interpolate import CubicSpline,interp1d
 import matplotlib.pyplot as plt
 
 
@@ -126,7 +126,149 @@ def getEvent(events):
     return fixationDF, saccadesDF, blinkDF  # Return the DataFrames
 
 
+
+
+def changeTiming(RawDF,fixationDF,saccadesDF,blinkDF,own):
+    """
+        OLD FUNCTION
+    """
+    # Get the time of the event
+
+    fixationDF['Beg'] = fixationDF['Beg'] -RawDF['TimePoint'].iloc[0]
+    fixationDF['End'] = fixationDF['End'] -RawDF['TimePoint'].iloc[0]
+
+    saccadesDF['Beg'] = saccadesDF['Beg'] -RawDF['TimePoint'].iloc[0]
+    saccadesDF['End'] = saccadesDF['End'] -RawDF['TimePoint'].iloc[0]
+
+    blinkDF['Beg'] = blinkDF['Beg'] -RawDF['TimePoint'].iloc[0]
+    blinkDF['End'] = blinkDF['End'] -RawDF['TimePoint'].iloc[0]
+    own = [[o[0], (int(o[1].strip()) - RawDF['TimePoint'].iloc[0])] + o[2:] for o in own]
+
+    RawDF['TimePoint'] = RawDF['TimePoint'] - RawDF['TimePoint'].iloc[0]
+
+    return RawDF,fixationDF,saccadesDF,blinkDF,own
+
+
+
+
+def parse_events(own):
+    """
+    Parse the events from the own list and separate them into different DataFrames.
+
+    Parameters:
+    own (list): List of lists from the ASC file corresponding to custom events.
+
+    Returns:
+    dict: Dictionary containing DataFrames for each event type.
+    """
+    parts = [];
+    end = [];
+    beg = [];
+    keypress = [];
+    keytime = [];
+    story = [];
+
+    # Parse the own list
+    for line in own:
+        event_type = line[2]
+        timestamp = int(line[1])
+        event_name = line[3].strip()
+        event_status = line[4].strip()
+        #print(event_type,event_name)
+        #print(line)
+        if event_type == 'PART' and event_status != 'END':
+            parts.append(event_name)
+            beg.append(timestamp)
+            story.append(latestStory)
+        if event_type =='PART'and event_status == 'END':
+            end.append(timestamp)
+        if event_type == 'KEYPRESS':
+            keypress.append(int(event_name))
+            keytime.append(timestamp)
+        if event_type =='LISTEN' and event_name not in story:
+            latestStory = event_name
+   
+    # Create DataFrames for each event type
+    event_dfs = pd.DataFrame(zip(*[parts,beg, end,keypress, keytime,story]),columns =['Part','beg','end','key','keytime','story'] )
+
+    return event_dfs
+
+def rename_parts(df):
+
+    """
+    rename parts in the DataFrame by removing the number at the end and renumbering them.
+    (A sanity check, when the parts have been incorrectly numbered)
+    :param df: DataFrame containing the parts to be renamed.
+    """
+    df['name'] = df['Part'].str.rsplit('_', n=1).str[0]
+    # Add renumbering per name - just count the number of occurences of each entity and cumulate it counting! 
+    df['new_num'] = df.groupby('name').cumcount() + 1
+    # Rebuild 'parts' column
+    df['Part'] = df['name'] + '_' + df['new_num'].astype(str)
+    # Drop helper columns if you want
+    df = df.drop(columns=['name', 'new_num'])
+    return df
+
+def split_dataframes_by_events(RawDF, fixationDF, saccadesDF, blinkDF, events_df):
+    """
+    Split the RawDF, fixationDF, saccadesDF, and blinkDF into separate DataFrames based on the time intervals in events_df.
+
+    Parameters:
+    RawDF (DataFrame): DataFrame containing raw eye-tracking data.
+    fixationDF (DataFrame): DataFrame containing fixation events.
+    saccadesDF (DataFrame): DataFrame containing saccade events.
+    blinkDF (DataFrame): DataFrame containing blink events.
+    events_df (DataFrame): DataFrame containing event intervals with BEG and END columns.
+
+    Returns:
+    dict: Dictionary containing split DataFrames for each event interval.
+    """
+    split_data = {
+       'STORY_1' : {'RawDF': {}, 'fixationDF': {}, 'saccadesDF': {}, 'blinkDF': {}},
+       'STORY_2' : {'RawDF': {}, 'fixationDF': {}, 'saccadesDF': {}, 'blinkDF': {}}
+    }
+
+    for idx, row in events_df.iterrows():
+        beg = row['beg']
+        end = row['end']
+        event_name = row['Part']
+        story_name = row['story']
+        split_data[story_name]['RawDF'][event_name] = RawDF[(RawDF['TimePoint'] >= beg) & (RawDF['TimePoint'] <= end)]
+        split_data[story_name]['fixationDF'][event_name] = fixationDF[(fixationDF['Beg'] >= beg) & (fixationDF['End'] <= end)]
+        split_data[story_name]['saccadesDF'][event_name] = saccadesDF[(saccadesDF['Beg'] >= beg) & (saccadesDF['End'] <= end)]
+        split_data[story_name]['blinkDF'][event_name] = blinkDF[(blinkDF['Beg'] >= beg) & (blinkDF['End'] <= end)]
+
+    return split_data
  
+
+
+def splitEntities(RawDF, event_dfs):
+    """
+    Splits the RawDF into two entities based on the events DataFrame.Dependning who the story has been about
+    """
+    firstEntityRaw  = []
+    secondEntityRaw = []
+
+    for i in range(len(event_dfs)):
+
+        currentTiming1 = event_dfs['beg'].iloc[i]
+        currentTiming2 = event_dfs['end'].iloc[i]
+
+        if 'TimePoint' in RawDF.columns:
+            RawDF1 = RawDF[(RawDF['TimePoint'] >= currentTiming1) & (RawDF['TimePoint'] <= currentTiming2)]
+        elif 'Beg' in RawDF.columns:
+            RawDF1 = RawDF[(RawDF['Beg'] >= currentTiming1) & (RawDF['End'] <= currentTiming2)]
+
+        if i %2 ==0:
+            firstEntityRaw.append(RawDF1)
+        else:
+            secondEntityRaw.append(RawDF1)
+
+    firstEntityDF = pd.concat(firstEntityRaw, ignore_index=True)
+    secondEntityDF = pd.concat(secondEntityRaw, ignore_index=True)
+
+    return firstEntityDF, secondEntityDF
+
 
 
         ##############################################################
@@ -323,6 +465,160 @@ def plotSaccadeData(left_saccades, right_saccades, gazeCoords):
     # Display the plot
     plt.show()
 
+
+
+def plotEyeWithBlink(RawDF, blinkDF, gazeCoords, titl="Raw Gaze Data", visual_angle=5):
+    """
+    Plot raw gaze data for the left eye, highlighting points during blinks and their 50ms boundary.
+    Also, draw a circle to signify the 5 degrees of visual angle.
+
+    Parameters:
+    RawDF        (DataFrame): Raw eye-tracking data.
+    blinkDF      (DataFrame): DataFrame containing blink events with 'Beg' and 'End' columns.
+    gazeCoords   (list):      Screen dimensions [width, height, center_x, center_y].
+    titl         (str):       Title of the plot.
+    visual_angle (float):    Visual angle threshold in degrees.
+    """
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    fig = plt.figure(figsize=(20, 20))
+    plt.title(titl, fontsize=20)
+
+    plt.xlabel("Width Coords (pixels)")
+    plt.ylabel("Height Coords (pixels)")
+
+    # Create a mask for points during blinks and their 50ms boundary
+    blink_mask = np.zeros(len(RawDF), dtype=bool)
+    for _, blink in blinkDF.iterrows():
+        start = blink["Beg"] - 50  # Extend 50ms before the blink
+        end = blink["End"] + 50   # Extend 50ms after the blink
+        blink_mask |= (RawDF["TimePoint"] >= start) & (RawDF["TimePoint"] <= end)
+
+    # Plot left eye data
+    plt.scatter(
+        RawDF.loc[~blink_mask, 'LeftX'],  # Non-blink points
+        RawDF.loc[~blink_mask, 'LeftY'],
+        color='blue', label='Left Eye (Non-Blink)', s=10
+    )
+    plt.scatter(
+        RawDF.loc[blink_mask, 'LeftX'],  # Blink points (including 50ms boundary)
+        RawDF.loc[blink_mask, 'LeftY'],
+        color='green', label='Left Eye (Blink + 50ms Boundary)', s=10
+    )
+
+    # Add a rectangle representing the screen dimensions
+    rect = plt.Rectangle((0, 0), gazeCoords[2], gazeCoords[3], 
+                         linewidth=2, edgecolor='black', facecolor='none')
+    plt.gca().add_patch(rect)
+
+    # Calculate the radius of the circle for 5 degrees of visual angle
+    center_x = gazeCoords[2] / 2
+    center_y = gazeCoords[3] / 2
+    radius_x = Dg2px(visual_angle, 70, 53, 1920)  # Horizontal radius in pixels
+    radius_y = Dg2px(visual_angle, 70, 53, 1080)  # Vertical radius in pixels
+
+    # Add a circle to signify the 5 degrees of visual angle
+    circle = plt.Circle((center_x, center_y), radius_x, color='red', fill=False, linestyle='--', linewidth=2)
+    plt.gca().add_patch(circle)
+
+    plt.legend(loc='upper center')
+
+    return fig
+
+
+
+
+def plot_gaze_check(P_dict,filename,tracked):
+    """
+    Plots the gaze check for each entity in the story. in 4 different plots:
+    Differentiates between Tracked and Untracked Entity 
+    """
+    # Set up subplots: 4 rows, 1 column
+    fig, axs = plt.subplots(4, 1, figsize=(12, 12), sharex=True)
+    plt.suptitle(f"Gaze Checks: {filename}", fontsize=16)
+    if tracked == 'KAROLINA':
+        label1 = 'Tracked'
+        label2 = 'Untracked'
+    else:
+        label2 = 'Tracked'
+        label1 = 'Untracked'
+    # Loop through each key and its corresponding data
+    for ax, (key, P) in zip(axs, P_dict.items()):
+        x = list(range(len(P)))
+        x_even = x[::2]
+        y_even = P[::2]
+        x_odd = x[1::2]
+        y_odd = P[1::2]
+
+        ax.scatter(x_even, y_even, color='blue', label=label1)
+        ax.scatter(x_odd, y_odd, color='orange', label=label2)
+        ax.set_title(f"{key}", fontsize=14)
+        ax.set_ylabel("Value")
+        ax.grid(True)
+
+    # Add shared X label
+    axs[-1].set_xlabel("Trial Number")
+    axs[0].legend(loc='upper right')
+
+
+
+
+def mwHist(resultsDF,filename):
+    """
+    Plots a general histogram to see whether there is a disproporitons of particular answers
+    """
+    plt.figure(figsize=(12,12))
+    plt.title(f'Tracked/Untracked Count: {filename}')
+    plt.hist(resultsDF[resultsDF['Tracking'] == 'TRACKED']['MW Estimate'], bins=20,
+            label='Tracked', alpha=0.5,color='blue')  # Set alpha to 0.5 for transparency
+    plt.hist(resultsDF[resultsDF['Tracking'] == 'UNTRACKED']['MW Estimate'], bins=20, 
+            label='Untracked', alpha=0.5,color='orange') # Set alpha to 0.5 for transparency
+    plt.legend()
+    plt.xlabel('MW Estimate')
+    plt.ylabel('Count')
+
+def scatterResults(MW,Results, filename, pdf=None):
+    """
+    Plots pupil diameter for tracked and untracked entities in a 2x2 grid.
+    
+    Parameters:
+    - Results: List of results to plot (e.g., [resultsL, resultsR, resultsL2, resultsR2]).
+    - filename: Name of the subject entity.
+    - pdf: PdfPages object to save the plots (optional).
+    """
+    fig, axs = plt.subplots(int( len(Results)/2),2, figsize=(12, 12),sharey='row')
+    plt.suptitle(f"Pupil Diameter for {filename}", fontsize=16)
+
+    # Titles for subplots
+    row_titles = ["Mean", "Std",'diff']
+    col_titles = ["Left Eye", "Right Eye"]
+
+    for row in range(2):  # Rows: Mean vs. Std
+        for col in range(2):  # Columns: Left Eye vs. Right Eye
+            ax = axs[row, col]
+            result = Results[row * 2 + col]  # Select the correct result (e.g., resultsL, resultsR, resultsL2, resultsR2)
+
+            # Scatter plot for tracked and untracked entities
+            ax.scatter(MW[::2], result[::2], label="Tracked Entity", color="blue")
+            ax.scatter(MW[1::2], result[1::2], label="Untracked Entity", color="orange")
+
+            # Set titles, labels, and grid
+            if row == 0:
+                ax.set_title(col_titles[col], fontsize=14)
+            if col == 0:
+                ax.set_ylabel(f"{row_titles[row]} Pupil Diameter (a.u.)", fontsize=12)
+            ax.set_xlabel("MW Estimate (1-100)", fontsize=12)
+            ax.legend()
+            ax.grid(True)
+
+    # Adjust layout to ensure everything fits
+    plt.tight_layout(rect=[0, 0, 1, 0.95])  # Add space for the title
+
+    if pdf is not None:
+        pdf.savefig(fig)
+
+
         #########################################################
         ##### ------------  Cleaning Functions ------------ #####
         #########################################################
@@ -382,6 +678,9 @@ def matchLeftRight(DF):
 
 def removeBlinks(blinkDF, ScreenData, inter=50):
     """
+
+    OLD  and UNOPTIMISED
+    
     Remove blinks from data in a specified interval (default 50 ms).
 
     Parameters:
@@ -410,6 +709,8 @@ def removeBlinks(blinkDF, ScreenData, inter=50):
 
 def cleanStd(ScreenData,obj,stdThesh):
     """
+        OLD AND UNOPTIMISED
+
         Gets data that Exceeds a certain threshold of the standard deviation
         Requires a DataFrame containing Data, and a list of columns to check (Always 2) as well as a Threshold
     """
@@ -420,6 +721,8 @@ def cleanStd(ScreenData,obj,stdThesh):
 
 def cleanIQR(ScreenData,obj,threshold = 1.5,windows =0 ):
     """
+        OLD AND UNOPTIMISED
+
         Computes IQR on my samples - DOESNT WORK WELL WITH THIS KIND OF DATA....
         Requires a DataFrame of values to filter through, a threshold and a window size 
         as well as OBJ whiich is a name of the column on basis which the filter is used
@@ -461,793 +764,6 @@ def checkSaccadeMismatch(saccades):
     saccades['diffY'] = [0] + diffY
 
     return saccades
-
-import numpy as np
-import pandas as pd
-from scipy.interpolate import CubicSpline
-import matplotlib.pyplot as plt
-
-
-
-
-def removeOutliers(ScreenData, threshold=3, max_duration=500, boundary=50, verbose=0,logfile=None):
-    """
-    Remove outliers in pupil size data using the 3-sigma rule on the differential time series. \
-        Replaces them with NaNs or interpolating them, if their duration has not corssed max_duration
-
-    Parameters:
-    ScreenData (DataFrame): DataFrame containing screen data.
-    threshold (int): Threshold for identifying outliers (default 3 for 3-sigma rule).
-    max_duration (int): Maximum duration for interpolation (default 500 ms).
-    boundary (int): Interval in milliseconds to extend the outlier period.
-    verbose (int): Verbosity level for debugging and visualization (default 0).
-
-    Returns:
-    DataFrame: ScreenData with interpolated outliers.
-    """
-    
-
-    for eye in ['LeftPupil', 'RightPupil']:
-        # Create differential time series for the left eye
-        diff_left = np.diff(ScreenData[eye], prepend=ScreenData[eye].iloc[0])
-        # Identify outliers using the 3-sigma rule on the differential time series
-        mean_diff_left = np.mean(diff_left)
-        std_diff_left = np.std(diff_left)
-        outliers_left = abs(diff_left - mean_diff_left) > threshold * std_diff_left
-
-        if logfile is not None:
-            logfile.write(f"        (4) Interpolating or NaN Outliers in {eye} eye N:{len(outliers_left):5.1f}\n")
-            print(f"    Interpolating or NaN Outliers in {eye} eye N:{len(outliers_left):5.1f}")
-        if verbose ==2:
-            plt.figure(figsize=(12, 6))
-            plt.plot(diff_left, label=' Pupil Size')
-            plt.xlabel('TimePoint')
-            plt.ylabel('Differential Time Series')
-            plt.title(eye+' Pupil Size with Outliers')
-            plt.legend()
-            plt.show()
-
-        # Visualize the outliers
-        if verbose ==2:
-            plt.figure(figsize=(12, 6))
-            plt.plot(ScreenData['TimePoint'], ScreenData[eye], label=eye+' Pupil Size')
-            plt.plot(ScreenData['TimePoint'], ScreenData['RightPupil'], label=eye+' Pupil Size')
-
-            plt.scatter(ScreenData['TimePoint'][outliers_left], ScreenData[eye][outliers_left], color='red', label='Outliers')
-            plt.xlabel('TimePoint')
-            plt.ylabel(eye+' Pupil Size')
-            plt.title(eye+' Pupil Size with Outliers')
-            plt.legend()
-            plt.show()
-
-        # Cluster outliers together
-        clusters = []
-        current_cluster = []
-        for i in range(len(outliers_left)):
-            if outliers_left[i]:
-                current_cluster.append(i)
-            else:
-                if current_cluster:
-                    clusters.append(current_cluster)
-                    current_cluster = []
-        if current_cluster:
-            clusters.append(current_cluster)
-
-        # Create a mask for the outliers and their boundaries
-        mask = np.zeros(len(ScreenData), dtype=bool)
-        for clust in clusters:
-            Beg_extended = ScreenData['TimePoint'].iloc[clust[0]] - boundary
-            End_extended = ScreenData['TimePoint'].iloc[clust[-1]] + boundary
-            mask |= (ScreenData["TimePoint"] >= Beg_extended) & (ScreenData["TimePoint"] <= End_extended)
-
-        if verbose ==2:
-            # Visualize the outliers with extension
-            plt.figure(figsize=(12, 6))
-            plt.plot(ScreenData.loc[mask, 'TimePoint'], ScreenData.loc[mask, eye], label=eye+' Pupil Size')
-            plt.xlabel('TimePoint')
-            plt.ylabel(eye+' Pupil Size')
-            plt.title('Outliers only with extension')
-            plt.legend()
-            plt.show()
-
-        # Set outlier values to NaNs
-        ScreenData.loc[mask, eye] = np.nan
-
-        # Interpolate using cubic splines
-        valid_idx = ScreenData[eye].dropna().index  # Indices where data is NOT an artefact
-        valid_x = valid_idx.to_numpy()
-        valid_y = ScreenData.loc[valid_idx, eye].to_numpy()
-
-        # Create cubic spline function
-        cs = CubicSpline(valid_x, valid_y, extrapolate=False)  # Extrapolate False to account for missing data at the edges
-
-        # Interpolate at artefactual indices
-        ScreenData = ScreenData.copy()
-
-        ScreenData.loc[mask, eye] = cs(ScreenData.index[mask])
-
-        # Visualize the interpolated data
-        if verbose ==2:
-            plt.figure(figsize=(12, 6))
-            plt.plot(ScreenData['TimePoint'], ScreenData[eye], label=eye+' Pupil Size')
-            plt.scatter(ScreenData['TimePoint'][mask], ScreenData[eye][mask], color='red', label='Interpolated Points')
-            plt.xlabel('TimePoint')
-            plt.ylabel(eye+' Pupil Size')
-            plt.title(eye+' Pupil Size with Interpolated Outliers')
-            plt.legend()
-            plt.show()
-
-        # Iterate through interpolated clusters and check if any exceed max_duration
-        for clust in clusters:
-            Beg_extended = ScreenData['TimePoint'].iloc[clust[0]] - boundary
-            End_extended = ScreenData['TimePoint'].iloc[clust[-1]] + boundary
-            mask = (ScreenData["TimePoint"] >= Beg_extended) & (ScreenData["TimePoint"] <= End_extended)
-            duration = ScreenData['TimePoint'][mask].iloc[-1] - ScreenData['TimePoint'][mask].iloc[0]
-            if duration > max_duration:
-                #print(f"Cluster from {Beg_extended} to {End_extended} exceeds max_duration with duration {duration} ms")
-                ScreenData.loc[mask, eye] = np.nan
-
-        # Visualize the final data
-        if verbose ==2:
-            plt.figure(figsize=(12, 6))
-            plt.plot(ScreenData['TimePoint'], ScreenData[eye], label=eye+' Pupil Size')
-            plt.xlabel('TimePoint')
-            plt.ylabel(eye+' Pupil Size')
-            plt.title(eye+' Pupil Size after Removing Long Clusters')
-            plt.legend()
-            plt.show()
-
-        # Print the mask for debugging
-    # print(mask)
-    return ScreenData
-
-from scipy.interpolate import interp1d
-import numpy as np
-import pandas as pd
-from scipy.interpolate import CubicSpline
-
-
-def merge_blink_intervals(blinkDF, inter=50):
-    """
-    Merge overlapping or closely spaced blink events.
-
-    Parameters:
-    blinkDF (DataFrame): DataFrame containing blink events.
-    inter (int): Interval in milliseconds to extend the blink period.
-
-    Returns:
-    DataFrame: Merged blink intervals.
-    """
-    # Sort by start time
-    blinkDF = blinkDF.sort_values(by="Beg").copy()
-
-    merged_intervals = []
-    current_beg = blinkDF.iloc[0]["Beg"] - inter
-    current_end = blinkDF.iloc[0]["End"] + inter
-
-    for _, row in blinkDF.iterrows():
-        new_beg = row["Beg"] - inter
-        new_end = row["End"] + inter
-
-        if new_beg <= current_end:  # Overlapping or close blink events
-            current_end = max(current_end, new_end)
-        else:
-            merged_intervals.append([current_beg, current_end])
-            current_beg = new_beg
-            current_end = new_end
-
-    # Append last merged interval
-    merged_intervals.append([current_beg, current_end])
-
-    # Convert back to DataFrame
-    mergedDF = pd.DataFrame(merged_intervals, columns=["Beg_extended", "End_extended"])
-    return mergedDF
-
-def interpolate_blinks(blinkDF, ScreenData, inter=50,maxBlink=500,verbose = 0,logfile=None,begendDur = 1000,interp_method=0):
-    if logfile is not None:
-        logfile.write("        (3) Interpolating Blinks: \n")
-        
-    """
-    Interpolate blinks from data in a specified interval (default 50 ms) using Cubic Spline interpolation.
-    OR Linear interpolation
-
-    First we MERGE left and RIGHT blinks: They are mostly corresponding with oneathoer
-
-    Parameters:
-    blinkDF (DataFrame): DataFrame containing blink events.
-    ScreenData (DataFrame): DataFrame containing screen data.
-    inter (int): Interval in milliseconds to extend the blink period.
-
-    Returns:
-    DataFrame: ScreenData with interpolated blinks.
-
-    """
-    interpDur = 0;
-
-    if len(blinkDF) > 0:
-        ScreenData = ScreenData.copy()
-        removedBlinks = 0;
-        interpBlinks=0;
-        rempDur = 0;
-        interpDur = 0;
-        # Merge overlapping blink events before applying interpolation
-        merged_blinks = merge_blink_intervals(blinkDF, inter)
-        # Process each merged blink interval
-        for i, row in merged_blinks.iterrows():
-            beg_ext = row.Beg_extended
-            end_ext = row.End_extended
-            duration = end_ext - beg_ext
-            mask = (ScreenData["TimePoint"] >= beg_ext) & (ScreenData["TimePoint"] <= end_ext)
-
-            # Nans When Blink event is Too Long OR when it is at the Immediate Beginning!
-            if  duration > maxBlink  and verbose == 2:
-                print(f"Blink n. {i} is too long! Duration: {duration}")
-                if logfile is not None:
-                        logfile.write(f"            interpolating Blink: N: {i}  Duration: {duration}\n")
-
-            if abs(ScreenData["TimePoint"].iloc[0] -beg_ext) < begendDur  and verbose == 2:
-                print(f"  Blink {i} is too close to the beginning! ({ScreenData['TimePoint'].iloc[0] - beg_ext}")
-                if logfile is not None:
-                        logfile.write(f"            Blink {i} is too close to the beginning! ({ScreenData['TimePoint'].iloc[0] - beg_ext})\n")
-
-            if abs(ScreenData["TimePoint"].iloc[-1] - end_ext) < begendDur and verbose == 2:
-                print(f"Blink {i} is too close to the end! ({ScreenData['TimePoint'].iloc[-1] - end_ext})")
-                if logfile is not None:
-                        logfile.write(f"            Blink {i} is too close to the end! ({ScreenData['TimePoint'].iloc[-1] - end_ext})\n")
-
-
-            if duration <= maxBlink and abs(ScreenData["TimePoint"].iloc[0] - beg_ext) > begendDur and abs(ScreenData["TimePoint"].iloc[-1] - end_ext) > begendDur:
-                for col in ["LeftPupil", "RightPupil"]:
-                    valid_idx = ScreenData.loc[~mask, col].dropna().index
-                    if len(valid_idx) < 5:  # Need at least 5 valid points for cubic spline
-                        ScreenData.loc[mask, col] = np.nan
-                
-                        continue
-                    if logfile is not None and verbose == 2:
-                        logfile.write(f"            interpolating Blink: N: {i}  Duration: {duration}\n")
-                    valid_x = valid_idx.to_numpy()
-                    valid_y = ScreenData.loc[valid_idx, col].to_numpy()
-
-                    try:
-                        if interp_method == 0:  # Linear interpolation
-                            linear_interp = interp1d(valid_x, valid_y, bounds_error=False, fill_value="extrapolate")
-                            ScreenData.loc[mask, col] = linear_interp(ScreenData.loc[mask].index)
-                            interpBlinks +=1
-                            interpDur += duration;
-
-                        elif interp_method == 1:  # Cubic spline interpolation
-                            cs = CubicSpline(valid_x, valid_y, extrapolate=False)
-                            ScreenData.loc[mask, col] = cs(ScreenData.loc[mask].index)
-                            interpDur += duration;
-                            interpBlinks +=1
-                    except Exception as e:
-                        if logfile is not None:
-                            logfile.write(f"            Interpolation failed for {col} at {beg_ext}-{end_ext}: {e}\n")
-                        print(f"Interpolation failed for {col} at {beg_ext}-{end_ext}: {e}")
-                        ScreenData.loc[mask, col] = np.nan  # Fallback to NaN if error occurs
-            else:
-                removedBlinks +=1
-                rempDur += duration;
-
-                if logfile is not None  and verbose == 2:
-                    logfile.write(f"            Blink removed: N:{i}, Duration: {duration}\n")
-                ScreenData.loc[mask, ["LeftPupil", "RightPupil"]] = np.nan
-
-        if logfile is not None:
-            logfile.write(f"            Blinks removed: {removedBlinks} (duration: {rempDur})\n")
-            logfile.write(f"            Blinks interp:  {interpBlinks} (duration: {interpDur})\n")
-    else:
-         if logfile is not None:
-            logfile.write("          No blinks to interpolate!!!!")
-        
-    return ScreenData,interpDur
-
-
-
-
-
-def downsamplePupil(ScreenData,divisor=5,logfile=None):
-    """
-    Downsample Pupil Data to 100 Hz
-    :param ScreenData:
-    :return:
-    """
-    # Downsample to freq (default 100) Hz
-    ScreenData = ScreenData[ScreenData['TimePoint'] % divisor == 0]
-    if logfile is not None:
-        print(f"    Downsampling to rate {500/divisor}")
-        logfile.write(f"        (1) Downsampling to rate {500/divisor}\n")
-    return ScreenData
-
-def plotEyeWithBlink(RawDF, blinkDF, gazeCoords, titl="Raw Gaze Data", visual_angle=5):
-    """
-    Plot raw gaze data for the left eye, highlighting points during blinks and their 50ms boundary.
-    Also, draw a circle to signify the 5 degrees of visual angle.
-
-    Parameters:
-    RawDF (DataFrame): Raw eye-tracking data.
-    blinkDF (DataFrame): DataFrame containing blink events with 'Beg' and 'End' columns.
-    gazeCoords (list): Screen dimensions [width, height, center_x, center_y].
-    titl (str): Title of the plot.
-    visual_angle (float): Visual angle threshold in degrees.
-    """
-    import matplotlib.pyplot as plt
-    import numpy as np
-
-    fig = plt.figure(figsize=(20, 20))
-    plt.title(titl, fontsize=20)
-
-    plt.xlabel("Width Coords (pixels)")
-    plt.ylabel("Height Coords (pixels)")
-
-    # Create a mask for points during blinks and their 50ms boundary
-    blink_mask = np.zeros(len(RawDF), dtype=bool)
-    for _, blink in blinkDF.iterrows():
-        start = blink["Beg"] - 50  # Extend 50ms before the blink
-        end = blink["End"] + 50   # Extend 50ms after the blink
-        blink_mask |= (RawDF["TimePoint"] >= start) & (RawDF["TimePoint"] <= end)
-
-    # Plot left eye data
-    plt.scatter(
-        RawDF.loc[~blink_mask, 'LeftX'],  # Non-blink points
-        RawDF.loc[~blink_mask, 'LeftY'],
-        color='blue', label='Left Eye (Non-Blink)', s=10
-    )
-    plt.scatter(
-        RawDF.loc[blink_mask, 'LeftX'],  # Blink points (including 50ms boundary)
-        RawDF.loc[blink_mask, 'LeftY'],
-        color='green', label='Left Eye (Blink + 50ms Boundary)', s=10
-    )
-
-    # Add a rectangle representing the screen dimensions
-    rect = plt.Rectangle((0, 0), gazeCoords[2], gazeCoords[3], 
-                         linewidth=2, edgecolor='black', facecolor='none')
-    plt.gca().add_patch(rect)
-
-    # Calculate the radius of the circle for 5 degrees of visual angle
-    center_x = gazeCoords[2] / 2
-    center_y = gazeCoords[3] / 2
-    radius_x = Dg2px(visual_angle, 70, 53, 1920)  # Horizontal radius in pixels
-    radius_y = Dg2px(visual_angle, 70, 53, 1080)  # Vertical radius in pixels
-
-    # Add a circle to signify the 5 degrees of visual angle
-    circle = plt.Circle((center_x, center_y), radius_x, color='red', fill=False, linestyle='--', linewidth=2)
-    plt.gca().add_patch(circle)
-
-    plt.legend(loc='upper center')
-
-    return fig
-
-
-def replace_zero_clusters_with_nans(ScreenData,logfile=None):
-    """
-    Identify clusters of zeros in LeftPupil and rightPupil Respectively, replace them with NaN, and extend the replacement
-    by a specified boundary (e.g., 50ms).
-
-    Parameters:
-    ScreenData (DataFrame): DataFrame containing gaze and pupil data.
-    boundary (int): Time in milliseconds to extend the range around zero clusters.
-
-    Returns:
-    DataFrame: Modified ScreenData with zero clusters and their boundaries replaced by NaN.
-    """
-    import numpy as np
-
-    # Identify rows where LeftPupil is zero
-    for eye in ['LeftPupil','RightPupil']:
-        zero_mask = (ScreenData[eye] <= 0)
-        if logfile is not None:
-                logfile.write("        (5) Replacing Zeros: \n")
-        # If no zeros are found, return the original DataFrame
-        if not zero_mask.any():
-            if logfile is not None:
-                logfile.write("            No zeros present in the data\n")
-            return ScreenData
-        else:
-            if logfile is not None:
-                logfile.write(f"            Zeros: N:{zero_mask.sum():4.1f}\n")
-        # Get the row positions (not the DataFrame index) of zeros
-        zero_positions = np.where(zero_mask)[0]
-
-        # Create a mask for the clusters and their boundaries
-        boundary_mask = np.zeros(len(ScreenData), dtype=bool)
-
-        # Iterate through zero positions
-        for pos in zero_positions:
-            start_idx = max(0, pos)
-            end_idx = min(len(ScreenData) - 1, pos)
-            boundary_mask[start_idx:end_idx + 1] = True
-
-        # Replace the clusters and their boundaries with NaN
-        ScreenData.loc[boundary_mask, [eye]] = np.nan
-
-    return ScreenData
-
-def smooth_pupil_data(ScreenData, window_size=5, min_cluster_duration=1000, max_gap_duration=50, logfile=None, verbose=0):
-    """
-    Smooth the pupil data (LeftPupil and RightPupil) while ignoring NaNs.
-    Each cluster of consecutive non-NaN measurements is smoothed separately.
-    Clusters shorter than min_cluster_duration (in ms) or with gaps longer than max_gap_duration
-    are replaced with NaN.
-
-    Parameters:
-    ScreenData (DataFrame): DataFrame containing gaze and pupil data.
-    window_size (int): Size of the smoothing window (e.g., for moving average).
-    min_cluster_duration (int): Minimum duration (in ms) for a cluster to be smoothed.
-    max_gap_duration (int): Maximum gap (in ms) between timestamps within a cluster.
-
-    Returns:
-    DataFrame: Modified ScreenData with smoothed pupil data.
-    """
-    import numpy as np
-    import pandas as pd
-
-    if logfile is not None:
-        logfile.write("        (6) Smoothing Out the Data: \n")
-
-    def smooth_cluster(cluster, window_size):
-        """Apply smoothing to a single cluster."""
-        return cluster.rolling(window=window_size, center=True, min_periods=1).mean()
-
-    # Copy the data to avoid modifying the original DataFrame
-    smoothed_data = ScreenData.copy()
-
-    for eye in ['LeftPupil', 'RightPupil']:
-        non_nan_mask = pd.notna(ScreenData[eye])
-        cluster_indices = np.where(non_nan_mask)[0]
-
-        if len(cluster_indices) == 0:
-            if logfile is not None:
-                logfile.write(f"       WARNING! No valid data found for {eye}.\n")
-            continue
-
-        # Group consecutive indices into clusters
-        clusters = []
-        current_cluster = [cluster_indices[0]]
-        for i in range(1, len(cluster_indices)):
-           
-            t_now  = ScreenData.iloc[cluster_indices[i]]['TimePoint']
-            t_prev = ScreenData.iloc[cluster_indices[i-1]]['TimePoint']
-            if t_now - t_prev > max_gap_duration:  # Gap detected
-                clusters.append(current_cluster)
-                current_cluster = []
-            current_cluster.append(cluster_indices[i])
-
-        if current_cluster:
-            clusters.append(current_cluster)
-
-        if verbose > 0:
-            print(f"    Found {len(clusters)} clusters for {eye}.")
-            if logfile is not None:
-                logfile.write(f"        Found {len(clusters)} clusters for {eye}.\n")
-
-        previous_cluster_end = None
-
-        for cluster in clusters:
-            cluster_timepoints = ScreenData.iloc[cluster]['TimePoint']
-            cluster_duration = cluster_timepoints.iloc[-1] - cluster_timepoints.iloc[0] 
-
-            if previous_cluster_end is not None:
-                gap_duration = cluster_timepoints.iloc[0] - previous_cluster_end
-            else:
-                gap_duration = None
-            # Adding +1 sample to avoid rejectin by the nick of hair
-            if cluster_duration + int( ScreenData.iloc[1]['TimePoint'] - ScreenData.iloc[0]['TimePoint'] ) < min_cluster_duration:
-                # Replace cluster with NaN if it's too short or the gap is too large
-                smoothed_data.iloc[cluster, smoothed_data.columns.get_loc(eye)] = np.nan
-                if verbose > 0:
-                    print(f"    Cluster replaced with NaN for {eye}: Duration={cluster_duration}, Gap={gap_duration}.")
-                    if logfile is not None:
-                        logfile.write(f"        Cluster replaced with NaN for {eye}: Duration={cluster_duration}, Gap={gap_duration}.\n")
-            else:
-                # Smooth the cluster
-                cluster_data = smoothed_data.iloc[cluster][eye]
-                smoothed_data.iloc[cluster, smoothed_data.columns.get_loc(eye)] = smooth_cluster(cluster_data, window_size)
-                if verbose > 0:
-                    print(f"    Cluster smoothed for {eye}: Duration={cluster_duration}.")
-                    if logfile is not None:
-                        logfile.write(f"        Cluster smoothed for {eye}: Duration={cluster_duration}.\n")
-
-            previous_cluster_end = cluster_timepoints.iloc[-1]
-
-    return smoothed_data
-
-
-### Use this  to filter None Screen Data - at the end
-
-def count_gaze_outside(ScreenData, blinkDF, gazeCoords,max_blink_duration=500, boundary=50, visual_angle=5,logfile=None,verbose=0):
-    """
-    Count the number of gaze points outside 5 degrees of visual angle
-    that do not coincide with a blink (plus 50ms boundary), are not longer than 500ms,
-    and are not NaN.
-
-    Parameters:
-    ScreenData (DataFrame): DataFrame containing gaze and pupil data.
-    blinkDF (DataFrame): DataFrame containing blink events.
-    gazeCoords (list): List containing screen dimensions [width, height, center_x, center_y].
-    max_blink_duration (int): Maximum blink duration (in ms) to exclude from counting.
-    boundary (int): Time in milliseconds to extend the range around blink periods.
-    visual_angle (float): Visual angle threshold in degrees.
-
-    Returns:
-    int: Number of gaze points outside the visual angle that meet the criteria.
-    """
-
-
-    import numpy as np
-    ScreenData = ScreenData.copy()
-
-    # Calculate the center of the screen
-    center_x = gazeCoords[2] / 2
-    center_y = gazeCoords[3] / 2
-
-    # Calculate the Degrees Angle of the LeftX and LeftY values
-    std_x = Dg2px(visual_angle, 93, 53, 1920)
-    std_y = Dg2px(visual_angle, 93, 53, 1920)
-
-
-    for eye  in ['Left','Right']:
-        # Identify points outside the visual angle
-        outside_mask = ~(
-            (np.abs(ScreenData[eye +'X'] - center_x) < std_x) &
-            (np.abs(ScreenData[eye +'Y'] - center_y) < std_y)
-        )
-        # Exclude NaN values from the mask
-        not_nan_mask = pd.notna(ScreenData[eye +'X']) & pd.notna(ScreenData[eye +'Y'])
-
-        # Combine the outside mask with the not-NaN mask
-        outside_mask = outside_mask & not_nan_mask
-
-        # Create a mask for blink periods (including 50ms boundary)
-        blink_mask = np.zeros(len(ScreenData), dtype=bool)
-
-        for i, blink in blinkDF.iterrows():
-            if blink['Duration'] <= max_blink_duration:
-                start = blink['Beg'] - boundary
-                end = blink['End'] + boundary
-                blink_mask |= (ScreenData["TimePoint"] >= start) & (ScreenData["TimePoint"] <= end)
-
-        if logfile is not None and verbose > 0:
-            logfile.write(f"        (2) Removing Points from Outside of the Gaze by {visual_angle} dg ({std_x:3.1f} px) \n")
-            logfile.write(f"            N: {blink_mask.sum():5.1f};  \n")
-
-        if verbose > 0:
-            print(f"    Removing Points from Outside of the Gaze by {visual_angle} dg. ")
-        # Exclude blink periods from the outside mask
-        valid_outside_mask = outside_mask & ~blink_mask
-        # Count the number of valid gaze points outside the visual angle
-        count_outside = valid_outside_mask.sum()
-        ScreenData.loc[valid_outside_mask,eye +'Pupil'] = np.nan
-    return ScreenData
-
-
-
-
-def Dg2px(dg,dist,width,wpx):
-    return wpx*2*dist*np.tan(dg*np.pi/360)/width
-
-def px2Dg(px,dist,width,wpx):
-    return 360*np.arctan(px*width/(2*dist*wpx))/np.pi
-
-
-
-
-def changeTiming(RawDF,fixationDF,saccadesDF,blinkDF,own):
-    # Get the time of the event
-
-    fixationDF['Beg'] = fixationDF['Beg'] -RawDF['TimePoint'].iloc[0]
-    fixationDF['End'] = fixationDF['End'] -RawDF['TimePoint'].iloc[0]
-
-    saccadesDF['Beg'] = saccadesDF['Beg'] -RawDF['TimePoint'].iloc[0]
-    saccadesDF['End'] = saccadesDF['End'] -RawDF['TimePoint'].iloc[0]
-
-    blinkDF['Beg'] = blinkDF['Beg'] -RawDF['TimePoint'].iloc[0]
-    blinkDF['End'] = blinkDF['End'] -RawDF['TimePoint'].iloc[0]
-    own = [[o[0], (int(o[1].strip()) - RawDF['TimePoint'].iloc[0])] + o[2:] for o in own]
-
-    RawDF['TimePoint'] = RawDF['TimePoint'] - RawDF['TimePoint'].iloc[0]
-
-    return RawDF,fixationDF,saccadesDF,blinkDF,own
-
-
-
-
-def parse_events(own):
-    """
-    Parse the events from the own list and separate them into different DataFrames.
-
-    Parameters:
-    own (list): List of lists from the ASC file corresponding to custom events.
-
-    Returns:
-    dict: Dictionary containing DataFrames for each event type.
-    """
-    parts = [];
-    end = [];
-    beg = [];
-    keypress = [];
-    keytime = [];
-    story = [];
-
-    # Parse the own list
-    for line in own:
-        event_type = line[2]
-        timestamp = int(line[1])
-        event_name = line[3].strip()
-        event_status = line[4].strip()
-        #print(event_type,event_name)
-        #print(line)
-        if event_type == 'PART' and event_status != 'END':
-            parts.append(event_name)
-            beg.append(timestamp)
-            story.append(latestStory)
-        if event_type =='PART'and event_status == 'END':
-            end.append(timestamp)
-        if event_type == 'KEYPRESS':
-            keypress.append(int(event_name))
-            keytime.append(timestamp)
-        if event_type =='LISTEN' and event_name not in story:
-            latestStory = event_name
-   
-    # Create DataFrames for each event type
-    event_dfs = pd.DataFrame(zip(*[parts,beg, end,keypress, keytime,story]),columns =['Part','beg','end','key','keytime','story'] )
-
-    return event_dfs
-
-def rename_parts(df):
-
-    """
-    rename parts in the DataFrame by removing the number at the end and renumbering them.
-    (A sanity check, when the parts have been incorrectly numbered)
-    :param df: DataFrame containing the parts to be renamed.
-    """
-    df['name'] = df['Part'].str.rsplit('_', n=1).str[0]
-    # Add renumbering per name - just count the number of occurences of each entity and cumulate it counting! 
-    df['new_num'] = df.groupby('name').cumcount() + 1
-    # Rebuild 'parts' column
-    df['Part'] = df['name'] + '_' + df['new_num'].astype(str)
-    # Drop helper columns if you want
-    df = df.drop(columns=['name', 'new_num'])
-    return df
-
-def split_dataframes_by_events(RawDF, fixationDF, saccadesDF, blinkDF, events_df):
-    """
-    Split the RawDF, fixationDF, saccadesDF, and blinkDF into separate DataFrames based on the time intervals in events_df.
-
-    Parameters:
-    RawDF (DataFrame): DataFrame containing raw eye-tracking data.
-    fixationDF (DataFrame): DataFrame containing fixation events.
-    saccadesDF (DataFrame): DataFrame containing saccade events.
-    blinkDF (DataFrame): DataFrame containing blink events.
-    events_df (DataFrame): DataFrame containing event intervals with BEG and END columns.
-
-    Returns:
-    dict: Dictionary containing split DataFrames for each event interval.
-    """
-    split_data = {
-       'STORY_1' : {'RawDF': {}, 'fixationDF': {}, 'saccadesDF': {}, 'blinkDF': {}},
-       'STORY_2' : {'RawDF': {}, 'fixationDF': {}, 'saccadesDF': {}, 'blinkDF': {}}
-    }
-
-    for idx, row in events_df.iterrows():
-        beg = row['beg']
-        end = row['end']
-        event_name = row['Part']
-        story_name = row['story']
-        split_data[story_name]['RawDF'][event_name] = RawDF[(RawDF['TimePoint'] >= beg) & (RawDF['TimePoint'] <= end)]
-        split_data[story_name]['fixationDF'][event_name] = fixationDF[(fixationDF['Beg'] >= beg) & (fixationDF['End'] <= end)]
-        split_data[story_name]['saccadesDF'][event_name] = saccadesDF[(saccadesDF['Beg'] >= beg) & (saccadesDF['End'] <= end)]
-        split_data[story_name]['blinkDF'][event_name] = blinkDF[(blinkDF['Beg'] >= beg) & (blinkDF['End'] <= end)]
-
-    return split_data
-
-
-
-
-def preprocessingPipeline(blinkDF,RawDF,saccadesDF,gazeCoords,story,part,fixationDF=None,log_file=[],pdfs=[None],verbose=0,interp_type=0,interpBoundary=50,maxBlinkDur=500,resampleRate=100,dgvCenter=5,smoothwin=5,min_cluster_duration=2000,max_gap_duration=500):
-    """
-    Our pipeline for preprocessing information
-
-    WARNING! Some functions are Eye Specific! BUT Most importantly, the blink interpolation IS DONE ON BLINKS FOR BOTH EYES!
-    
-    """
-
-    # 1) Downsampling Raw Data to limit computation time
-    RawDFDown = downsamplePupil(RawDF,logfile=log_file,divisor=500/resampleRate)
-    if verbose :
-        fig1 = plotPupilTimecourse(RawDFDown, f"Downsampled Pupil Data: {story} // {part}", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
-        if len(pdfs) >= 1:
-            pdfs[0].savefig(fig1)
-        else:
-            plt.show(fig1)
-        plt.close(fig1)
-
-    # 2) Compute Non-blink Outside of Center points
-    ScreenData = count_gaze_outside(RawDFDown, blinkDF, gazeCoords, max_blink_duration=maxBlinkDur, boundary=interpBoundary, visual_angle=dgvCenter,logfile=log_file,verbose=verbose)
-    if verbose:
-        fig2 = plotEyeWithBlink(ScreenData[pd.notna(ScreenData['LeftPupil'])], blinkDF, gazeCoords, f"Screen Data: {story} // {part}")
-        if len(pdfs) >= 2:
-            pdfs[1].savefig(fig2)
-        else:
-            plt.show(fig2)
-        plt.close(fig2)
-
-    # 3) Interpolate Blinks
-    RawDF2,interpDuration = interpolate_blinks(blinkDF=blinkDF, ScreenData=ScreenData, inter=interpBoundary,maxBlink = 2*interpBoundary+maxBlinkDur,verbose =verbose,logfile=log_file,interp_method=interp_type)
-    if verbose:
-        fig3 = plotPupilTimecourse(RawDF2, f"Interpolated Blinks: {story} // {part} ({interpDuration})", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
-        if len(pdfs) >= 3:
-            pdfs[2].savefig(fig3)
-        else:
-            plt.show(fig3)
-        plt.close(fig3)
-
-    # 4) Remove Other Outliers (it doesnt Work irregardless :C)
-    RawDF3 = removeOutliers(RawDF2, threshold=3, max_duration=maxBlinkDur, boundary=40, verbose=verbose,logfile=log_file)
-    if verbose:
-        fig4 = plotPupilTimecourse(RawDF3, f"Outliers Removed: {story} // {part}", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
-        if  len(pdfs) >= 4:
-            pdfs[3].savefig(fig4)
-        else:
-            plt.show(fig4)
-        plt.close(fig4)
-
-    # 5) Remove Edge NaNs (Which are already padded!)
-    RawDF4 = replace_zero_clusters_with_nans(RawDF3,logfile=log_file)
-    if verbose:
-        fig5 = plotPupilTimecourse(RawDF4, f"Edge Artifacts Removed: {story} // {part}", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
-        if len(pdfs) >= 5:
-            pdfs[4].savefig(fig5)
-        else:
-            plt.show(fig5)
-        plt.close(fig5)
-
-
-    # 6) Smooth the data
-    finalData = smooth_pupil_data(RawDF4, window_size=smoothwin, min_cluster_duration=min_cluster_duration, max_gap_duration=max_gap_duration,logfile=log_file,verbose=verbose)
-    if verbose:
-        fig6 = plotPupilTimecourse(finalData, f"Smoothed Data: {story} // {part}", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
-        if len(pdfs) >= 6:
-            pdfs[5].savefig(fig6)
-        else:
-            plt.show(fig6)
-
-        plt.close(fig6)
-    
-    return finalData
-
-
-
-
-
-
-
-def splitEntities(RawDF, event_dfs):
-    """
-    Splits the RawDF into two entities based on the events DataFrame.
-    """
-    firstEntityRaw  = []
-    secondEntityRaw = []
-
-    for i in range(len(event_dfs)):
-
-        currentTiming1 = event_dfs['beg'].iloc[i]
-        currentTiming2 = event_dfs['end'].iloc[i]
-
-        if 'TimePoint' in RawDF.columns:
-            RawDF1 = RawDF[(RawDF['TimePoint'] >= currentTiming1) & (RawDF['TimePoint'] <= currentTiming2)]
-        elif 'Beg' in RawDF.columns:
-            RawDF1 = RawDF[(RawDF['Beg'] >= currentTiming1) & (RawDF['End'] <= currentTiming2)]
-
-        if i %2 ==0:
-            firstEntityRaw.append(RawDF1)
-        else:
-            secondEntityRaw.append(RawDF1)
-
-    firstEntityDF = pd.concat(firstEntityRaw, ignore_index=True)
-    secondEntityDF = pd.concat(secondEntityRaw, ignore_index=True)
-
-    return firstEntityDF, secondEntityDF
 
 
 
@@ -1387,97 +903,641 @@ def qualiryMetrics(RawDFs, saccadesDFs, blinkDFs, gazeCoords, log_file=None,verb
 
 
 
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------- # 
+
+
+                                        ####################################################################
+                                        ##### ------------  PUPIL PREPROCESSINF FUNCTIONS ------------ #####
+                                        ####################################################################
 
 
 
-def plot_gaze_check(P_dict,filename,tracked):
+def preprocessingPipeline(blinkDF,RawDF,saccadesDF,gazeCoords,story="",part="",fixationDF=None,log_file=[],pdfs=[None],verbose=0,interp_type=0,interpBoundary=50,maxBlinkDur=500,resampleRate=100,dgvCenter=5,smoothwin=5,min_cluster_duration=2000,max_gap_duration=50):
     """
-    Plots the gaze check for each entity in the story. in 4 different plots:
-    Differentiates between Tracked and Untracked Entity 
+    Preprocessing pipeline for eye-tracking data.
+
+    This function processes raw eye-tracking and event data to produce a cleaned, interpolated, and smoothed pupil timecourse for both eyes. 
+    It handles downsampling, removal of out-of-bounds gaze points, blink interpolation, outlier removal, edge artifact cleaning, and smoothing. 
+    Optionally, it generates diagnostic plots at each step.
+
+    Inputs:
+        blinkDF         : DataFrame containing blink events for our trial
+        RawDF           : DataFrame containing raw eye-tracking data for our trial
+        saccadesDF      : DataFrame containing saccade events  for our trial
+        gazeCoords      : List or array with gaze/screen coordinates. [0 0 width height]
+     
+
+        #General Parameters#
+        fixationDF      : (Optional) DataFrame containing fixation events. IIt is usefull only for plotting! 
+                                     Default = None
+        log_file        : (Optional) File handle or list for logging. If you want to Log the process
+                                     Default = None
+        pdfs            : (Optional) List of PdfPages or None for saving plots.
+                                     Default = []
+        verbose         : (Optional) Verbosity level for debug/plots. If you want plots set it to 1
+                                     Default = 1
+        story           : (Optional) String identifier for the story/condition. (Used Only as a placeholder for PLOTS)
+        part            : (Optional) String or int identifier for the part/trial. (Used Only as a placeholder for PLOTS)
+
+        #Downsampling#
+        resampleRate        : (Optional) Resample rate for downsampling (Hz).
+                                         Default = 100
+        #Blink Interpolation#
+        interp_type     : (Optional) Interpolation type for blinks (0=linear, 1=cubic). 
+                                     Default (and recommended) =  0 (linear)
+        interpBoundary  : (Optional) Boundary (ms) around blinks for interpolation.
+                                     Default = 50ms 
+        maxBlinkDur     : (Optional) Maximum blink duration for interpolation (ms).
+                                      If it is exceeded, events are NaN-ed.
+                                      Default = 500ms
+        #Centering Gaze#
+        dgvCenter           : (Optional) Visual angle threshold for gaze exclusion (deg) . 
+                                         How far from center is considered good Pupil diameter). 
+                                         Default = 5
+        #Smoothing#
+        smoothwin           : (Optional) Window size for smoothing. How many samples are with smoothing over. 
+                                          Default  = 5 (recommend 10)
+        min_cluster_duration: (Optional) Minimum cluster duration for smoothing (ms). If it is exceeded, data is NaN-ed. 
+                                          Default  = 2s
+        max_gap_duration    :  (Optional) Maximum gap duration for smoothing (ms). 
+                                          Concatenate data divided by NaNs for smoothing that are closer than max_gap. 
+                                          Default = 50ms
+
+    Returns:
+        finalData       : DataFrame with cleaned and processed pupil data.
     """
-    # Set up subplots: 4 rows, 1 column
-    fig, axs = plt.subplots(4, 1, figsize=(12, 12), sharex=True)
-    plt.suptitle(f"Gaze Checks: {filename}", fontsize=16)
-    if tracked == 'KAROLINA':
-        label1 = 'Tracked'
-        label2 = 'Untracked'
-    else:
-        label2 = 'Tracked'
-        label1 = 'Untracked'
-    # Loop through each key and its corresponding data
-    for ax, (key, P) in zip(axs, P_dict.items()):
-        x = list(range(len(P)))
-        x_even = x[::2]
-        y_even = P[::2]
-        x_odd = x[1::2]
-        y_odd = P[1::2]
+    # 1) Downsampling Raw Data to limit computation time (WARNING! It assumes that your Fs is 500!)
+    RawDFDown = downsamplePupil(RawDF,logfile=log_file,divisor=500/resampleRate)
+    if verbose : # Plot if Necessery
+        fig1 = plotPupilTimecourse(RawDFDown, f"Downsampled Pupil Data: {story} // {part}", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
+        if len(pdfs) >= 1:
+            pdfs[0].savefig(fig1)
+        else:
+            plt.show(fig1)
+        plt.close(fig1)
 
-        ax.scatter(x_even, y_even, color='blue', label=label1)
-        ax.scatter(x_odd, y_odd, color='orange', label=label2)
-        ax.set_title(f"{key}", fontsize=14)
-        ax.set_ylabel("Value")
-        ax.grid(True)
+    # 2) Compute Non-blink Outside of Center points
+    ScreenData = count_gaze_outside(RawDFDown, blinkDF, gazeCoords, max_blink_duration=maxBlinkDur, boundary=interpBoundary, visual_angle=dgvCenter,logfile=log_file,verbose=verbose)
+    if verbose:
+        fig2 = plotEyeWithBlink(ScreenData[pd.notna(ScreenData['LeftPupil'])], blinkDF, gazeCoords, f"Screen Data: {story} // {part}")
+        if len(pdfs) >= 2:
+            pdfs[1].savefig(fig2)
+        else:
+            plt.show(fig2)
+        plt.close(fig2)
 
-    # Add shared X label
-    axs[-1].set_xlabel("Trial Number")
-    axs[0].legend(loc='upper right')
+    # 3) Interpolate Blinks
+    RawDF2,interpDuration = interpolate_blinks(blinkDF=blinkDF, ScreenData=ScreenData, inter=interpBoundary,maxBlink = 2*interpBoundary+maxBlinkDur,verbose =verbose,logfile=log_file,interp_method=interp_type)
+    if verbose:
+        fig3 = plotPupilTimecourse(RawDF2, f"Interpolated Blinks: {story} // {part} ({interpDuration})", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
+        if len(pdfs) >= 3:
+            pdfs[2].savefig(fig3)
+        else:
+            plt.show(fig3)
+        plt.close(fig3)
+
+    # 4) Remove Other Outliers (it doesnt Work irregardless :C)
+    RawDF3 = removeOutliers(RawDF2, threshold=3, max_duration=maxBlinkDur, boundary=40, verbose=verbose,logfile=log_file)
+    if verbose:
+        fig4 = plotPupilTimecourse(RawDF3, f"Outliers Removed: {story} // {part}", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
+        if  len(pdfs) >= 4:
+            pdfs[3].savefig(fig4)
+        else:
+            plt.show(fig4)
+        plt.close(fig4)
+
+    # 5) Remove Edge NaNs (Which are already padded!)
+    RawDF4 = replace_zero_clusters_with_nans(RawDF3,logfile=log_file)
+    if verbose:
+        fig5 = plotPupilTimecourse(RawDF4, f"Edge Artifacts Removed: {story} // {part}", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
+        if len(pdfs) >= 5:
+            pdfs[4].savefig(fig5)
+        else:
+            plt.show(fig5)
+        plt.close(fig5)
 
 
+    # 6) Smooth the data
+    finalData = smooth_pupil_data(RawDF4, window_size=smoothwin, min_cluster_duration=min_cluster_duration, max_gap_duration=max_gap_duration,logfile=log_file,verbose=verbose)
+    if verbose:
+        fig6 = plotPupilTimecourse(finalData, f"Smoothed Data: {story} // {part}", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
+        if len(pdfs) >= 6:
+            pdfs[5].savefig(fig6)
+        else:
+            plt.show(fig6)
 
-
-def mwHist(resultsDF,filename):
-    """
-    Plots a general histogram to see whether there is a disproporitons of particular answers
-    """
-    plt.figure(figsize=(12,12))
-    plt.title(f'Tracked/Untracked Count: {filename}')
-    plt.hist(resultsDF[resultsDF['Tracking'] == 'TRACKED']['MW Estimate'], bins=20,
-            label='Tracked', alpha=0.5,color='blue')  # Set alpha to 0.5 for transparency
-    plt.hist(resultsDF[resultsDF['Tracking'] == 'UNTRACKED']['MW Estimate'], bins=20, 
-            label='Untracked', alpha=0.5,color='orange') # Set alpha to 0.5 for transparency
-    plt.legend()
-    plt.xlabel('MW Estimate')
-    plt.ylabel('Count')
-
-def scatterResults(MW,Results, filename, pdf=None):
-    """
-    Plots pupil diameter for tracked and untracked entities in a 2x2 grid.
+        plt.close(fig6)
     
-    Parameters:
-    - Results: List of results to plot (e.g., [resultsL, resultsR, resultsL2, resultsR2]).
-    - filename: Name of the subject entity.
-    - pdf: PdfPages object to save the plots (optional).
+    return finalData
+
+
+
+def downsamplePupil(ScreenData,divisor=5,logfile=None):
     """
-    fig, axs = plt.subplots(int( len(Results)/2),2, figsize=(12, 12),sharey='row')
-    plt.suptitle(f"Pupil Diameter for {filename}", fontsize=16)
+    Downsample Pupil Data to 100 Hz
+    :param ScreenData:
+    : divisor - dividing current Rate to a given count via Modullo 
+    : logfile (Optional) - if you want to log things 
+    :return:
+    """
+    # Downsample to freq (default 100) Hz
+    ScreenData = ScreenData[ScreenData['TimePoint'] % divisor == 0]
+    if logfile is not None:
+        print(f"    Downsampling to rate {500/divisor} Hz")
+        logfile.write(f"        (1) Downsampling to rate {500/divisor} Hz\n")
+    return ScreenData
 
-    # Titles for subplots
-    row_titles = ["Mean", "Std",'diff']
-    col_titles = ["Left Eye", "Right Eye"]
 
-    for row in range(2):  # Rows: Mean vs. Std
-        for col in range(2):  # Columns: Left Eye vs. Right Eye
-            ax = axs[row, col]
-            result = Results[row * 2 + col]  # Select the correct result (e.g., resultsL, resultsR, resultsL2, resultsR2)
 
-            # Scatter plot for tracked and untracked entities
-            ax.scatter(MW[::2], result[::2], label="Tracked Entity", color="blue")
-            ax.scatter(MW[1::2], result[1::2], label="Untracked Entity", color="orange")
+def merge_blink_intervals(blinkDF, inter=50):
+    """
+    Merge overlapping or closely spaced blink events.
 
-            # Set titles, labels, and grid
-            if row == 0:
-                ax.set_title(col_titles[col], fontsize=14)
-            if col == 0:
-                ax.set_ylabel(f"{row_titles[row]} Pupil Diameter (a.u.)", fontsize=12)
-            ax.set_xlabel("MW Estimate (1-100)", fontsize=12)
-            ax.legend()
-            ax.grid(True)
+    Parameters:
+    blinkDF (DataFrame): DataFrame containing blink events.
+    inter (int): Interval in milliseconds to extend the blink period.
 
-    # Adjust layout to ensure everything fits
-    plt.tight_layout(rect=[0, 0, 1, 0.95])  # Add space for the title
+    Returns:
+    DataFrame: Merged blink intervals.
+    """
+    # Sort by start time
+    blinkDF = blinkDF.sort_values(by="Beg").copy()
 
-    if pdf is not None:
-        pdf.savefig(fig)
+    merged_intervals = []
+    current_beg = blinkDF.iloc[0]["Beg"] - inter
+    current_end = blinkDF.iloc[0]["End"] + inter
+
+    for _, row in blinkDF.iterrows():
+        new_beg = row["Beg"] - inter
+        new_end = row["End"] + inter
+
+        if new_beg <= current_end:  # Overlapping or close blink events
+            current_end = max(current_end, new_end)
+        else:
+            merged_intervals.append([current_beg, current_end])
+            current_beg = new_beg
+            current_end = new_end
+
+    # Append last merged interval
+    merged_intervals.append([current_beg, current_end])
+
+    # Convert back to DataFrame
+    mergedDF = pd.DataFrame(merged_intervals, columns=["Beg_extended", "End_extended"])
+    return mergedDF
+
+def interpolate_blinks(blinkDF, ScreenData, inter=50,maxBlink=500,verbose = 0,logfile=None,begendDur = 1000,interp_method=0):
+    if logfile is not None:
+        logfile.write("        (3) Interpolating Blinks: \n")
+        
+    """
+    Interpolate blinks from data in a specified interval (default 50 ms) using Cubic Spline interpolation.
+    OR Linear interpolation
+
+    First we MERGE left and RIGHT blinks: They are mostly corresponding with oneathoer
+
+    Parameters:
+    blinkDF (DataFrame): DataFrame containing blink events.
+    ScreenData (DataFrame): DataFrame containing screen data.
+    inter (int): Interval in milliseconds to extend the blink period.
+
+    Returns:
+    DataFrame: ScreenData with interpolated blinks.
+
+    """
+    interpDur = 0;
+
+    if len(blinkDF) > 0:
+        ScreenData = ScreenData.copy()
+        removedBlinks = 0;
+        interpBlinks=0;
+        rempDur = 0;
+        interpDur = 0;
+        # Merge overlapping blink events before applying interpolation
+        merged_blinks = merge_blink_intervals(blinkDF, inter)
+        # Process each merged blink interval
+        for i, row in merged_blinks.iterrows():
+            beg_ext = row.Beg_extended
+            end_ext = row.End_extended
+            duration = end_ext - beg_ext
+            mask = (ScreenData["TimePoint"] >= beg_ext) & (ScreenData["TimePoint"] <= end_ext)
+
+            # Nans When Blink event is Too Long OR when it is at the Immediate Beginning!
+            if  duration > maxBlink  and verbose == 2:
+                print(f"Blink n. {i} is too long! Duration: {duration}")
+                if logfile is not None:
+                        logfile.write(f"            interpolating Blink: N: {i}  Duration: {duration}\n")
+
+            if abs(ScreenData["TimePoint"].iloc[0] -beg_ext) < begendDur  and verbose == 2:
+                print(f"  Blink {i} is too close to the beginning! ({ScreenData['TimePoint'].iloc[0] - beg_ext}")
+                if logfile is not None:
+                        logfile.write(f"            Blink {i} is too close to the beginning! ({ScreenData['TimePoint'].iloc[0] - beg_ext})\n")
+
+            if abs(ScreenData["TimePoint"].iloc[-1] - end_ext) < begendDur and verbose == 2:
+                print(f"Blink {i} is too close to the end! ({ScreenData['TimePoint'].iloc[-1] - end_ext})")
+                if logfile is not None:
+                        logfile.write(f"            Blink {i} is too close to the end! ({ScreenData['TimePoint'].iloc[-1] - end_ext})\n")
+
+
+            if duration <= maxBlink and abs(ScreenData["TimePoint"].iloc[0] - beg_ext) > begendDur and abs(ScreenData["TimePoint"].iloc[-1] - end_ext) > begendDur:
+                for col in ["LeftPupil", "RightPupil"]:
+                    valid_idx = ScreenData.loc[~mask, col].dropna().index
+                    if len(valid_idx) < 5:  # Need at least 5 valid points for cubic spline
+                        ScreenData.loc[mask, col] = np.nan
+                
+                        continue
+                    if logfile is not None and verbose == 2:
+                        logfile.write(f"            interpolating Blink: N: {i}  Duration: {duration}\n")
+                    valid_x = valid_idx.to_numpy()
+                    valid_y = ScreenData.loc[valid_idx, col].to_numpy()
+
+                    try:
+                        if interp_method == 0:  # Linear interpolation
+                            linear_interp = interp1d(valid_x, valid_y, bounds_error=False, fill_value="extrapolate")
+                            ScreenData.loc[mask, col] = linear_interp(ScreenData.loc[mask].index)
+                            interpBlinks +=1
+                            interpDur += duration;
+
+                        elif interp_method == 1:  # Cubic spline interpolation
+                            cs = CubicSpline(valid_x, valid_y, extrapolate=False)
+                            ScreenData.loc[mask, col] = cs(ScreenData.loc[mask].index)
+                            interpDur += duration;
+                            interpBlinks +=1
+                    except Exception as e:
+                        if logfile is not None:
+                            logfile.write(f"            Interpolation failed for {col} at {beg_ext}-{end_ext}: {e}\n")
+                        print(f"Interpolation failed for {col} at {beg_ext}-{end_ext}: {e}")
+                        ScreenData.loc[mask, col] = np.nan  # Fallback to NaN if error occurs
+            else:
+                removedBlinks +=1
+                rempDur += duration;
+
+                if logfile is not None  and verbose == 2:
+                    logfile.write(f"            Blink removed: N:{i}, Duration: {duration}\n")
+                ScreenData.loc[mask, ["LeftPupil", "RightPupil"]] = np.nan
+
+        if logfile is not None:
+            logfile.write(f"            Blinks removed: {removedBlinks} (duration: {rempDur})\n")
+            logfile.write(f"            Blinks interp:  {interpBlinks} (duration: {interpDur})\n")
+    else:
+         if logfile is not None:
+            logfile.write("          No blinks to interpolate!!!!")
+        
+    return ScreenData,interpDur
+
+
+### Use this  to filter None Screen Data - at the end
+
+def count_gaze_outside(ScreenData, blinkDF, gazeCoords,max_blink_duration=500, boundary=50, visual_angle=5,logfile=None,verbose=0):
+    """
+    Count the number of gaze points outside 5 degrees of visual angle
+    that do not coincide with a blink (plus 50ms boundary), are not longer than 500ms,
+    and are not NaN.
+
+    Parameters:
+    ScreenData (DataFrame): DataFrame containing gaze and pupil data.
+    blinkDF (DataFrame): DataFrame containing blink events.
+    gazeCoords (list): List containing screen dimensions [width, height, center_x, center_y].
+    max_blink_duration (int): Maximum blink duration (in ms) to exclude from counting.
+    boundary (int): Time in milliseconds to extend the range around blink periods.
+    visual_angle (float): Visual angle threshold in degrees.
+
+    Returns:
+    int: Number of gaze points outside the visual angle that meet the criteria.
+    """
+
+
+    import numpy as np
+    ScreenData = ScreenData.copy()
+
+    # Calculate the center of the screen
+    center_x = gazeCoords[2] / 2
+    center_y = gazeCoords[3] / 2
+
+    # Calculate the Degrees Angle of the LeftX and LeftY values
+    std_x = Dg2px(visual_angle, 93, 53, 1920)
+    std_y = Dg2px(visual_angle, 93, 53, 1920)
+
+
+    for eye  in ['Left','Right']:
+        # Identify points outside the visual angle
+        outside_mask = ~(
+            (np.abs(ScreenData[eye +'X'] - center_x) < std_x) &
+            (np.abs(ScreenData[eye +'Y'] - center_y) < std_y)
+        )
+        # Exclude NaN values from the mask
+        not_nan_mask = pd.notna(ScreenData[eye +'X']) & pd.notna(ScreenData[eye +'Y'])
+
+        # Combine the outside mask with the not-NaN mask
+        outside_mask = outside_mask & not_nan_mask
+
+        # Create a mask for blink periods (including 50ms boundary)
+        blink_mask = np.zeros(len(ScreenData), dtype=bool)
+
+        for i, blink in blinkDF.iterrows():
+            if blink['Duration'] <= max_blink_duration:
+                start = blink['Beg'] - boundary
+                end = blink['End'] + boundary
+                blink_mask |= (ScreenData["TimePoint"] >= start) & (ScreenData["TimePoint"] <= end)
+
+        if logfile is not None and verbose > 0:
+            logfile.write(f"        (2) Removing Points from Outside of the Gaze by {visual_angle} dg ({std_x:3.1f} px) \n")
+            logfile.write(f"            N: {blink_mask.sum():5.1f};  \n")
+
+        if verbose > 0:
+            print(f"    Removing Points from Outside of the Gaze by {visual_angle} dg. ")
+        # Exclude blink periods from the outside mask
+        valid_outside_mask = outside_mask & ~blink_mask
+        # Count the number of valid gaze points outside the visual angle
+        count_outside = valid_outside_mask.sum()
+        ScreenData.loc[valid_outside_mask,eye +'Pupil'] = np.nan
+    return ScreenData
+
+
+
+
+def Dg2px(dg,dist,width,wpx):
+    return wpx*2*dist*np.tan(dg*np.pi/360)/width
+
+def px2Dg(px,dist,width,wpx):
+    return 360*np.arctan(px*width/(2*dist*wpx))/np.pi
+
+
+def replace_zero_clusters_with_nans(ScreenData,logfile=None):
+    """
+    Identify clusters of zeros in LeftPupil and rightPupil Respectively, replace them with NaN, and extend the replacement
+    by a specified boundary (e.g., 50ms).
+
+    Parameters:
+    ScreenData (DataFrame): DataFrame containing gaze and pupil data.
+    boundary (int): Time in milliseconds to extend the range around zero clusters.
+
+    Returns:
+    DataFrame: Modified ScreenData with zero clusters and their boundaries replaced by NaN.
+    """
+    import numpy as np
+
+    # Identify rows where LeftPupil is zero
+    for eye in ['LeftPupil','RightPupil']:
+        zero_mask = (ScreenData[eye] <= 0)
+        if logfile is not None:
+                logfile.write("        (5) Replacing Zeros: \n")
+        # If no zeros are found, return the original DataFrame
+        if not zero_mask.any():
+            if logfile is not None:
+                logfile.write("            No zeros present in the data\n")
+            return ScreenData
+        else:
+            if logfile is not None:
+                logfile.write(f"            Zeros: N:{zero_mask.sum():4.1f}\n")
+        # Get the row positions (not the DataFrame index) of zeros
+        zero_positions = np.where(zero_mask)[0]
+
+        # Create a mask for the clusters and their boundaries
+        boundary_mask = np.zeros(len(ScreenData), dtype=bool)
+
+        # Iterate through zero positions
+        for pos in zero_positions:
+            start_idx = max(0, pos)
+            end_idx = min(len(ScreenData) - 1, pos)
+            boundary_mask[start_idx:end_idx + 1] = True
+
+        # Replace the clusters and their boundaries with NaN
+        ScreenData.loc[boundary_mask, [eye]] = np.nan
+
+    return ScreenData
+
+
+def smooth_pupil_data(ScreenData, window_size=5, min_cluster_duration=1000, max_gap_duration=50, logfile=None, verbose=0):
+    """
+    Smooth the pupil data (LeftPupil and RightPupil) while ignoring NaNs.
+    Each cluster of consecutive non-NaN measurements is smoothed separately.
+    Clusters shorter than min_cluster_duration (in ms) or with gaps longer than max_gap_duration
+    are replaced with NaN.
+
+    Parameters:
+    ScreenData (DataFrame): DataFrame containing gaze and pupil data.
+    window_size (int): Size of the smoothing window (e.g., for moving average).
+    min_cluster_duration (int): Minimum duration (in ms) for a cluster to be smoothed.
+    max_gap_duration (int): Maximum gap (in ms) between timestamps within a cluster.
+
+    Returns:
+    DataFrame: Modified ScreenData with smoothed pupil data.
+    """
+    import numpy as np
+    import pandas as pd
+
+    if logfile is not None:
+        logfile.write("        (6) Smoothing Out the Data: \n")
+
+    def smooth_cluster(cluster, window_size):
+        """Apply smoothing to a single cluster."""
+        return cluster.rolling(window=window_size, center=True, min_periods=1).mean()
+
+    # Copy the data to avoid modifying the original DataFrame
+    smoothed_data = ScreenData.copy()
+
+    for eye in ['LeftPupil', 'RightPupil']:
+        non_nan_mask = pd.notna(ScreenData[eye])
+        cluster_indices = np.where(non_nan_mask)[0]
+
+        if len(cluster_indices) == 0:
+            if logfile is not None:
+                logfile.write(f"       WARNING! No valid data found for {eye}.\n")
+            continue
+
+        # Group consecutive indices into clusters
+        clusters = []
+        current_cluster = [cluster_indices[0]]
+        for i in range(1, len(cluster_indices)):
+           
+            t_now  = ScreenData.iloc[cluster_indices[i]]['TimePoint']
+            t_prev = ScreenData.iloc[cluster_indices[i-1]]['TimePoint']
+            if t_now - t_prev > max_gap_duration:  # Gap detected
+                clusters.append(current_cluster)
+                current_cluster = []
+            current_cluster.append(cluster_indices[i])
+
+        if current_cluster:
+            clusters.append(current_cluster)
+
+        if verbose > 0:
+            print(f"    Found {len(clusters)} clusters for {eye}.")
+            if logfile is not None:
+                logfile.write(f"        Found {len(clusters)} clusters for {eye}.\n")
+
+        previous_cluster_end = None
+
+        for cluster in clusters:
+            cluster_timepoints = ScreenData.iloc[cluster]['TimePoint']
+            cluster_duration = cluster_timepoints.iloc[-1] - cluster_timepoints.iloc[0] 
+
+            if previous_cluster_end is not None:
+                gap_duration = cluster_timepoints.iloc[0] - previous_cluster_end
+            else:
+                gap_duration = None
+            # Adding +1 sample to avoid rejectin by the nick of hair
+            if cluster_duration + int( ScreenData.iloc[1]['TimePoint'] - ScreenData.iloc[0]['TimePoint'] ) < min_cluster_duration:
+                # Replace cluster with NaN if it's too short or the gap is too large
+                smoothed_data.iloc[cluster, smoothed_data.columns.get_loc(eye)] = np.nan
+                if verbose > 0:
+                    print(f"    Cluster replaced with NaN for {eye}: Duration={cluster_duration}, Gap={gap_duration}.")
+                    if logfile is not None:
+                        logfile.write(f"        Cluster replaced with NaN for {eye}: Duration={cluster_duration}, Gap={gap_duration}.\n")
+            else:
+                # Smooth the cluster
+                cluster_data = smoothed_data.iloc[cluster][eye]
+                smoothed_data.iloc[cluster, smoothed_data.columns.get_loc(eye)] = smooth_cluster(cluster_data, window_size)
+                if verbose > 0:
+                    print(f"    Cluster smoothed for {eye}: Duration={cluster_duration}.")
+                    if logfile is not None:
+                        logfile.write(f"        Cluster smoothed for {eye}: Duration={cluster_duration}.\n")
+
+            previous_cluster_end = cluster_timepoints.iloc[-1]
+
+    return smoothed_data
+
+
+
+def removeOutliers(ScreenData, threshold=3, max_duration=500, boundary=50, verbose=0,logfile=None):
+    """
+    Remove outliers in pupil size data using the 3-sigma rule on the differential time series. \
+        Replaces them with NaNs or interpolating them, if their duration has not corssed max_duration
+
+    Parameters:
+    ScreenData (DataFrame): DataFrame containing screen data.
+    threshold (int): Threshold for identifying outliers (default 3 for 3-sigma rule).
+    max_duration (int): Maximum duration for interpolation (default 500 ms).
+    boundary (int): Interval in milliseconds to extend the outlier period.
+    verbose (int): Verbosity level for debugging and visualization (default 0).
+
+    Returns:
+    DataFrame: ScreenData with interpolated outliers.
+    """
+    
+
+    for eye in ['LeftPupil', 'RightPupil']:
+        # Create differential time series for the left eye
+        diff_left = np.diff(ScreenData[eye], prepend=ScreenData[eye].iloc[0])
+        # Identify outliers using the 3-sigma rule on the differential time series
+        mean_diff_left = np.mean(diff_left)
+        std_diff_left = np.std(diff_left)
+        outliers_left = abs(diff_left - mean_diff_left) > threshold * std_diff_left
+
+        if logfile is not None:
+            logfile.write(f"        (4) Interpolating or NaN Outliers in {eye} eye N:{len(outliers_left):5.1f}\n")
+            print(f"    Interpolating or NaN Outliers in {eye} eye N:{len(outliers_left):5.1f}")
+        if verbose ==2:
+            plt.figure(figsize=(12, 6))
+            plt.plot(diff_left, label=' Pupil Size')
+            plt.xlabel('TimePoint')
+            plt.ylabel('Differential Time Series')
+            plt.title(eye+' Pupil Size with Outliers')
+            plt.legend()
+            plt.show()
+
+        # Visualize the outliers
+        if verbose ==2:
+            plt.figure(figsize=(12, 6))
+            plt.plot(ScreenData['TimePoint'], ScreenData[eye], label=eye+' Pupil Size')
+            plt.plot(ScreenData['TimePoint'], ScreenData['RightPupil'], label=eye+' Pupil Size')
+
+            plt.scatter(ScreenData['TimePoint'][outliers_left], ScreenData[eye][outliers_left], color='red', label='Outliers')
+            plt.xlabel('TimePoint')
+            plt.ylabel(eye+' Pupil Size')
+            plt.title(eye+' Pupil Size with Outliers')
+            plt.legend()
+            plt.show()
+
+        # Cluster outliers together
+        clusters = []
+        current_cluster = []
+        for i in range(len(outliers_left)):
+            if outliers_left[i]:
+                current_cluster.append(i)
+            else:
+                if current_cluster:
+                    clusters.append(current_cluster)
+                    current_cluster = []
+        if current_cluster:
+            clusters.append(current_cluster)
+
+        # Create a mask for the outliers and their boundaries
+        mask = np.zeros(len(ScreenData), dtype=bool)
+        for clust in clusters:
+            Beg_extended = ScreenData['TimePoint'].iloc[clust[0]] - boundary
+            End_extended = ScreenData['TimePoint'].iloc[clust[-1]] + boundary
+            mask |= (ScreenData["TimePoint"] >= Beg_extended) & (ScreenData["TimePoint"] <= End_extended)
+
+        if verbose ==2:
+            # Visualize the outliers with extension
+            plt.figure(figsize=(12, 6))
+            plt.plot(ScreenData.loc[mask, 'TimePoint'], ScreenData.loc[mask, eye], label=eye+' Pupil Size')
+            plt.xlabel('TimePoint')
+            plt.ylabel(eye+' Pupil Size')
+            plt.title('Outliers only with extension')
+            plt.legend()
+            plt.show()
+
+        # Set outlier values to NaNs
+        ScreenData.loc[mask, eye] = np.nan
+
+        # Interpolate using cubic splines
+        valid_idx = ScreenData[eye].dropna().index  # Indices where data is NOT an artefact
+        valid_x = valid_idx.to_numpy()
+        valid_y = ScreenData.loc[valid_idx, eye].to_numpy()
+
+        # Create cubic spline function
+        cs = CubicSpline(valid_x, valid_y, extrapolate=False)  # Extrapolate False to account for missing data at the edges
+
+        # Interpolate at artefactual indices
+        ScreenData = ScreenData.copy()
+
+        ScreenData.loc[mask, eye] = cs(ScreenData.index[mask])
+
+        # Visualize the interpolated data
+        if verbose ==2:
+            plt.figure(figsize=(12, 6))
+            plt.plot(ScreenData['TimePoint'], ScreenData[eye], label=eye+' Pupil Size')
+            plt.scatter(ScreenData['TimePoint'][mask], ScreenData[eye][mask], color='red', label='Interpolated Points')
+            plt.xlabel('TimePoint')
+            plt.ylabel(eye+' Pupil Size')
+            plt.title(eye+' Pupil Size with Interpolated Outliers')
+            plt.legend()
+            plt.show()
+
+        # Iterate through interpolated clusters and check if any exceed max_duration
+        for clust in clusters:
+            Beg_extended = ScreenData['TimePoint'].iloc[clust[0]] - boundary
+            End_extended = ScreenData['TimePoint'].iloc[clust[-1]] + boundary
+            mask = (ScreenData["TimePoint"] >= Beg_extended) & (ScreenData["TimePoint"] <= End_extended)
+            duration = ScreenData['TimePoint'][mask].iloc[-1] - ScreenData['TimePoint'][mask].iloc[0]
+            if duration > max_duration:
+                #print(f"Cluster from {Beg_extended} to {End_extended} exceeds max_duration with duration {duration} ms")
+                ScreenData.loc[mask, eye] = np.nan
+
+        # Visualize the final data
+        if verbose ==2:
+            plt.figure(figsize=(12, 6))
+            plt.plot(ScreenData['TimePoint'], ScreenData[eye], label=eye+' Pupil Size')
+            plt.xlabel('TimePoint')
+            plt.ylabel(eye+' Pupil Size')
+            plt.title(eye+' Pupil Size after Removing Long Clusters')
+            plt.legend()
+            plt.show()
+
+        # Print the mask for debugging
+    # print(mask)
+    return ScreenData
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------- # 
+        
+        
+        #########################################################
+        ##### ------------  Analysis Functions ------------ #####
+        #########################################################
+
+
+
 
 def wilcTest(x,y,verbose=0,log_file=None,analysisName=''):
     """
