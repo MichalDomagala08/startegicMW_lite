@@ -51,7 +51,7 @@ pygame.display.set_caption("Strategic MW Experiment")
 # story Global parameters Setup:
 storyPart = "welcome1"  # Controlling the experiment flow
 dummyMode = True
-TestMode = False
+TestMode = True
 SCREEN_WIDTH_CM = 53 #Width
 SCREEN_HEIGHT_CM = 30 # Height 
 VIEWING_DISTANCE_CM = 93 # 
@@ -81,7 +81,7 @@ else:
     Story1 = audioTrial(r".\TextToSpeech\Story3_AIpart1",storyTimeDict3,font,screen,"story1","calib_text",outputControll,verbose=2)
     Story2 = audioTrial(r".\TextToSpeech\Story3_AIpart2",storyTimeDict3,font,screen,"story2","recall1",outputControll,verbose=2)
 # Audio Recording Object Initialization:
-recall1 = recallTrial("story1.wav",font,screen,"recall1","exit",outputControll)
+recall1 = recallTrial("story1.wav",font,screen,"recall1","exit",outputControll,entityName)
 
 # connect to the tracker
 if not dummyMode:

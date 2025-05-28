@@ -177,7 +177,7 @@ class audioTrial:
         self.screen.fill(background_color)
 
         # Draw the centered text
-        center_text_surface = self.font.render("Na ile w tym momencie czujesz, że jesteś rozproszony/a od słuchania historii?", True, text_color)
+        center_text_surface = self.font.render("W jakim stopniu byłeś w tym momencie rozproszony podczas słuchania historii?", True, text_color)
         center_text_rect = center_text_surface.get_rect(center=(self.width // 2, self.height // 4))
         self.screen.blit(center_text_surface, center_text_rect)
 

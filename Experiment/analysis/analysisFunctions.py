@@ -962,7 +962,6 @@ def preprocessingPipeline(blinkDF,RawDF,saccadesDF,gazeCoords,story="",part="",f
         max_gap_duration    :  (Optional) Maximum gap duration for smoothing (ms). 
                                           Concatenate data divided by NaNs for smoothing that are closer than max_gap. 
                                           Default = 50ms
-
     Returns:
         finalData       : DataFrame with cleaned and processed pupil data.
     """
@@ -976,7 +975,7 @@ def preprocessingPipeline(blinkDF,RawDF,saccadesDF,gazeCoords,story="",part="",f
             plt.show(fig1)
         plt.close(fig1)
 
-    # 2) Compute Non-blink Outside of Center points
+    # 2) Remove Data that are not in the center (Do not count blinks yet!)
     ScreenData = count_gaze_outside(RawDFDown, blinkDF, gazeCoords, max_blink_duration=maxBlinkDur, boundary=interpBoundary, visual_angle=dgvCenter,logfile=log_file,verbose=verbose)
     if verbose:
         fig2 = plotEyeWithBlink(ScreenData[pd.notna(ScreenData['LeftPupil'])], blinkDF, gazeCoords, f"Screen Data: {story} // {part}")
@@ -1542,6 +1541,7 @@ def removeOutliers(ScreenData, threshold=3, max_duration=500, boundary=50, verbo
 def wilcTest(x,y,verbose=0,log_file=None,analysisName=''):
     """
     Perform Wilcoxon signed-rank test on two paired samples.
+
     """
     from scipy.stats import wilcoxon
     stat, p = wilcoxon(x, y)
@@ -1582,6 +1582,8 @@ def wilcLoop(resultsDF,entityTracked,verbose=0,log_file=None):
         makes a Wilcoxon test of Tracked vs Untracked data on 2 analysis scheme:
         1) Whether they differ in MW subejctive Estimation
         2) Whether they differ on Pupil Diameter Metrics 
+
+        Script for usage on a singular Person: Within Subject Analysis!
     """
     p =  []
     z = []
@@ -1663,3 +1665,320 @@ def wilcLoop(resultsDF,entityTracked,verbose=0,log_file=None):
 
     stats_df.sort_values(by=['Analysis Name'], inplace=True)
     return stats_df
+
+
+##### --- Pupil Diameter Timecourse in the last part of the Experiment --- #####
+
+
+from scipy.stats import wilcoxon
+from statsmodels.stats.multitest import multipletests
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
+
+
+def meanPupilShade(last10sDF1,last10sDF2,ds='',pvals = [], mltpl = 0,nsamp = 1000,sf=100):
+    """
+        Creates a Shade for the Mean Pupil Diameter in the last 10 seconds of the Experiment. For both Eyes
+
+        Inputs:
+    
+        last10sDF1 - list of Last 10 seconds of the pupil diameter data in condition 1 across trials 
+        last10sDF2 - Last 10 seconds of the pupil diameter in condition 2
+        ds - Dataset Name (For vis)
+
+    """
+
+    # Compute mean of the last 10s for both conditions
+    mean_df1 = (
+        pd.concat(last10sDF1, keys=range(len(last10sDF1)))
+        .groupby(level=1)
+        .mean()
+    )
+    mean_df2 = (
+        pd.concat(last10sDF2, keys=range(len(last10sDF2)))
+        .groupby(level=1)
+        .mean()
+    )
+
+
+    fig,axs = plt.subplots(1,2,figsize=(14,7))
+    plt.suptitle(f"Mean Pupil Diameter in Tracked and Untracked Condition {ds}",fontsize=18)
+
+    for i,eye in enumerate(['LeftPupil','RightPupil']):
+        
+        last10arr1 = np.array([last10sDF1[a][eye] for a in range(len(last10sDF1))]) # Make an array for more efficient computation 
+        last10arr2 = np.array([last10sDF2[a][eye] for a in range(len(last10sDF2))])
+
+        ### Wilcoxon Tests: (Making WIlcoxon for EVERY POINT)
+        if len(pvals) == 0: # If pvals is empty, we can compute the stats
+            stats = []
+            for j in range(nsamp+1): # Iterate thtough timepoints
+                stat, pv= wilcoxon(last10arr1[:,j],last10arr2[:,j], zero_method="wilcox",nan_policy='omit')
+                stats.append(stat)
+                pvals.append(pv)
+
+        if mltpl:
+            reject, p_fdr, _, _ = multipletests(pvals, alpha=0.05, method="fdr_bh") #Benjamini-Hochberg procedure for multiple comparison 
+        else:
+            p_fdr = pvals
+
+            
+        axs[i].plot(np.linspace(1,nsamp/sf,nsamp+1),mean_df1[eye],label='',color='blue')
+        axs[i].fill_between(np.linspace(1,nsamp/sf,nsamp+1), 
+                        mean_df1[eye] - np.nanstd(last10arr1[:][:],axis=0), 
+                        mean_df1[eye]+ np.nanstd(last10arr1[:][:],axis=0), 
+                        color='darkblue', alpha=0.2, label='TRACKED (STD Envelope)') # make an STD Shade 
+
+        axs[i].plot(np.linspace(1,nsamp/sf,nsamp+1),mean_df2[eye],color='orange')
+        axs[i].fill_between(np.linspace(1,nsamp/sf,nsamp+1), 
+                        mean_df2[eye] - np.nanstd(last10arr2[:][:],axis=0), 
+                        mean_df2[eye]+ np.nanstd(last10arr2[:][:],axis=0), 
+                        color='orangered', alpha=0.2, label='TRACKED (STD Envelope)') # makeand STD shade 
+        axs[i].set_title(eye)
+        mask = np.array(p_fdr) < 0.05
+        mask_nan = np.where(mask, True, np.nan)  # True stays True, False becomes np.nan
+        axs[i].scatter(np.linspace(1, nsamp/sf, nsamp+1), mask_nan+ np.max(mean_df1[eye])+np.max(np.nanstd(last10arr1[:][:],axis=0)),color='black')    
+        axs[i].set_xlabel('Time (s)')
+        axs[i].set_ylabel('Pupil size (Au)')
+        axs[i].legend()
+
+    return fig
+
+
+
+def getPupilDiamLast(allData,last10sDF = [],thrTime = 10000):
+    """
+        Function to get last 10s of any Data, differentiating between Tracked and Untracked Data.
+    """
+
+    last10sDF1 = []
+    last10sDF2 = []
+
+    for key in allData['data']['STORY_1'].keys():
+        ltim = allData['data']['STORY_1'][key]['Gaze']['TimePoint'].iloc[-1]
+
+        # Calculate the threshold for the last 10 seconds (10,000 ms)
+        threshold = int(ltim) - thrTime
+        # Select only rows where TimePoint is within the last 10 seconds
+        last_10s_df = allData['data']['STORY_1'][key]['Gaze'][allData['data']['STORY_1'][key]['Gaze']['TimePoint'] >= threshold].reset_index()
+        if 'KAROLINA' in key:
+            last10sDF1.append(last_10s_df)
+        else:
+            last10sDF2.append(last_10s_df)
+        last10sDF.append(last_10s_df)
+
+    return last10sDF1, last10sDF2,last10sDF
+
+
+
+def add_ds_trial_tracking(last10s_list, grand_df):
+    """
+        Cross-reference each trial DataFrame in last10s_list with grand_df to get DS, trialNum, and Tracking.
+        Assumes order matches (i.e., last10s_list[i] corresponds to grand_df.iloc[i]).
+    """
+    
+    out = []
+    for i, df in enumerate(last10s_list):
+        # Get subject/trial info as a DataFrame with 1 row
+        currentGrandDF = grand_df.iloc[i][['Tracking', 'DS', 'trialNum']].copy()
+
+        # Repeat info to match df's length
+        repeated_info = pd.DataFrame([currentGrandDF.values] * len(df), columns=currentGrandDF.index)
+        repeated_info.columns = [col[0] for col in repeated_info.columns]  # flatten
+        repeated_info.index = df.index  # align index
+
+        df = df.copy()
+        df['SampleNum'] = np.arange(1, len(df) + 1)
+
+
+        out.append(pd.concat([df, repeated_info], axis=1))
+
+    return pd.concat(out, axis=0, ignore_index=True)
+
+
+###### ---- (1) Testng MW_estimate vs Tracking/Untracking ---- ######
+import statsmodels.api  as sm
+
+
+def plotTrialTrack(m,name,grand_df,ax,titl):
+  ### QUick Linear Model 
+  quick_untracked_lm = lambda x: m.params[m.params.keys()[0]] + m.params[m.params.keys()[1]]+m.params[m.params.keys()[2]]*x 
+  quick_tracked_lm = lambda x: m.params[m.params.keys()[0]] + m.params[m.params.keys()[2]]*x
+
+  trialN = np.linspace(0,len(np.unique(grand_df['trialNum'])),len(np.unique(grand_df['trialNum']))+1);
+  mw_est_utr = pd.Series(trialN).apply(quick_untracked_lm)
+  mw_est_tr = pd.Series(trialN).apply(quick_tracked_lm)
+
+  ax.set_title(titl)
+  ax.plot(trialN,mw_est_tr,label="Tracked model slope")
+  ax.plot(trialN,mw_est_utr,label="Tracked model slope")
+  grTr = grand_df[[name,'trialNum','Tracking']].groupby(['Tracking','trialNum'])
+  ax.fill_between(trialN, 
+                  mw_est_tr - grTr.std().loc['TRACKED'][name], 
+                    mw_est_tr+   grTr.std().loc['TRACKED'][name], 
+                  color='darkblue', alpha=0.2, label='TRACKED (STD Envelope)')
+
+  ax.scatter(grTr.mean().loc['TRACKED'].index,grTr.mean().loc['TRACKED'],label="Subj Mean Tracked",color = 'blue')
+
+  ax.fill_between(trialN, 
+                  mw_est_utr - grTr.std().loc['UNTRACKED'][name], 
+                    mw_est_utr+   grTr.std().loc['UNTRACKED'][name], 
+                  color='orangered', alpha=0.2, label='UNTRACKED (STD Envelope)')
+  ax.scatter(grTr.mean().loc['UNTRACKED'].index,grTr.mean().loc['UNTRACKED'],label="Subj Mean Untracked",color = 'orange')
+  ax.set_xlabel="Trial Number"
+  ax.legend()
+  
+####### (3) ---- MW vs Gaze ----- #######
+
+
+def plot_pupil_vs_mw(m, currentDf, ind, ax=None):
+    """
+    Plot Pupil vs MW_Estimate with linear fits for TRACKED and UNTRACKED groups.
+    
+    Parameters:
+    - m: Fitted mixed effects model.
+    - currentDf: DataFrame containing the data.
+    - ind: Tuple indicating the current column (e.g., ('Pupil', 'Diameter')).
+    - ax: Matplotlib Axes object. If None, a new figure will be created.
+    """
+    # Create a new figure and axis if no Axes object is provided
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(10, 6))
+    
+    # Define linear functions for TRACKED and UNTRACKED
+    linfunTr = lambda x: m.params[m.params.keys()[0]] + m.params[m.params.keys()[2]] * x
+    linfunUnTr = lambda x: m.params[m.params.keys()[0]] + m.params[m.params.keys()[2]] * x + m.params[m.params.keys()[1]]
+
+    # Scatter plot for TRACKED and UNTRACKED
+    ax.scatter(currentDf[currentDf['Tracking'] == 'TRACKED']['MW_Estimate'],
+               currentDf[currentDf['Tracking'] == 'TRACKED']['Pupil'],
+               color='blue', label=f"Tracked (Coef: {m.params[m.params.keys()[1]]:1.4f})")
+    ax.scatter(currentDf[currentDf['Tracking'] == 'UNTRACKED']['MW_Estimate'],
+               currentDf[currentDf['Tracking'] == 'UNTRACKED']['Pupil'],
+               color='orange', label=f"Untracked (pval: {m.pvalues[m.params.keys()[1]]:1.4f})")
+
+    # Plot linear fits
+    ax.plot(currentDf['MW_Estimate'], linfunTr(currentDf['MW_Estimate']), 'b--', label="Tracked Fit")
+    ax.plot(currentDf['MW_Estimate'], linfunUnTr(currentDf['MW_Estimate']), 'orange', label="Untracked Fit")
+
+    # Add labels, title, and legend
+    ax.set_xlabel('MW Estimate')
+    ax.set_ylabel(f"Pupil Measure: {ind[0]} // {ind[1]}")
+    ax.set_title(f"{ind[0]} // {ind[1]}: (Coef: {m.params[m.params.keys()[2]]:1.4f} // P: {m.pvalues[m.params.keys()[2]]:1.4f})")
+    ax.legend()
+
+    # Add a suptitle if it's a standalone plot
+    if ax is None:
+        plt.suptitle(f"MW Estimate vs Pupil Measure")
+        plt.show()
+
+
+###### ---- Helpers ------ #####
+
+
+def pad_columns(df: pd.DataFrame, depth: int, fill='') -> pd.DataFrame:
+    """
+    Ensure df.columns is a MultiIndex with exactly `depth` levels.
+    Missing levels are right-padded with `fill`.
+    """
+    if not isinstance(df.columns, pd.MultiIndex):
+        # single-level → promote to MultiIndex
+        df.columns = pd.MultiIndex.from_tuples([(c,) + (fill,) * (depth - 1) for c in df.columns])
+    elif df.columns.nlevels < depth:
+        df.columns = pd.MultiIndex.from_tuples(
+            [tuple(col) + (fill,) * (depth - len(col)) for col in df.columns]
+        )
+    return df
+
+
+######## ------ Analysis Checks ------- ########
+
+def checkEntity(grand_df):
+    trackedEntities = []
+    ## Setup Working Directory and all necessery paths
+    workingDir =  os.getcwd();
+    path = os.path.split(workingDir)[0] + "\\data" #data path
+    subjects = [f for f in os.listdir(path) if  not os.path.isfile(os.path.join(path, f))] # get all the filenames
+
+
+    for filename  in subjects:
+
+        with open(os.path.join(path, filename,filename + '_log.txt'), 'r') as fp:
+            for line in fp:
+                if "Current Named Entity" in line:
+                    entityTracked = line.split("Current Named Entity: ")[1].strip()
+                    trackedEntities.append(entityTracked)
+
+                    break
+
+    trackedEntities
+
+    first_rows = grand_df.groupby('DS').first()
+    first_rows.replace({'TRACKED': 'Karolina', 'UNTRACKED': 'Janek'},inplace=True)
+
+    df =  pd.DataFrame([list(first_rows['Tracking']),trackedEntities],columns=first_rows['Tracking'],index=['df','original'])
+    return df
+
+
+
+def qualityChecks(grand_df,column):
+    partiaclCheck1 = grand_df[grand_df['Checks']['']['goodRatio'+column] > 0.75]
+    partiaclCheck2 = partiaclCheck1[partiaclCheck1['Checks']['']['goodPupRatio'+column] > 0.95]
+
+    trmw1 = partiaclCheck1[partiaclCheck1['Tracking']=="TRACKED"].groupby(['Tracking','DS'])
+    untrmw1  = partiaclCheck1[partiaclCheck1['Tracking']=="UNTRACKED"].groupby(['Tracking','DS'])
+
+    trmw2 = partiaclCheck2[partiaclCheck2['Tracking']=="TRACKED"].groupby(['Tracking','DS'])
+    untrmw2  = partiaclCheck2[partiaclCheck2['Tracking']=="UNTRACKED"].groupby(['Tracking','DS'])
+
+
+    return partiaclCheck1,partiaclCheck2,trmw1,untrmw1,trmw2,untrmw2
+
+
+def linearModelChecks(m,grand_df):
+    # trial-level diagnostics
+    resid   = m.resid                   # raw (conditional) residuals
+    fitted  = m.fittedvalues            # conditional fitted values
+    std_res = resid / np.sqrt(m.scale)  # ≈ studentised residuals
+    fig,axs = plt.subplots(2,1,figsize=(14, 8))
+    plt.suptitle("Checks for a Linear Model")
+
+    # (1) Homoscedascisity
+    axs[0].scatter(fitted, std_res, alpha=0.6, s=15)
+    axs[0].axhline(0, linestyle='--')
+    axs[0].set_xlabel("Fitted value")
+    axs[0].set_ylabel("Studentised residual")
+    axs[0].set_title("Residuals vs fitted")
+
+    # (2) 
+    sm.qqplot(std_res, line="45", fit=True, ax=axs[1])
+    axs[1].set_title("Normal Q–Q")
+
+    # (3) Colinearity:
+    from patsy import dmatrices
+
+    formula_fixed = "MW_Estimate ~ Tracking + trialNum"   # your fixed part
+    y, X = dmatrices(formula_fixed, data=grand_df[['DS','trialNum','Tracking','MW_Estimate']], return_type="dataframe")
+    from statsmodels.stats.outliers_influence import variance_inflation_factor
+
+    vif = pd.Series(
+        [variance_inflation_factor(X.values, i) for i in range(X.shape[1])],
+        index=X.columns
+    )
+    print(vif)
+
+     # Drop the intercept from display (its VIF is usually not meaningful)
+    vif_display = vif.drop('Intercept', errors='ignore')
+    
+    # Convert to multiline string
+    vif_text = "\n".join([f"{k}: {v:.2f}" for k, v in vif_display.items()])
+    vif_text = f"VIFs\n{vif_text}"
+
+    axs[1].text(
+        0.8, 0.5, vif_text,
+        transform=axs[1].transAxes,
+        verticalalignment='top',
+        fontsize=9,
+        bbox=dict(boxstyle="round,pad=0.4", facecolor="white", alpha=0.8)
+    )
+    plt.show()

@@ -8,7 +8,7 @@ import time
 
 class recallTrial:
 
-    def __init__(self,filename,font,screen,currentStage,nextStage,output_control ,channels = 1 ,rate = 44100,chunk_size = 1024,verbose=1 ):
+    def __init__(self,filename,font,screen,currentStage,nextStage,output_control ,firstEntityName,channels = 1 ,rate = 44100,chunk_size = 1024,verbose=1 ):
 
 
         # Screen setup
@@ -16,7 +16,7 @@ class recallTrial:
         self.height = screen.get_size()[1]
         self.screen = screen
         self.font = font
-
+        self.firstEntityName = firstEntityName
         # Recording setup
         self.chunk_size = chunk_size  # Audio chunk size
         self.sample_format = pyaudio.paInt16  # 16-bit audio
@@ -124,7 +124,7 @@ class recallTrial:
     def run(self):
 
         if self.welcome_screen:
-            self.display_message(["Poczekaj teraz na eksperymentatora, aż ustawi sprzęt potrzebny do nagrywania.", " ", "Gdy wszystko będzie gotowe, naciśnij SPACJĘ by nagrać "," ustne odpamiętanie historii"])
+            self.display_message(["Poczekaj teraz na eksperymentatora, aż ustawi sprzęt potrzebny do nagrywania.", " ", "Gdy wszystko będzie gotowe, naciśnij SPACJĘ by nagrać "," ustne odpamiętanie fragmentów historii dotyczących bohatera imieniem"," "," ",f"#{self.firstEntityName}#"])
         elif self.recording and self.assurance == False:
             self.display_message(["Nagrywanie... ","","Naciśniej ENTER by zakończyć nagrywanie "])
         elif self.recording and self.assurance:

@@ -89,18 +89,17 @@ def generateMessages(firstEntityName):
                         "Dodatkowo poprosimy Cię o zwracanie szczególnej uwagi na losy konkretnego bohatera.",
                         " ",
                         "Po odsłuchaniu, zostaniesz poproszony/a o ustne",
-                        " odpamiętani całości historii (które będzie nagrywane dźwiękowo).",
+                        "odpamiętanie JEDYNIE fragmentów dotyczących tego bohatera.",
                         " ",
                                 "#Naciśnij SPACJĘ aby przejść dalej #"]
 
     WelcomeMessage2 =  ["Historia będzie co jakis czas przerywana przez pytanie",
                         "wyświetlone na środku ekranu:", 
                         " ",
-                                "#\"Na ile w tym momencie czujesz, że jesteś rozproszony/a od słuchania historii? \"#",
+                                "#\"W jakim stopniu byłeś w tym momencie rozproszony podczas słuchania historii? \"#",
                         " ",
                         "W odpowiedzi, będziesz musiał/a myszką wybrać punkt na liniowej skali w taki sposób, ", 
                         "aby pokazywał twoją subiektywną ocenę rozproszenia od słuchania historii:",
-
                         " ",
                         "% Początek skali oznacza pełną uwagę na historii%",
                         "% Koniec skali oznacza rozproszenie od słuchania historii%",
@@ -114,10 +113,14 @@ def generateMessages(firstEntityName):
 
 
     WelcomeMessage21alt =  [f"Za chwilę usłyszysz historię. Nałóż słuchawki i przygotuj się.",
-                        "Postaraj się skupić na wszystkich odniesieniach do bohatera imieniem:",
+                        "Postaraj się skupić i zapamiętać wszystkie fragmenty dotyczące"
+                        " bohatera imieniem:",
                         "",
                                             f"#{firstEntityName}#",
                         "",
+                        "Pamiętaj, że po zakończeniu eksperymentu będziesz proszony o odpamiętanie",
+                         " szczegółów dotyczących tylko tego bohatera.",
+                         " ",
                         "#Naciśnij SPACJĘ aby zacząć słuchać historii#"]
 
     WelcomeMessage4 =  [f"Za chwilę przejdziesz do ponownej kalibracji okulografu.",
