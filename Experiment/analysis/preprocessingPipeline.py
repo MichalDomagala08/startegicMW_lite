@@ -29,51 +29,60 @@ path = os.path.split(workingDir)[0] + "\\data" #data path
 
 
 ######## --> SETUP ALL PARAMETERS <-- ########
-
-### Setup all general parameters:
+paramsDict = {};
 verbose = 1 # Verbose mode
-analysisName = 'TEST_'
-### Setup all cleaning parameters
+
+### PREPROCESSING STAGES:
+paramsDict['downs'    ] =1 # 1) Downsampling of data to a given Frequency
+paramsDict['centering'] =0 # 2) Reduce data to only Center
+paramsDict['binterp'  ] =1 # 3) Blink Inrerpolation
+paramsDict['outrmv'   ] =1 # 4) Remove Outliers (3std and IQR)
+paramsDict['nanrmv'   ] =1 # 5) Remove Nans
+paramsDict['smth'     ] =1 # 6) Smooth out
+
 
 # General parameters
-paramsDict = {};
 paramsDict['verbose'      ]  = 1;    # Whether we want to print plots or not 
+
+### 1) Downsampling Parameters:
 paramsDict['resRate'      ]  = 100;  # Resampling Rate
 
-# Centering parameters
+# 2) Centering parameters
 paramsDict['dgvCent'      ]  = 5;    # How many degrees of visual angle are considered as a Centered Gaze
 
-# Blink Interpolation parameters
+# 3) Blink Interpolation parameters
 paramsDict['blinkInt'     ]  = 0;    #Blink interpolation merhod: 0-linear; 1-cubic
 paramsDict['maxblength'   ]  = 500;  # Maximum length of a missing data event - for centering computation 
 paramsDict['blkboundry'   ]  = 75;   # TIme in miliseconds to extent the range around faulty periods to remove-count (CHECK! Whether you are considering Padding in thresholding blinks)
 paramsDict['blinkbegbound']  = 1000; # OLD - the time in ms after exp onset that the blinks are considered
 
-# Smoothing and clusterinf 
+# 4) Smoothing and clusterinf 
 paramsDict['smoothwin'    ]  = 10;   # Window for smoothing (in samples)
 paramsDict['maxcluslen'   ]  = 2000; # Minimum length  (in ms) of a cluster to be smoothed 
 paramsDict['mingaplen'    ]  = 50;  # Maximum gap (in ms) between timestamps within a cluster.
 
 # Pupil Diameter Computation 
-paramsDict['pupMode'      ]  = 'mean' # mean or std computation to assess trial Pupil Size (TBD - for now both are used) 
-paramsDict['trialOffset'  ]  = 10000  # How many ms before the trial offset do we compute our measure (10s default)
+paramsDict['trialOffset'  ]  = 10000 #"all"  # How many ms before the trial offset do we compute our measure (10s default)
+                                      # - "All" -for a whole trial (then optional begTrialOff - for excluding first and last N ms )
+paramsDict['begTrialOff']    = 5000; # if All is selected we cut the trial at the beginning by N ms
+paramsDict['endTrialOff']    = 5000; # if All is selected we cut the trial at the End       by N ms
 
 # Baseline Pupil Computation
 paramsDict['baseOffset'] = 0 # How many ms after the trials onset will be considered a baseline:  0 if you do not want baseline
 ### Setup all testing parameters 
 
 
+
 ### Subject Choice
 begID = 0;
-endID = 14
+endID = 30;
 
-analysisName = f"TEST_res{paramsDict['resRate']}_dgv{paramsDict['dgvCent']}_bll{paramsDict['maxblength']}_blb{paramsDict['blkboundry']}_smw10_smL{paramsDict['maxcluslen']}_swG{paramsDict['mingaplen']}_trO{paramsDict['trialOffset']}_trB{paramsDict['baseOffset']}"
+analysisName = f"TEST_withoutCenter_res{paramsDict['resRate']}_dgv{paramsDict['dgvCent']}_bll{paramsDict['maxblength']}_blb{paramsDict['blkboundry']}_smw10_smL{paramsDict['maxcluslen']}_swG{paramsDict['mingaplen']}_trO{paramsDict['trialOffset']}_trB{paramsDict['baseOffset']}"
 # Get all of the IDs for subject froma "data" folder
 subjects = [f for f in os.listdir(path) if  not os.path.isfile(os.path.join(path, f))] # get all the filenames
 
 ### Create a current Analysis Pipeline
-if os.path.isdir(os.path.join(workingDir,analysisName,'individuals')) == 0:
-        os.makedirs(os.path.join(workingDir,analysisName,'individuals'))
+os.makedirs(os.path.join(workingDir,analysisName,'individuals'),exist_ok=True)
 allList = [];
 
 ### Createa an excel for data:
@@ -112,8 +121,7 @@ for subj in range(begID,endID+1):
     filename = subjects[subj]
 
     # Open Log File
-    if os.path.isdir(os.path.join(workingDir,analysisName,'individuals',filename)) == 0:
-        os.makedirs(os.path.join(workingDir,analysisName,'individuals',filename))
+    os.makedirs(os.path.join(workingDir,analysisName,'individuals',filename),exist_ok=True)
     log_file = open(os.path.join(workingDir,analysisName,'individuals',filename,filename+"_preprocLog.txt"),'w+')
     log_fileSt = open(os.path.join(workingDir,analysisName,'individuals',filename,filename+"_statLog.txt"),'w+')
 
@@ -297,14 +305,12 @@ for subj in range(begID,endID+1):
     log_file.write(f"        Maximal Gap Length:   {paramsDict['mingaplen']}\n\n")
     # Iterate through events of split_data
     data = {};
-    finalDataStruct = {}
     resultsL = np.zeros((len(split_data['STORY_1']['RawDF']), 5))
     resultsR = np.zeros((len(split_data['STORY_1']['RawDF']), 5))
 
     ### Loop thtough Stories X Parts: 
     iterCounter = 0;
     for story, data_dict in split_data.items():
-        finalDataStruct[story] = {}
         data[story] = {}
         storyIndCheck[story] = {}
         storyIndCheck[story]['goodRatioLeft']      = []
@@ -327,8 +333,13 @@ for subj in range(begID,endID+1):
 
 
             finalData = preprocessingPipeline(blinkDF,RawDF,saccadesDF,gazeCoords,story,part,log_file=log_file,pdfs=[pdf_downsampled,pdf_center_only,pdf_blink_rejection ,pdf_outlier_rejection ,pdf_nan_rejection,pdf_smoothed],
-                                            verbose=paramsDict['verbose'],interp_type=paramsDict['blinkInt'],interpBoundary=paramsDict['blkboundry'],maxBlinkDur=paramsDict['maxblength'],resampleRate=paramsDict['resRate'],
-                                            dgvCenter=paramsDict['dgvCent'],smoothwin=paramsDict['smoothwin'], min_cluster_duration=paramsDict['maxcluslen'],max_gap_duration=paramsDict['mingaplen'])
+                                            verbose=paramsDict['verbose'],
+                                            downs     =paramsDict['downs'    ] , resampleRate=paramsDict['resRate'],
+                                            centering =paramsDict['centering'] , dgvCenter=paramsDict['dgvCent'],
+                                            binterp   =paramsDict['binterp'  ] , interp_type=paramsDict['blinkInt'],interpBoundary=paramsDict['blkboundry'],maxBlinkDur=paramsDict['maxblength'],
+                                            outrmv    =paramsDict['outrmv'   ] ,
+                                            nanrmv    =paramsDict['nanrmv'   ] ,
+                                            smth      =paramsDict['smth'     ] , smoothwin=paramsDict['smoothwin'], min_cluster_duration=paramsDict['maxcluslen'],max_gap_duration=paramsDict['mingaplen'])
             
             log_file.write("\n        Final Data Stats: \n")
             log_file.write(finalData.describe().to_string().replace('\n', '\n\t\t').join(['\t\t', ''])) # Adds two Tabulations!
@@ -339,35 +350,56 @@ for subj in range(begID,endID+1):
             
 
             ### Compute mean of last 10s of the data
-            meanPupilL = finalData[(finalData['TimePoint'] >= finalData['TimePoint'].iloc[-1] - paramsDict['trialOffset'  ])]['LeftPupil']
-            meanPupilR = finalData[(finalData['TimePoint'] >= finalData['TimePoint'].iloc[-1] - paramsDict['trialOffset'  ])]['RightPupil']
- 
-            ### Correct for Baseline if YOu want to
+            if type( paramsDict['trialOffset'  ]) == int:
+                choice = finalData[(finalData['TimePoint'] >= finalData['TimePoint'].iloc[-1] - paramsDict['trialOffset'  ])]
+            elif  paramsDict['trialOffset'  ] == "all":
+                choice = finalData[
+                    (finalData['TimePoint'] >= finalData['TimePoint'].iloc[0] + paramsDict['begTrialOff']) &
+                    (finalData['TimePoint'] <= finalData['TimePoint'].iloc[-1] - paramsDict['endTrialOff'])
+                ]
+            meanPupilL = choice['LeftPupil']                
+            meanPupilR = choice['RightPupil']
+
+
+            ### Gaze Difference:
+
+            gazeDifference = np.mean(np.sqrt((choice['LeftX'] - choice['RightX'])**2 + (choice['LeftY'] - choice['RightY'])**2))
+
+            gazeDispersion = np.mean(np.sqrt(np.diff(choice['LeftX'])**2 + np.diff(choice['LeftY'])**2))
+
+
+            from scipy.spatial import ConvexHull
+            points = choice[['LeftX', 'LeftY']].dropna().to_numpy()
+            if len(points) > 3:
+                hull = ConvexHull(points)
+                gaze_area = hull.volume  # or .area for perimeter
+            else:
+                gaze_area = np.nan
+            gazeConvexHull = gaze_area;
+
+
+            ### Correct for Baseline if YOU want to
             if paramsDict['baseOffset']:
                 meanPupilL = meanPupilL - finalData[(finalData['TimePoint'] <= finalData['TimePoint'].iloc[0] +  paramsDict['baseOffset'  ])]['LeftPupil'].mean()
                 meanPupilR = meanPupilR - finalData[(finalData['TimePoint'] <= finalData['TimePoint'].iloc[0] +  paramsDict['baseOffset'  ])]['RightPupil'].mean()
 
-            last10 = finalData[(finalData['TimePoint'] >= finalData['TimePoint'].iloc[-1] - paramsDict['trialOffset'  ])]
-            gazeDifference = np.mean(np.sqrt((last10['LeftX'] - last10['RightX'])**2 + (last10['LeftY'] - last10['RightY'])**2))
-
-            resultsL[iterCounter,:] =  [meanPupilL.mean(), meanPupilL.std(),np.nanmean(np.diff(meanPupilL)), event_dfs[event_dfs["Part"] == part]['key'].values[0],gazeDifference]
+            ### Compute Pupil Diamter based Measures, MW, and Gaze Based Measures 
+            resultsL[iterCounter,:] =  [meanPupilL.mean(), meanPupilL.std(),np.nanmean(np.diff(meanPupilL)), event_dfs[event_dfs["Part"] == part]['key'].values[0],gazeDifference,]
             resultsR[iterCounter,:] =  [meanPupilR.mean(), meanPupilR.std(),np.nanmean(np.diff(meanPupilR)), event_dfs[event_dfs["Part"] == part]['key'].values[0],gazeDifference]
 
             iterCounter+=1;
 
 
-            finalDataStruct[story][part] = finalData;
             data[story][part]['Gaze']     =finalData;
             data[story][part]['Blinks']   =blinkDF;
             data[story][part]['Saccades'] =saccadesDF;
 
             storyIndCheck[story]['saccadeRate'].append(len(saccadesDF)/(finalData['TimePoint'].iloc[-1] - finalData['TimePoint'].iloc[0])/1000)
             storyIndCheck[story]['blinkRate'].append(len(blinkDF)/(finalData['TimePoint'].iloc[-1] - finalData['TimePoint'].iloc[0])/1000)
-
             storyIndCheck[story]['goodRatioLeft'].append(len(finalData['LeftPupil'].dropna())/len(finalData))
-            storyIndCheck[story]['goodRatioRight'].append(len(finalData['LeftPupil'].dropna())/len(finalData))
-            storyIndCheck[story]['goodPupRatioLeft'].append(len( finalData[(finalData['TimePoint'] >= finalData['TimePoint'].iloc[-1] - paramsDict['trialOffset'  ])]['LeftPupil'].dropna())/len( finalData[(finalData['TimePoint'] >= finalData['TimePoint'].iloc[-1] - paramsDict['trialOffset'  ])]))
-            storyIndCheck[story]['goodPupRatioRight'].append(len( finalData[(finalData['TimePoint'] >= finalData['TimePoint'].iloc[-1] - paramsDict['trialOffset'  ])]['LeftPupil'].dropna())/len( finalData[(finalData['TimePoint'] >= finalData['TimePoint'].iloc[-1] - paramsDict['trialOffset'  ])]))
+            storyIndCheck[story]['goodRatioRight'].append(len(finalData['RightPupil'].dropna())/len(finalData))
+            storyIndCheck[story]['goodPupRatioLeft'].append(len( choice['LeftPupil'].dropna())/len( choice))
+            storyIndCheck[story]['goodPupRatioRight'].append(len( choice['RightPupil'].dropna())/len( choice))
             
             storyIndCheck[story]['gazeDiff'].append(np.mean(gazeD[0,:]))
             zeroPupil = RawDF.query("LeftPupil == 0 or RightPupil == 0")
@@ -385,7 +417,7 @@ for subj in range(begID,endID+1):
     print("Processing complete. PDFs saved.")
     log_file.write("\n===# Preprocessing Completed Successfully #===\n")
     log_file.write(f"  Total trials processed: {iterCounter}\n")
-    log_file.write(f"  FinalDataStruct contains stories: {list(finalDataStruct.keys())}\n")
+    log_file.write(f"  FinalDataStruct contains stories: {list(data.keys())}\n")
     log_file.write("===# End of Preprocessing Section #===\n\n")
     log_file.close() # Closing the preprocessing log file)
 
@@ -433,7 +465,7 @@ for subj in range(begID,endID+1):
     pdf_mwHist.savefig(fig2)
     plt.close(fig2)
 
-    fig3 = scatterResults(resultsL[:, 3],[resultsL[:, 0],resultsR[:, 0],resultsL[:, 1],resultsR[:, 1],resultsL[:, 2],resultsR[:, 2]],filename)
+    fig3 = scatterResults(resultsL[:, 3],[resultsL[:, 0],resultsR[:, 0],resultsL[:, 1],resultsR[:, 1],resultsL[:, 4],resultsR[:, 4]],filename)
     pdf_scatres.savefig(fig3)
     plt.close(fig3)
 

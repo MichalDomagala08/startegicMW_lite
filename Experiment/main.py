@@ -8,7 +8,7 @@ from tests.testFunctions import testTiming,compareEyeTrackingWithBeh,prepareEyeT
 from classes.fileIDInput import createOutputs
 from classes.CalibrationGraphivs import CalibrationGraphics
 from classes.Audio import audioTrial
-from classes.Audio import storyTimeDict3
+from classes.Audio import storyTimeDict3,storyTimeDict3a,storyTimeDict3b
 from classes.recallTrial import recallTrial
 from classes.welcomeMessage import welcomeMessage
 from classes.welcomeMessage import generateMessages
@@ -75,11 +75,11 @@ exitMessage = welcomeMessage([exitMessage1],font,screen,"exit","")
 
 # Audio File initialization:
 if TestMode:
-    Story1 = audioTrial(r".\TextToSpeech\Story3_AIpartTest1",storyTimeDict3,font,screen,"story1","calib_text",outputControll,verbose=2)
-    Story2 = audioTrial(r".\TextToSpeech\Story3_AIpartTest2",storyTimeDict3,font,screen,"story2","recall1",outputControll,verbose=2)
+    Story1 = audioTrial(r".\TextToSpeech\Story3_AIpartTest1",storyTimeDict3a,font,screen,"story1","calib_text",outputControll,verbose=2)
+    Story2 = audioTrial(r".\TextToSpeech\Story3_AIpartTest2",storyTimeDict3b,font,screen,"story2","recall1",outputControll,verbose=2)
 else:
-    Story1 = audioTrial(r".\TextToSpeech\Story3_AIpart1",storyTimeDict3,font,screen,"story1","calib_text",outputControll,verbose=2)
-    Story2 = audioTrial(r".\TextToSpeech\Story3_AIpart2",storyTimeDict3,font,screen,"story2","recall1",outputControll,verbose=2)
+    Story1 = audioTrial(r".\TextToSpeech\Story3_AIpart1",storyTimeDict3a,font,screen,"story1","calib_text",outputControll,verbose=2)
+    Story2 = audioTrial(r".\TextToSpeech\Story3_AIpart2",storyTimeDict3b,font,screen,"story2","recall1",outputControll,verbose=2)
 # Audio Recording Object Initialization:
 recall1 = recallTrial("story1.wav",font,screen,"recall1","exit",outputControll,entityName)
 

@@ -9,6 +9,10 @@ import time
 from random import uniform
 import sys,os
 
+    
+import time
+from classes.recallTrial import recallTrial  # your existing class
+
 class audioTrial:
 
     def __init__(self, audioPath,storyTimeDict, font, screen,currentStage,nextStage, output_control,entity=0,chunk_size=256,verbose=0):
@@ -54,6 +58,7 @@ class audioTrial:
         self.nextStage = nextStage #What Kind of stage do you expect next  
         self.storyParts = storyTimeDict["partNames"]
         self.entities = [storyTimeDict["partTimes"][0], storyTimeDict["partTimes"][0]]
+        self.state = "audio"  # Initial state
 
     def load_audio_files(self):
             """ Load all WAV file as a path from the folder and sort them numerically. """
@@ -260,6 +265,8 @@ class audioTrial:
                 self.screen.blit(text_surface, (margin, y_offset + i * line_height))
         pygame.display.flip()
 
+
+   
     def play_audio(self):
         """
         Starts/resumes playing the audio from each file
@@ -317,61 +324,204 @@ class audioTrial:
         # Play audio on a separate thread
         threading.Thread(target=stream_audio, daemon=True).start()
 
+
+
+
     
+    class Recording(recallTrial):
+        """
+        Subclass of recallTrial that:
+        - Custom welcome screen without experimenter message
+        - Uses super().display_message for multi-line prompts
+        - Overlays a timer line turning red after 20s
+        - Auto-stops at 25s without assurance prompt
+        - Displays 'Nagranie zapisane!' for 1s after saving
+        - Exposes thoughtContentEstimation() → True when done
+        """
+        def __init__(self, filename, font, screen, output_control, verbose=1):
+            super().__init__(
+                filename=filename,
+                font=font,
+                screen=screen,
+                currentStage=None,
+                nextStage=None,
+                output_control=output_control,
+                firstEntityName="",
+                verbose=verbose
+            )
+            self._done = False
+            self.start_time = None
+            self._should_save = False
+            self.timer_threshold = 20.0    # seconds to turn red
+            self.record_duration = 25.0    # max recording length
+
+        def thoughtContentEstimation(self):
+            """
+            Call each frame from audioTrial.run().
+            Returns True once recording finished and saved.
+            """
+            events = pygame.event.get()
+
+            # 1) Welcome screen
+            if self.welcome_screen:
+                lines = [
+                    "Opowiedz przebieg swoich myśli od ostatniego fragmentu.",
+                    "",
+                    "Naciśnij SPACJĘ, aby rozpocząć nagranie"
+                ]
+                super().display_message(lines)
+                for evt in events:
+                    if evt.type == pygame.KEYDOWN and evt.key == pygame.K_SPACE:
+                        self.welcome_screen = False
+                        self.start_time = time.time()
+                        super().start_recording()
+                return False
+
+            # 2) Recording in progress
+            elapsed = time.time() - self.start_time
+
+            # Draw prompt via parent
+            lines = [
+                "Nagrywanie...",
+                "",
+                "Naciśnij ENTER, aby zakończyć nagrywanie"
+            ]
+            self.display_message(lines)
+
+            # Overlay timer on second line
+            line_height = 40
+            total_height = len(lines) * line_height
+            y0 = (self.screen.get_height() - total_height) // 2
+            color = (255, 0, 0) if elapsed >= self.timer_threshold else (255, 255, 255)
+            timer_text = f"{elapsed:.1f}s"
+            timer_surf = self.font.render(timer_text, True, color)
+            tx = (self.screen.get_width() - timer_surf.get_width()) // 2
+            ty = y0 + line_height
+            self.screen.blit(timer_surf, (tx+self.screen.get_width()*0.3, ty-self.screen.get_height()*0.3))
+            pygame.display.flip()
+
+            # Check stop conditions
+            for evt in events:
+                if (evt.type == pygame.KEYDOWN and
+                    evt.key == pygame.K_RETURN and
+                    self.recording):
+                    self._should_save = True
+
+            if elapsed >= self.record_duration and self.recording:
+                self._should_save = True
+
+            # Save and confirm once
+            if self._should_save:
+                super().stop_recording()
+                super().save_audio()
+                self._draw_and_flip(["Nagranie zapisane!"])
+                pygame.display.flip()
+                pygame.time.delay(1000)
+                self._done = True
+                return True
+
+            return False
+
+        # Delegate unchanged methods
+
+        def _draw_and_flip(self, lines, line_height=40):
+            """
+            Helper to clear screen, display lines, and flip.
+            """
+            self.screen.fill((128, 128, 128))
+            super().display_message(lines, line_height)
+            pygame.display.flip()
+        def start_recording(self):
+            super().start_recording()
+
+        def stop_recording(self):
+            super().stop_recording()
+
+        def save_audio(self):
+            super().save_audio()
+
+        def display_message(self, text_lines, line_height=40):
+            super().display_message(text_lines, line_height)
+
     def run(self):
         """
         Runs the core of our audio trial.
         """
 
-        if self.initFlag: # Initailise Experiment Begin as well as first Time to Pause
-            self.initialTime = time.perf_counter()  # Start the timer
-            self.pausedTime = self.initialTime
-            self.initFlag = False;
-        
-        if self.trialFlag: # Startingto play The first sound at the beggining 
-            self.play_audio()
-            self.trialFlag = False
+        # ==== Auditory Part of a Trial =====
+        if self.state == "audio":
 
-        if self.paused_for_input:
-            self.display_linear_scale_probe()
-        else:
+            if self.initFlag: # Initailise Experiment Begin as well as first Time to Pause
+                self.initialTime = time.perf_counter()  # Start the timer
+                self.pausedTime = self.initialTime
+                self.initFlag = False;
+            
+            if self.trialFlag: # Startingto play The first sound at the beggining 
+                self.play_audio()
+                self.trialFlag = False
+
+   
             self.display_fixation_cross()
-        pygame.mouse.set_visible(self.paused_for_input)
+            pygame.mouse.set_visible(False)
 
-        # Check if the audio has finished
-        if not self.audio_playing:
-            if not self.paused_for_input:
+            # Check if the audio has finished
+            if not self.audio_playing:
                 self.probeOnset =  time.perf_counter();
                 self.log_part_end()
-            self.paused_for_input = True
+                self.state = "probe"
+                pygame.mouse.set_visible(True)
 
-        ### Waiting for KeyPress on Thought Probe
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
-                self.stream.stop_stream()
-                self.stream.close()
-                return "exit"
 
-            if self.paused_for_input: 
-                if self.get_linear_scale_value():
-                #if self.paused_for_input and event.type == pygame.KEYDOWN:
-                #    if event.key == pygame.K_1 or event.key == pygame.K_2 or event.key == pygame.K_3 or event.key == pygame.K_4:
-                
-                    self.paused_for_input = False
-                    self.pausedTime = time.perf_counter()  # Reset timer
+        # ==== Thought Probe Part of a Trial =====
+        elif self.state == "probe":
+
+            self.display_linear_scale_probe()
+
+            ### Waiting for KeyPress on Thought Probe
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+                    self.stream.stop_stream()
+                    self.stream.close()
+                    return "exit"
+
+                if self.get_linear_scale_value(): # If there was a correct button press 
+                    #if self.paused_for_input and event.type == pygame.KEYDOWN:
+                    #    if event.key == pygame.K_1 or event.key == pygame.K_2 or event.key == pygame.K_3 or event.key == pygame.K_4:
+                    
                     currentKey = self.attention_value
-                    self.log_keypress(currentKey) # Logs KeyPresses
+                    self.log_keypress(currentKey) # Logs attention state value and moves on 
                         
+                    pygame.mouse.set_visible(False)
+                    self.currentRecorder = self.Recording(f"recall_{self.storyParts[self.currentStoryPart]}.wav", self.font,self.screen, self.output_control, verbose=self.verbose) # Create a Recorder instance 
+
+                    self.state = "recall" # Change state to recall
+
+        # --- 3. RECALL (RECORDING) STATE ---
+        elif self.state == "recall":
+                done = self.currentRecorder.thoughtContentEstimation()
+                
+                if done:
+                    # flash “saved” message for 1 s
+                    self.currentRecorder.display_message(["Nagranie zapisane!"])
+                    pygame.time.delay(1000)
+
+                    # set up for the next audio trial
                     self.currentStoryPart += 1
                     self.trialFlag = True
                     self.audio_playing = True
-                    self.attention_value = None  # Reset attention value
+                    self.attention_value = None
 
+                    self.state = "play"
+                    pygame.mouse.set_visible(False)
+
+
+
+        # ─── 4) END‑OF‑BLOCK CHECK ─────────────────────────────────────────────────────
         if self.currentStoryPart >= len(self.audio_files):
             self.output_control.write("\nStory Ends.")
-            return self.nextStage  # No more segments → End experiment
+            return self.nextStage
 
-        return  self.currentStage # Usually return story1 if audio has not ended or we hadnt exit
+        return self.currentStage
 
 # A list of Timings of story 1: Used to Clock the Onset of Each Fragment: (in seconds)
 storyTimeDict2 = data = {
@@ -407,6 +557,19 @@ storyTimeDict3 = {'partNames': [
   'JANEK_15',  'KAROLINA_16','JANEK_16',  'KAROLINA_17', 'JANEK_17',  'KAROLINA_18',  'JANEK_18','KAROLINA_19',  'JANEK_19',  'KAROLINA_20', 'JANEK_20'],
  'partTimes': [42.553,  48.271, 40.601,  42.5, 43.513,  44.164,  43.247,  43.375,  46.17,  49.967, 42.457,  47.333,  48.069,  45.562,
   44.131,  40.003,  44.921,  44.452,  47.087,  45.145,  41.155,  42.415,  47.428,  47.183,  45.007,  43.833,
+  47.652,  48.26,  49.082,  47.791,  44.025,  47.279,  47.141,  44.271,  42.404,  46.661,  40.963,  44.207,  44.591, 53.241]}
+
+
+storyTimeDict3a = {'partNames': [
+    'KAROLINA_1', 'JANEK_1',  'KAROLINA_2', 'JANEK_2',  'KAROLINA_3', 'JANEK_3',  'KAROLINA_4', 'JANEK_4',  'KAROLINA_5', 'JANEK_5',  'KAROLINA_6','JANEK_6',  'KAROLINA_7', 'JANEK_7',  'KAROLINA_8', 'JANEK_8',  'KAROLINA_9', 'JANEK_9',
+  'KAROLINA_10', 'JANEK_10'],
+ 'partTimes': [42.553,  48.271, 40.601,  42.5, 43.513,  44.164,  43.247,  43.375,  46.17,  49.967, 42.457,  47.333,  48.069,  45.562,
+  44.131,  40.003,  44.921,  44.452,  47.087,  45.145,  ]}
+
+storyTimeDict3b = {'partNames': [
+  'KAROLINA_11','JANEK_11',  'KAROLINA_12','JANEK_12',  'KAROLINA_13', 'JANEK_13',  'KAROLINA_14', 'JANEK_14',  'KAROLINA_15',
+  'JANEK_15',  'KAROLINA_16','JANEK_16',  'KAROLINA_17', 'JANEK_17',  'KAROLINA_18',  'JANEK_18','KAROLINA_19',  'JANEK_19',  'KAROLINA_20', 'JANEK_20'],
+ 'partTimes': [ 41.155,  42.415,  47.428,  47.183,  45.007,  43.833,
   47.652,  48.26,  49.082,  47.791,  44.025,  47.279,  47.141,  44.271,  42.404,  46.661,  40.963,  44.207,  44.591, 53.241]}
 Question =  ["Na chwilę obecną jaki jest twój stan uwagowy?",
              "Wciśnij odpowiedni przycisk:",

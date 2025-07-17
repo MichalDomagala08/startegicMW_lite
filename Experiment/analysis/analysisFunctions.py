@@ -103,7 +103,7 @@ def getEvent(events):
     blink = []  # Initialize an empty list to store blinks
     
     for j, ev in enumerate(events):
-        if 'ESACC' in ev[0] and ev[3].strip() != '.':
+        if 'ESACC' in ev[0] and ev[3].strip() != '.' and ev[5].strip() != '.': # checks if the saccade Onset and Offset are not empty (Saccades during Blinks for example)
             # Process saccade events
             saccades.append([ev[0][6], float(ev[0][9:])] + [float(ev[i].strip()) for i in range(1, len(ev))])
         elif 'EFIX' in ev[0]:
@@ -912,7 +912,7 @@ def qualiryMetrics(RawDFs, saccadesDFs, blinkDFs, gazeCoords, log_file=None,verb
 
 
 
-def preprocessingPipeline(blinkDF,RawDF,saccadesDF,gazeCoords,story="",part="",fixationDF=None,log_file=[],pdfs=[None],verbose=0,interp_type=0,interpBoundary=50,maxBlinkDur=500,resampleRate=100,dgvCenter=5,smoothwin=5,min_cluster_duration=2000,max_gap_duration=50):
+def preprocessingPipeline(blinkDF,RawDF,saccadesDF,gazeCoords,story="",part="",fixationDF=None,log_file=[],pdfs=[None],downs=1,centering=1,binterp=1,outrmv=1,nanrmv=1,smth=1,verbose=0,interp_type=0,interpBoundary=50,maxBlinkDur=500,resampleRate=100,dgvCenter=5,smoothwin=5,min_cluster_duration=2000,max_gap_duration=50):
     """
     Preprocessing pipeline for eye-tracking data.
 
@@ -966,67 +966,80 @@ def preprocessingPipeline(blinkDF,RawDF,saccadesDF,gazeCoords,story="",part="",f
         finalData       : DataFrame with cleaned and processed pupil data.
     """
     # 1) Downsampling Raw Data to limit computation time (WARNING! It assumes that your Fs is 500!)
-    RawDFDown = downsamplePupil(RawDF,logfile=log_file,divisor=500/resampleRate)
-    if verbose : # Plot if Necessery
-        fig1 = plotPupilTimecourse(RawDFDown, f"Downsampled Pupil Data: {story} // {part}", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
-        if len(pdfs) >= 1:
-            pdfs[0].savefig(fig1)
+    if downs:
+        RawDFDown = downsamplePupil(RawDF,logfile=log_file,divisor=500/resampleRate)
+        if verbose : # Plot if Necessery
+            fig1 = plotPupilTimecourse(RawDFDown, f"Downsampled Pupil Data: {story} // {part}", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
+            if len(pdfs) >= 1:
+                pdfs[0].savefig(fig1)
+            else:
+                plt.show(fig1)
+            plt.close(fig1)
         else:
-            plt.show(fig1)
-        plt.close(fig1)
+            RawDFDown = RawDF;
 
     # 2) Remove Data that are not in the center (Do not count blinks yet!)
-    ScreenData = count_gaze_outside(RawDFDown, blinkDF, gazeCoords, max_blink_duration=maxBlinkDur, boundary=interpBoundary, visual_angle=dgvCenter,logfile=log_file,verbose=verbose)
-    if verbose:
-        fig2 = plotEyeWithBlink(ScreenData[pd.notna(ScreenData['LeftPupil'])], blinkDF, gazeCoords, f"Screen Data: {story} // {part}")
-        if len(pdfs) >= 2:
-            pdfs[1].savefig(fig2)
-        else:
-            plt.show(fig2)
-        plt.close(fig2)
+    if centering:
 
+        ScreenData = count_gaze_outside(RawDFDown, blinkDF, gazeCoords, max_blink_duration=maxBlinkDur, boundary=interpBoundary, visual_angle=dgvCenter,logfile=log_file,verbose=verbose)
+        if verbose:
+            fig2 = plotEyeWithBlink(ScreenData[pd.notna(ScreenData['LeftPupil'])], blinkDF, gazeCoords, f"Screen Data: {story} // {part}")
+            if len(pdfs) >= 2:
+                pdfs[1].savefig(fig2)
+            else:
+                plt.show(fig2)
+            plt.close(fig2)
+    else:
+        ScreenData = RawDFDown
     # 3) Interpolate Blinks
-    RawDF2,interpDuration = interpolate_blinks(blinkDF=blinkDF, ScreenData=ScreenData, inter=interpBoundary,maxBlink = 2*interpBoundary+maxBlinkDur,verbose =verbose,logfile=log_file,interp_method=interp_type)
-    if verbose:
-        fig3 = plotPupilTimecourse(RawDF2, f"Interpolated Blinks: {story} // {part} ({interpDuration})", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
-        if len(pdfs) >= 3:
-            pdfs[2].savefig(fig3)
-        else:
-            plt.show(fig3)
-        plt.close(fig3)
-
+    if binterp:
+        RawDF2,interpDuration = interpolate_blinks(blinkDF=blinkDF, ScreenData=ScreenData, inter=interpBoundary,maxBlink = 2*interpBoundary+maxBlinkDur,verbose =verbose,logfile=log_file,interp_method=interp_type)
+        if verbose:
+            fig3 = plotPupilTimecourse(RawDF2, f"Interpolated Blinks: {story} // {part} ({interpDuration})", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
+            if len(pdfs) >= 3:
+                pdfs[2].savefig(fig3)
+            else:
+                plt.show(fig3)
+            plt.close(fig3)
+    else:
+        RawDF2 = ScreenData
     # 4) Remove Other Outliers (it doesnt Work irregardless :C)
-    RawDF3 = removeOutliers(RawDF2, threshold=3, max_duration=maxBlinkDur, boundary=40, verbose=verbose,logfile=log_file)
-    if verbose:
-        fig4 = plotPupilTimecourse(RawDF3, f"Outliers Removed: {story} // {part}", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
-        if  len(pdfs) >= 4:
-            pdfs[3].savefig(fig4)
-        else:
-            plt.show(fig4)
-        plt.close(fig4)
-
+    if outrmv:
+        RawDF3 = removeOutliers(RawDF2, threshold=3, max_duration=maxBlinkDur, boundary=40, verbose=verbose,logfile=log_file)
+        if verbose:
+            fig4 = plotPupilTimecourse(RawDF3, f"Outliers Removed: {story} // {part}", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
+            if  len(pdfs) >= 4:
+                pdfs[3].savefig(fig4)
+            else:
+                plt.show(fig4)
+            plt.close(fig4)
+    else:
+        RawDF3 = RawDF2
     # 5) Remove Edge NaNs (Which are already padded!)
-    RawDF4 = replace_zero_clusters_with_nans(RawDF3,logfile=log_file)
-    if verbose:
-        fig5 = plotPupilTimecourse(RawDF4, f"Edge Artifacts Removed: {story} // {part}", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
-        if len(pdfs) >= 5:
-            pdfs[4].savefig(fig5)
-        else:
-            plt.show(fig5)
-        plt.close(fig5)
-
-
+    if nanrmv:
+        RawDF4 = replace_zero_clusters_with_nans(RawDF3,logfile=log_file)
+        if verbose:
+            fig5 = plotPupilTimecourse(RawDF4, f"Edge Artifacts Removed: {story} // {part}", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
+            if len(pdfs) >= 5:
+                pdfs[4].savefig(fig5)
+            else:
+                plt.show(fig5)
+            plt.close(fig5)
+    else:
+        RawDF4 = RawDF3;
     # 6) Smooth the data
-    finalData = smooth_pupil_data(RawDF4, window_size=smoothwin, min_cluster_duration=min_cluster_duration, max_gap_duration=max_gap_duration,logfile=log_file,verbose=verbose)
-    if verbose:
-        fig6 = plotPupilTimecourse(finalData, f"Smoothed Data: {story} // {part}", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
-        if len(pdfs) >= 6:
-            pdfs[5].savefig(fig6)
-        else:
-            plt.show(fig6)
+    if smth:
+        finalData = smooth_pupil_data(RawDF4, window_size=smoothwin, min_cluster_duration=min_cluster_duration, max_gap_duration=max_gap_duration,logfile=log_file,verbose=verbose)
+        if verbose:
+            fig6 = plotPupilTimecourse(finalData, f"Smoothed Data: {story} // {part}", blinkDF, saccadesDF, fixationDF, chooseViz='011',secChan=1)
+            if len(pdfs) >= 6:
+                pdfs[5].savefig(fig6)
+            else:
+                plt.show(fig6)
 
-        plt.close(fig6)
-    
+            plt.close(fig6)
+    else:
+        finalData = RawDF4
     return finalData
 
 
@@ -1727,13 +1740,13 @@ def meanPupilShade(last10sDF1,last10sDF2,ds='',pvals = [], mltpl = 0,nsamp = 100
         axs[i].fill_between(np.linspace(1,nsamp/sf,nsamp+1), 
                         mean_df1[eye] - np.nanstd(last10arr1[:][:],axis=0), 
                         mean_df1[eye]+ np.nanstd(last10arr1[:][:],axis=0), 
-                        color='darkblue', alpha=0.2, label='TRACKED (STD Envelope)') # make an STD Shade 
+                        color='mediumslateblue', alpha=0.7,  label='TRACKED (STD Envelope)') # make an STD Shade 
 
         axs[i].plot(np.linspace(1,nsamp/sf,nsamp+1),mean_df2[eye],color='orange')
         axs[i].fill_between(np.linspace(1,nsamp/sf,nsamp+1), 
                         mean_df2[eye] - np.nanstd(last10arr2[:][:],axis=0), 
                         mean_df2[eye]+ np.nanstd(last10arr2[:][:],axis=0), 
-                        color='orangered', alpha=0.2, label='TRACKED (STD Envelope)') # makeand STD shade 
+                        color='moccasin', alpha=0.7,  label='TRACKED (STD Envelope)') # makeand STD shade 
         axs[i].set_title(eye)
         mask = np.array(p_fdr) < 0.05
         mask_nan = np.where(mask, True, np.nan)  # True stays True, False becomes np.nan
@@ -1746,30 +1759,43 @@ def meanPupilShade(last10sDF1,last10sDF2,ds='',pvals = [], mltpl = 0,nsamp = 100
 
 
 
-def getPupilDiamLast(allData,last10sDF = [],thrTime = 10000):
+def getPupilDiamLast(allData,last10sDF = [],beg = 10000,end=0,mode="ls"):
     """
-        Function to get last 10s of any Data, differentiating between Tracked and Untracked Data.
+        Function to get a s;ice of Raw PupilometricData:
+
+        ARGUMENTS:
+        allData   - structure containing All the data - Pupilometric and event wise
+        last10sDF - a list of Dfs cut to a different time slices. Can be provided if we aim to supplement the data
+        beg       - beggining of the slice in ms (If ls mode is active, then it is subtracted from the last time point)
+        end       - end of the slice in ms - always subtracted from the last time point 
+        mode      - "ls" - taking Last Seconds of the data, all takin a specific slice from the midde of the data
+
+        RETURN: 
+        df1 - dataFrame list containtig sliced pupiloemtric measures if the current entity is "KAROLINA"
+        df2 - dataFrame list containtig sliced pupiloemtric measures if the current entity is "JANEK"
+        last10sDF - a list of DataFrames containing the sliced data for all subjects
+
     """
 
-    last10sDF1 = []
-    last10sDF2 = []
+    df1 = []
+    df2 = []
 
     for key in allData['data']['STORY_1'].keys():
-        ltim = allData['data']['STORY_1'][key]['Gaze']['TimePoint'].iloc[-1]
-
-        # Calculate the threshold for the last 10 seconds (10,000 ms)
-        threshold = int(ltim) - thrTime
-        # Select only rows where TimePoint is within the last 10 seconds
-        last_10s_df = allData['data']['STORY_1'][key]['Gaze'][allData['data']['STORY_1'][key]['Gaze']['TimePoint'] >= threshold].reset_index()
-        if 'KAROLINA' in key:
-            last10sDF1.append(last_10s_df)
+        threshold1 = allData['data']['STORY_1'][key]['Gaze']['TimePoint'].iloc[-1] - end # computing the End point
+        if mode == "all": # If we want the same Slice of Data Each time 
+            threshold2 = allData['data']['STORY_1'][key]['Gaze']['TimePoint'].iloc[0] + beg  # Computing the Beginning Point 
         else:
-            last10sDF2.append(last_10s_df)
-        last10sDF.append(last_10s_df)
+            threshold2 = allData['data']['STORY_1'][key]['Gaze']['TimePoint'].iloc[-1] - beg  # Computing the Beginning Point 
 
-    return last10sDF1, last10sDF2,last10sDF
+        cutDf = allData['data']['STORY_1'][key]['Gaze'][(allData['data']['STORY_1'][key]['Gaze']['TimePoint'] >= threshold2)  &
+                                                               (allData['data']['STORY_1'][key]['Gaze']['TimePoint'] <= threshold1)].reset_index()
+        if 'KAROLINA' in key:
+            df1.append(cutDf)
+        else:
+            df2.append(cutDf)
+        last10sDF.append(cutDf) # All - Subject single 
 
-
+    return df1, df2,last10sDF
 
 def add_ds_trial_tracking(last10s_list, grand_df):
     """
@@ -1800,38 +1826,38 @@ def add_ds_trial_tracking(last10s_list, grand_df):
 import statsmodels.api  as sm
 
 
-def plotTrialTrack(m,name,grand_df,ax,titl):
+def plotTrialTrack(m,name,grand_df,ax,titl,paramNum=[0,1,2],anlysisName = 'Tracking',firstContrast='TRACKED',lastContrast = 'UNTRACKED'):
   ### QUick Linear Model 
-  quick_untracked_lm = lambda x: m.params[m.params.keys()[0]] + m.params[m.params.keys()[1]]+m.params[m.params.keys()[2]]*x 
-  quick_tracked_lm = lambda x: m.params[m.params.keys()[0]] + m.params[m.params.keys()[2]]*x
+  quick_untracked_lm = lambda x: m.params[m.params.keys()[paramNum[0]]] + m.params[m.params.keys()[paramNum[1]]]+m.params[m.params.keys()[paramNum[2]]]*x 
+  quick_tracked_lm = lambda x: m.params[m.params.keys()[paramNum[0]]] + m.params[m.params.keys()[paramNum[2]]]*x
 
   trialN = np.linspace(0,len(np.unique(grand_df['trialNum'])),len(np.unique(grand_df['trialNum']))+1);
   mw_est_utr = pd.Series(trialN).apply(quick_untracked_lm)
   mw_est_tr = pd.Series(trialN).apply(quick_tracked_lm)
 
   ax.set_title(titl)
-  ax.plot(trialN,mw_est_tr,label="Tracked model slope")
-  ax.plot(trialN,mw_est_utr,label="Tracked model slope")
-  grTr = grand_df[[name,'trialNum','Tracking']].groupby(['Tracking','trialNum'])
+  ax.plot(trialN,mw_est_tr,label="Tracked model slope",color="blue")
+  ax.plot(trialN,mw_est_utr,label="Tracked model slope",color="orange")
+  grTr = grand_df[[name,'trialNum',anlysisName]].groupby([anlysisName,'trialNum'])
   ax.fill_between(trialN, 
-                  mw_est_tr - grTr.std().loc['TRACKED'][name], 
-                    mw_est_tr+   grTr.std().loc['TRACKED'][name], 
-                  color='darkblue', alpha=0.2, label='TRACKED (STD Envelope)')
+                  mw_est_tr - grTr.std().loc[firstContrast][name], 
+                    mw_est_tr+   grTr.std().loc[firstContrast][name], 
+                  color='mediumslateblue', alpha=0.7, label=f'{firstContrast} (STD Envelope)')
 
-  ax.scatter(grTr.mean().loc['TRACKED'].index,grTr.mean().loc['TRACKED'],label="Subj Mean Tracked",color = 'blue')
 
   ax.fill_between(trialN, 
-                  mw_est_utr - grTr.std().loc['UNTRACKED'][name], 
-                    mw_est_utr+   grTr.std().loc['UNTRACKED'][name], 
-                  color='orangered', alpha=0.2, label='UNTRACKED (STD Envelope)')
-  ax.scatter(grTr.mean().loc['UNTRACKED'].index,grTr.mean().loc['UNTRACKED'],label="Subj Mean Untracked",color = 'orange')
+                  mw_est_utr - grTr.std().loc[lastContrast][name], 
+                    mw_est_utr+   grTr.std().loc[lastContrast][name], 
+                  color='moccasin', alpha=0.7, label=f'{lastContrast} (STD Envelope)')
+  ax.scatter(grTr.mean().loc[firstContrast].index,grTr.mean().loc[firstContrast],label="Subj Mean Tracked",color = 'blue')
+  ax.scatter(grTr.mean().loc[lastContrast].index,grTr.mean().loc[lastContrast],label="Subj Mean Untracked",color = 'orange')
   ax.set_xlabel="Trial Number"
   ax.legend()
   
 ####### (3) ---- MW vs Gaze ----- #######
 
 
-def plot_pupil_vs_mw(m, currentDf, ind, ax=None):
+def plot_pupil_vs_mw(m, currentDf, ind, ax=None,meas='Pupil',target='MW_Estimate',meas1=1,meas2=2,tracking=True):
     """
     Plot Pupil vs MW_Estimate with linear fits for TRACKED and UNTRACKED groups.
     
@@ -1846,31 +1872,159 @@ def plot_pupil_vs_mw(m, currentDf, ind, ax=None):
         fig, ax = plt.subplots(figsize=(10, 6))
     
     # Define linear functions for TRACKED and UNTRACKED
-    linfunTr = lambda x: m.params[m.params.keys()[0]] + m.params[m.params.keys()[2]] * x
-    linfunUnTr = lambda x: m.params[m.params.keys()[0]] + m.params[m.params.keys()[2]] * x + m.params[m.params.keys()[1]]
+    if tracking:
+
+        linfunTr = lambda x: m.params[m.params.keys()[0]] + m.params[m.params.keys()[2]] * x
+        linfunUnTr = lambda x: m.params[m.params.keys()[0]] + m.params[m.params.keys()[2]] * x + m.params[m.params.keys()[1]]
 
     # Scatter plot for TRACKED and UNTRACKED
-    ax.scatter(currentDf[currentDf['Tracking'] == 'TRACKED']['MW_Estimate'],
-               currentDf[currentDf['Tracking'] == 'TRACKED']['Pupil'],
-               color='blue', label=f"Tracked (Coef: {m.params[m.params.keys()[1]]:1.4f})")
-    ax.scatter(currentDf[currentDf['Tracking'] == 'UNTRACKED']['MW_Estimate'],
-               currentDf[currentDf['Tracking'] == 'UNTRACKED']['Pupil'],
-               color='orange', label=f"Untracked (pval: {m.pvalues[m.params.keys()[1]]:1.4f})")
+        ax.scatter(currentDf[currentDf['Tracking'] == 'TRACKED'][target],
+                currentDf[currentDf['Tracking'] == 'TRACKED'][meas],
+                color='blue', label=f"Tracked (Coef: {m.params[m.params.keys()[1]]:1.4f})")
+        ax.scatter(currentDf[currentDf['Tracking'] == 'UNTRACKED'][target],
+                currentDf[currentDf['Tracking'] == 'UNTRACKED'][meas],
+                color='orange', label=f"Untracked (pval: {m.pvalues[m.params.keys()[1]]:1.4f})")
 
     # Plot linear fits
-    ax.plot(currentDf['MW_Estimate'], linfunTr(currentDf['MW_Estimate']), 'b--', label="Tracked Fit")
-    ax.plot(currentDf['MW_Estimate'], linfunUnTr(currentDf['MW_Estimate']), 'orange', label="Untracked Fit")
+        ax.plot(currentDf[target], linfunTr(currentDf[target]), 'b--', label="Tracked Fit")
+        ax.plot(currentDf[target], linfunUnTr(currentDf[target]), 'orange', label="Untracked Fit")
+    else: 
+        linfun =lambda x: m.params[m.params.keys()[0]] + m.params[m.params.keys()[1]] * x 
 
+        ax.scatter(currentDf[target],
+                currentDf[meas],
+                color='orange', label=f"Trial: (Coef: {m.params[m.params.keys()[2]]:1.4f} | P: {m.pvalues[m.params.keys()[2]]:1.4f})")
+        ax.plot(currentDf[target], linfun(currentDf[target]), 'b--', label="Tracked Fit")
     # Add labels, title, and legend
     ax.set_xlabel('MW Estimate')
-    ax.set_ylabel(f"Pupil Measure: {ind[0]} // {ind[1]}")
-    ax.set_title(f"{ind[0]} // {ind[1]}: (Coef: {m.params[m.params.keys()[2]]:1.4f} // P: {m.pvalues[m.params.keys()[2]]:1.4f})")
+    ax.set_ylabel(f"{meas} Measure: {ind[0]} // {ind[1]}")
+    ax.set_title(f"{ind[0]} // {ind[1]}: (Coef: {m.params[m.params.keys()[meas2]]:1.4f} // P: {m.pvalues[m.params.keys()[meas2]]:1.4f})")
     ax.legend()
 
     # Add a suptitle if it's a standalone plot
     if ax is None:
-        plt.suptitle(f"MW Estimate vs Pupil Measure")
+        plt.suptitle(f"MW Estimate vs {meas} Measure")
         plt.show()
+
+###### ---- (6) Correlational Analysis F ----- #######
+
+
+def pairwiseCorrMatrix(dfList,column = 'LeftPupil'):
+    """
+        Compute correlation matrix BETWEEN SUBJECTS on given Data Between Trials from a List of DF corresponding to givrn DS
+
+        Algorithm:
+        - Create a DataFrame when Columns are subjects and rows are Trials
+        - Compute Correlation Matrix giving dense DS x DS matrix
+        - Selectively get the mean correlation for evetu Tracked and Untracked SUbjects between every other
+        - Out of that Get only those mean correaltion that are correspondent to the same vs Not the same subject giving us two vectoes 
+    """
+
+    # Create a DF o=in which columsn are subjects 
+    data = {df['DS'].iloc[0]: df[column].reset_index(drop=True) for df in dfList}
+    pupil_matrix = pd.DataFrame(data)
+
+    # Compute pairwise correlation matrix
+    corr_matrix = pupil_matrix.corr()
+    np.fill_diagonal(corr_matrix.values, np.nan)
+
+    firstEntSubs = [1 if df['firstEnt'].iloc[0] == 'TRACKED' else 0 for df in dfList]
+    corr_matrix_tracked = corr_matrix.loc[np.array(firstEntSubs) == 1, :].mean()
+    corr_matrix_untracked = corr_matrix.loc[np.array(firstEntSubs) == 0, :].mean()
+
+    # Create a single DataFrame with the relevant mean correlation for each subject
+    meanCorr = np.where(
+        np.array(firstEntSubs) == 1,
+        corr_matrix_tracked.values,
+        corr_matrix_untracked.values
+    )
+
+    meanCorr2 = np.where(
+        np.array(firstEntSubs) == 0,
+        corr_matrix_tracked.values,
+        corr_matrix_untracked.values
+    )
+
+    meanPupilDiam = pd.DataFrame({
+        "meanCorrTracked": meanCorr,
+        "meanCorrUntracked": meanCorr2,
+
+        "IfTrackedKarolina": firstEntSubs
+    }, index=corr_matrix.index)
+
+
+    return corr_matrix,meanPupilDiam
+
+
+def diffRainPlot(lis, titl, ax=None):
+    from matplotlib import pyplot as plt
+    import seaborn as sns
+    import numpy as np
+    import matplotlib.colors as mcolors
+
+    sns.set_style('white')
+
+    # Prepare data (Tracked is first, Untracked is second)
+    data1 = lis[0]
+    data2 = lis[1]
+
+    # Use provided axis or create a new one
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(7, 6))
+
+    main_palette = [mcolors.to_rgb('orange'), mcolors.to_rgb('blue')]  # tracked=orange, untracked=blue
+    violin_palette = [mcolors.to_rgb('moccasin'), mcolors.to_rgb('mediumslateblue')]  # tracked=orangered, untracked=darkblue
+
+    # Violin plot (external halves)
+    vp = sns.violinplot([data1, data2], dodge=False, palette=violin_palette, density_norm='width', inner=None, ax=ax)
+    xlim = ax.get_xlim()
+    ylim = ax.get_ylim()
+    for i, violin in enumerate(ax.collections[:2]):
+        bbox = violin.get_paths()[0].get_extents()
+        x0, y0, width, height = bbox.bounds
+        if i == 1:
+            # First violin: show only right half (Tracked)
+            violin.set_clip_path(plt.Rectangle((x0 + width / 2, y0), width / 2, height, transform=ax.transData))
+        else:
+            # Second violin: show only left half (Untracked)
+            violin.set_clip_path(plt.Rectangle((x0, y0), width / 2, height, transform=ax.transData))
+
+    # Add THIN boxplots to mimic violinplot "box"
+    box_colors = ['orange', 'blue']
+    boxplot = sns.boxplot(
+        data=[data1, data2],
+        width=0.03,
+        showcaps=True,
+        boxprops=dict(linewidth=1, alpha=0.8),
+        medianprops=dict(color='black', linewidth=2),
+        whiskerprops=dict(color='black', linewidth=1.5),
+        capprops=dict(color='black', linewidth=1),
+        flierprops=dict(marker='o', markersize=3, linestyle='none', markerfacecolor='gray', alpha=0.5),
+        ax=ax,
+        zorder=5
+    )
+    # Color each box separately (face and edge)
+    for i, artist in enumerate(ax.patches[-2:]):
+        artist.set_facecolor(box_colors[i])
+        artist.set_edgecolor("black")
+        artist.set_alpha(1)
+    # Stripplot (internal, closer to respective violins)
+    dot_shift = 0.05
+    xvals = np.array([0 + dot_shift, 1 - dot_shift])
+    ax.scatter(np.full(len(data1), xvals[0]), data1, color=main_palette[0], zorder=6, alpha=0.8)
+    ax.scatter(np.full(len(data2), xvals[1]), data2, color=main_palette[1], zorder=6, alpha=0.8)
+
+    # Draw lines between corresponding dots
+    for i in range(len(data1)):
+        col = "wheat" if data1.iloc[i] > data2.iloc[i] else "mediumslateblue"
+        ax.plot(xvals, [data1.iloc[i], data2.iloc[i]], color=col, alpha=1, zorder=4)
+
+    ax.set_xlim(xlim)
+    ax.set_ylim(ylim)
+    ax.set_xticks([0, 1])
+    ax.set_ylabel("Mean Correlation Coefficient", fontsize=16)
+    ax.set_xticklabels(['Tracked', 'Untracked'], fontsize=16)
+    ax.set_title(titl, fontsize=16)
 
 
 ###### ---- Helpers ------ #####
@@ -1915,7 +2069,7 @@ def checkEntity(grand_df):
 
     first_rows = grand_df.groupby('DS').first()
     first_rows.replace({'TRACKED': 'Karolina', 'UNTRACKED': 'Janek'},inplace=True)
-
+    print(list(first_rows['Tracking']))
     df =  pd.DataFrame([list(first_rows['Tracking']),trackedEntities],columns=first_rows['Tracking'],index=['df','original'])
     return df
 
@@ -1944,8 +2098,8 @@ def linearModelChecks(m,grand_df):
     plt.suptitle("Checks for a Linear Model")
 
     # (1) Homoscedascisity
-    axs[0].scatter(fitted, std_res, alpha=0.6, s=15)
-    axs[0].axhline(0, linestyle='--')
+    axs[0].scatter(fitted, std_res, alpha=0.6, s=15,color='blue')
+    axs[0].axhline(0, linestyle='--',color='orange')
     axs[0].set_xlabel("Fitted value")
     axs[0].set_ylabel("Studentised residual")
     axs[0].set_title("Residuals vs fitted")
@@ -1981,4 +2135,3 @@ def linearModelChecks(m,grand_df):
         fontsize=9,
         bbox=dict(boxstyle="round,pad=0.4", facecolor="white", alpha=0.8)
     )
-    plt.show()

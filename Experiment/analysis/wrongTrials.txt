@@ -1,9 +1,120 @@
 Wrong Trials 
 
-DS01 : Potentially Wrong - Many Saccades (Saccade rate Waay out of normal proportions: 3,  25, 26, 27,28, 30, 31, 33, 37, 38 ,   
-Trial 13 - Potentially to few at the end 
-Trial 19 - Wrong Algortyihm at the beginning 
+DS01 : Potentially Wrong - Many Saccades (Saccade rate Waay out of normal proportions: 2, 5, 6, 7, 8, 10, 30, 31, 33, 37, 38 ,   
+Trial 3  - Too little for Baseline 
+Trial 5  - Too little for Baseline 
+Trial 6  - Too little for Baseline 
+Trial 7  - Too little for Baseline 
+Trial 8 - Too little for Baseline 
+Trial 10 - Too little for Baseline
+Trial 11 - Too little for Baseline
+Trial 12 - Too little for Baseline
+Trial 14 - Too little for Pupil Estimation
+Trial 15 - Too little for Baseline
+Trial 18 - Too little for Baseline
+Trial 19 - Too little for Baseline
+Trial 20 - Too little for Baseline
 
-DS02: 
+Trial 24 - Too little for Pupil Estimation
+Trial 25 - Too little for Pupil Estimation
+Trial 26 - Too little for Baseline and Pupil
+Trial 27 - No Eye Data!
+Trial 28 - Almost no eye data
+Trial 29 - Too little for Baseline
+Trial 30 - Too little for Pupil Estimation
+Trial 31 - Too little for Pupil Estimation
+Trial 32 - Too little for Pupil Estimation
+Trial 34 - Too little for Baseline
+Trial 35 - Too little for Baseline
+Trial 36 - Too little for Baseline'
+Trial 37 - Too little for Baseline
+Trial 38 - Too little for Baseline and Pupil
+Trial 39 - Too little for Baseline
+Trial 40 - Too little for Baseline
 
-Trial 2 - Wrong Interpolation! --> CHange boundary to 75ms probably
+DS02: Very Clean
+
+DS03: Very clean
+trial 26 - potentially wrong baseline 
+
+DS04: Many blinks and small saccades
+
+Trial 1,2  - No Pupil Data - wrong Data: 
+Trial 3 - not enough for baseline
+ 
+
+DS05: Potenitlay Wrong! many blinbks and saccades 
+
+Trial 3 - potentiually too little Pupil Data
+Trial 4 - no Baseline 
+Trial 5 - no baseline and little pupil:
+Trial 7 - no baseline 
+Trial 11- no baseline 
+trial 12 - no baseline 
+trial 14 - no baseline
+trial 15 - no baseline
+trial 20 - no baseline
+trial 23 - no baseline
+trial 26 - no baseline
+trial 30 - no baseline
+trial 33 - no baseline
+trial 36 - no baseline
+trial 37 - no baseline
+trial 38 - no baseline
+
+DS:06 -  Potenitlay Wrong! Many Blinks, saccades and Wrong Eyes: Especially in the second part! 
+
+Trial 1 - no baseline 
+Trial 11 - no baseline
+trial 20 - no baseline
+trial 23 - no baseline
+trial 24 - no baseline
+trial 25 - no baseline
+trial 28 - no Pupil
+trial 29 - no baseline
+trial 31 - no baseline
+trial 33 - no baseline
+trial 35 - no baseline
+trial 36 - no baseline
+trial 38 - no pupil
+trial 39 - no baseline
+trial 40 - no baseline
+
+
+DS: 07: Maybe Wrong? Too many Eye Events 
+
+trial 4 - no baseline
+trial 13 - no baseline
+trial 35 - no baseline
+
+DS: 08 Very Clean 
+
+
+DS:09: SOmetimes too many Blink and out of screen events: 
+
+Trial 13
+
+DS:10: Aside from edge, very clean! 
+
+Trial 6 - Edge Artefact!!!!
+Trial 37 - Edge Artefact!!!!
+
+DS:11 Very Clean
+
+DS: 12 - very clean
+
+DS: 13 very clean 
+
+
+DS: 14: Lot of Blinks and artefacts in the second part 
+
+Trial 25: pupil
+Trial 26:baseline 
+Trial 28: baseline
+Trial 30: baseline
+Trial 32: baseline
+Trial 40: baseline
+
+DS 15: Very Clean 
+
+ 

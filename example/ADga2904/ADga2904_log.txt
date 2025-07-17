@@ -1,0 +1,709 @@
+
+       ###### STRATEGIC MW EXPERIMENT v0.98 ######    
+
+  Log Time: 2025-04-29 12:23:51.709480
+  Currently Processing Subject N.: ADga2904
+  Current Display Information: 
+      Width:  1920
+      Height: 1080
+
+      Viewing Distance:  93
+
+  Experiment Config: 
+      dummyMode:             False
+      Current Named Entity:  KAROLINA
+      Test Mode:             False
+Link established
+Failed to load audio: No file 'type.wav' found in working directory 'C:\Users\Lab\Documents\startegicMW_lite2'.
+
+
+
+EXPERIMENTS STARTS
+
+Calibration of EyeTracker (1745922404.350)
+
+   Calibration Ended (Duration: 119.76611328125)
+
+Starting Audio Trial 1 (1745922537.735) *** 
+
+   Beginning Part: KAROLINA_1   at exp Time     0.013
+Actual playback duration: 42.571 sec
+   Part ended:     KAROLINA_1   at exp Time    42.585 (Duration: 42.571)
+   Value Logged 0  at: 52.206; Reaction Time: 9.621
+
+   Beginning Part: JANEK_1      at exp Time    52.219
+Actual playback duration: 48.294 sec
+   Part ended:     JANEK_1      at exp Time   100.514 (Duration: 48.294)
+   Value Logged 0  at: 108.061; Reaction Time: 7.547
+
+   Beginning Part: KAROLINA_2   at exp Time   108.075
+Actual playback duration: 40.639 sec
+   Part ended:     KAROLINA_2   at exp Time   148.714 (Duration: 40.639)
+   Value Logged 0  at: 155.278; Reaction Time: 6.563
+
+   Beginning Part: JANEK_2      at exp Time   155.293
+Actual playback duration: 42.521 sec
+   Part ended:     JANEK_2      at exp Time   197.816 (Duration: 42.521)
+   Value Logged 1  at: 203.238; Reaction Time: 5.422
+
+   Beginning Part: KAROLINA_3   at exp Time   203.251
+Actual playback duration: 43.533 sec
+   Part ended:     KAROLINA_3   at exp Time   246.785 (Duration: 43.533)
+   Value Logged 1  at: 251.709; Reaction Time: 4.924
+
+   Beginning Part: JANEK_3      at exp Time   251.722
+Actual playback duration: 44.192 sec
+   Part ended:     JANEK_3      at exp Time   295.916 (Duration: 44.192)
+   Value Logged 0  at: 300.957; Reaction Time: 5.041
+
+   Beginning Part: KAROLINA_4   at exp Time   300.970
+Actual playback duration: 43.273 sec
+   Part ended:     KAROLINA_4   at exp Time   344.245 (Duration: 43.273)
+   Value Logged 0  at: 349.573; Reaction Time: 5.328
+
+   Beginning Part: JANEK_4      at exp Time   349.586
+Actual playback duration: 43.408 sec
+   Part ended:     JANEK_4      at exp Time   392.996 (Duration: 43.408)
+   Value Logged 0  at: 398.039; Reaction Time: 5.043
+
+   Beginning Part: KAROLINA_5   at exp Time   398.053
+Actual playback duration: 46.191 sec
+   Part ended:     KAROLINA_5   at exp Time   444.246 (Duration: 46.191)
+   Value Logged 1  at: 448.935; Reaction Time: 4.689
+
+   Beginning Part: JANEK_5      at exp Time   448.949
+Actual playback duration: 49.995 sec
+   Part ended:     JANEK_5      at exp Time   498.945 (Duration: 49.995)
+   Value Logged 1  at: 506.670; Reaction Time: 7.725
+
+   Beginning Part: KAROLINA_6   at exp Time   506.684
+Actual playback duration: 42.479 sec
+   Part ended:     KAROLINA_6   at exp Time   549.167 (Duration: 42.479)
+   Value Logged 1  at: 554.319; Reaction Time: 5.152
+
+   Beginning Part: JANEK_6      at exp Time   554.331
+Actual playback duration: 47.353 sec
+   Part ended:     JANEK_6      at exp Time   601.686 (Duration: 47.353)
+   Value Logged 1  at: 607.142; Reaction Time: 5.456
+
+   Beginning Part: KAROLINA_7   at exp Time   607.155
+Actual playback duration: 48.109 sec
+   Part ended:     KAROLINA_7   at exp Time   655.265 (Duration: 48.109)
+   Value Logged 1  at: 661.533; Reaction Time: 6.268
+
+   Beginning Part: JANEK_7      at exp Time   661.546
+Actual playback duration: 45.598 sec
+   Part ended:     JANEK_7      at exp Time   707.146 (Duration: 45.598)
+   Value Logged 1  at: 712.599; Reaction Time: 5.453
+
+   Beginning Part: KAROLINA_8   at exp Time   712.612
+Actual playback duration: 44.151 sec
+   Part ended:     KAROLINA_8   at exp Time   756.766 (Duration: 44.151)
+   Value Logged 2  at: 762.192; Reaction Time: 5.425
+
+   Beginning Part: JANEK_8      at exp Time   762.204
+Actual playback duration: 40.029 sec
+   Part ended:     JANEK_8      at exp Time   802.235 (Duration: 40.029)
+   Value Logged 1  at: 807.839; Reaction Time: 5.604
+
+   Beginning Part: KAROLINA_9   at exp Time   807.853
+Actual playback duration: 46.511 sec
+   Part ended:     KAROLINA_9   at exp Time   854.367 (Duration: 46.511)
+   Value Logged 1  at: 859.791; Reaction Time: 5.424
+
+   Beginning Part: JANEK_9      at exp Time   859.803
+Actual playback duration: 44.471 sec
+   Part ended:     JANEK_9      at exp Time   904.276 (Duration: 44.471)
+   Value Logged 1  at: 908.600; Reaction Time: 4.324
+
+   Beginning Part: KAROLINA_10  at exp Time   908.612
+   Part ended:     KAROLINA_10  at exp Time   955.725 (Duration: 47.112)
+Actual playback duration: 47.112 sec
+   Value Logged 2  at: 961.455; Reaction Time: 5.731
+
+   Beginning Part: JANEK_10     at exp Time   961.469
+Actual playback duration: 45.165 sec
+   Part ended:     JANEK_10     at exp Time  1006.635 (Duration: 45.165)
+   Value Logged 2  at: 1010.495; Reaction Time: 3.860
+
+Story Ends.
+
+Answer Timing Log:
+       Event    StoryTime        RT  partDuration
+0      BEGIN     0.012970  0.000000      0.000000
+1      PROBE    42.584752  0.000000     42.570899
+2   KEYPRESS    52.205642  9.620892     42.570899
+3      BEGIN    52.219495  0.000000      0.000000
+4      PROBE   100.514264  0.000000     48.293649
+5   KEYPRESS   108.061344  7.547081     48.293649
+6      BEGIN   108.074566  0.000000      0.000000
+7      PROBE   148.714311  0.000000     40.638930
+8   KEYPRESS   155.277713  6.563403     40.638930
+9      BEGIN   155.292675  0.000000      0.000000
+10     PROBE   197.815710  0.000000     42.520994
+11  KEYPRESS   203.237649  5.421940     42.520994
+12     BEGIN   203.250726  0.000000      0.000000
+13     PROBE   246.784938  0.000000     43.533392
+14  KEYPRESS   251.709112  4.924176     43.533392
+15     BEGIN   251.722243  0.000000      0.000000
+16     PROBE   295.915852  0.000000     44.192110
+17  KEYPRESS   300.957102  5.041252     44.192110
+18     BEGIN   300.970245  0.000000      0.000000
+19     PROBE   344.244757  0.000000     43.272847
+20  KEYPRESS   349.573231  5.328475     43.272847
+21     BEGIN   349.586237  0.000000      0.000000
+22     PROBE   392.995584  0.000000     43.407752
+23  KEYPRESS   398.038758  5.043175     43.407752
+24     BEGIN   398.052670  0.000000      0.000000
+25     PROBE   444.246251  0.000000     46.191326
+26  KEYPRESS   448.935049  4.688799     46.191326
+27     BEGIN   448.948806  0.000000      0.000000
+28     PROBE   498.945094  0.000000     49.995131
+29  KEYPRESS   506.670068  7.724976     49.995131
+30     BEGIN   506.683505  0.000000      0.000000
+31     PROBE   549.166608  0.000000     42.479307
+32  KEYPRESS   554.318714  5.152107     42.479307
+33     BEGIN   554.331209  0.000000      0.000000
+34     PROBE   601.685683  0.000000     47.353236
+35  KEYPRESS   607.142111  5.456431     47.353236
+36     BEGIN   607.155225  0.000000      0.000000
+37     PROBE   655.265144  0.000000     48.108664
+38  KEYPRESS   661.533213  6.268070     48.108664
+39     BEGIN   661.546042  0.000000      0.000000
+40     PROBE   707.145519  0.000000     45.598019
+41  KEYPRESS   712.598752  5.453234     45.598019
+42     BEGIN   712.612341  0.000000      0.000000
+43     PROBE   756.766318  0.000000     44.151434
+44  KEYPRESS   762.191520  5.425204     44.151434
+45     BEGIN   762.204210  0.000000      0.000000
+46     PROBE   802.235399  0.000000     40.028693
+47  KEYPRESS   807.839446  5.604049     40.028693
+48     BEGIN   807.853441  0.000000      0.000000
+49     PROBE   854.366556  0.000000     46.510722
+50  KEYPRESS   859.790750  5.424195     46.510722
+51     BEGIN   859.803279  0.000000      0.000000
+52     PROBE   904.275860  0.000000     44.471324
+53  KEYPRESS   908.599590  4.323732     44.471324
+54     BEGIN   908.612401  0.000000      0.000000
+55     PROBE   955.724739  0.000000     47.111674
+56  KEYPRESS   961.455328  5.730590     47.111674
+57     BEGIN   961.468788  0.000000      0.000000
+58     PROBE  1006.634688  0.000000     45.165302
+59  KEYPRESS  1010.494633  3.859946     45.165302
+Check Timing:
+Error Below 5 ms: for PROBE in 1 and BEGIN in 0 (0.0009)
+Error Below 5 ms: for KEYPRESS in 2 and PROBE in 1 (-0.0000)
+Error Below 5 ms: for PROBE in 4 and BEGIN in 3 (0.0011)
+Error Below 5 ms: for KEYPRESS in 5 and PROBE in 4 (-0.0000)
+Error Below 5 ms: for PROBE in 7 and BEGIN in 6 (0.0008)
+Error Below 5 ms: for KEYPRESS in 8 and PROBE in 7 (-0.0000)
+Error Below 5 ms: for PROBE in 10 and BEGIN in 9 (0.0020)
+Error Below 5 ms: for KEYPRESS in 11 and PROBE in 10 (-0.0000)
+Error Below 5 ms: for PROBE in 13 and BEGIN in 12 (0.0008)
+Error Below 5 ms: for KEYPRESS in 14 and PROBE in 13 (-0.0000)
+Error Below 5 ms: for PROBE in 16 and BEGIN in 15 (0.0015)
+Error Below 5 ms: for KEYPRESS in 17 and PROBE in 16 (-0.0000)
+Error Below 5 ms: for PROBE in 19 and BEGIN in 18 (0.0017)
+Error Below 5 ms: for KEYPRESS in 20 and PROBE in 19 (-0.0000)
+Error Below 5 ms: for PROBE in 22 and BEGIN in 21 (0.0016)
+Error Below 5 ms: for KEYPRESS in 23 and PROBE in 22 (-0.0000)
+Error Below 5 ms: for PROBE in 25 and BEGIN in 24 (0.0023)
+Error Below 5 ms: for KEYPRESS in 26 and PROBE in 25 (-0.0000)
+Error Below 5 ms: for PROBE in 28 and BEGIN in 27 (0.0012)
+Error Below 5 ms: for KEYPRESS in 29 and PROBE in 28 (-0.0000)
+Error Below 5 ms: for PROBE in 31 and BEGIN in 30 (0.0038)
+Error Below 5 ms: for KEYPRESS in 32 and PROBE in 31 (-0.0000)
+Error Below 5 ms: for PROBE in 34 and BEGIN in 33 (0.0012)
+Error Below 5 ms: for KEYPRESS in 35 and PROBE in 34 (-0.0000)
+Error Below 5 ms: for PROBE in 37 and BEGIN in 36 (0.0013)
+Error Below 5 ms: for KEYPRESS in 38 and PROBE in 37 (-0.0000)
+Error Below 5 ms: for PROBE in 40 and BEGIN in 39 (0.0015)
+Error Below 5 ms: for KEYPRESS in 41 and PROBE in 40 (-0.0000)
+Error Below 5 ms: for PROBE in 43 and BEGIN in 42 (0.0025)
+Error Below 5 ms: for KEYPRESS in 44 and PROBE in 43 (-0.0000)
+Error Below 5 ms: for PROBE in 46 and BEGIN in 45 (0.0025)
+Error Below 5 ms: for KEYPRESS in 47 and PROBE in 46 (-0.0000)
+Error Below 5 ms: for PROBE in 49 and BEGIN in 48 (0.0024)
+Error Below 5 ms: for KEYPRESS in 50 and PROBE in 49 (-0.0000)
+Error Below 5 ms: for PROBE in 52 and BEGIN in 51 (0.0013)
+Error Below 5 ms: for KEYPRESS in 53 and PROBE in 52 (-0.0000)
+Error Below 5 ms: for PROBE in 55 and BEGIN in 54 (0.0007)
+Error Below 5 ms: for KEYPRESS in 56 and PROBE in 55 (-0.0000)
+Error Below 5 ms: for PROBE in 58 and BEGIN in 57 (0.0006)
+Error Below 5 ms: for KEYPRESS in 59 and PROBE in 58 (-0.0000)
+Difference Between Summed StoryTimes and Summed Event Clock: 0.2975
+
+Calibration of EyeTracker (1745923561.958)
+
+   Calibration Ended (Duration: 62.06429839134216)
+
+Starting Audio Trial 1 (1745923624.146) *** 
+
+   Beginning Part: KAROLINA_1   at exp Time     0.013
+Actual playback duration: 41.170 sec
+   Part ended:     KAROLINA_1   at exp Time    41.184 (Duration: 41.170)
+   Value Logged 2  at: 45.451; Reaction Time: 4.267
+
+   Beginning Part: JANEK_1      at exp Time    45.464
+Actual playback duration: 42.449 sec
+   Part ended:     JANEK_1      at exp Time    87.914 (Duration: 42.449)
+   Value Logged 2  at: 93.154; Reaction Time: 5.240
+
+   Beginning Part: KAROLINA_2   at exp Time    93.167
+Actual playback duration: 47.456 sec
+   Part ended:     KAROLINA_2   at exp Time   140.624 (Duration: 47.456)
+   Value Logged 3  at: 145.500; Reaction Time: 4.876
+
+   Beginning Part: JANEK_2      at exp Time   145.514
+Actual playback duration: 47.208 sec
+   Part ended:     JANEK_2      at exp Time   192.723 (Duration: 47.208)
+   Value Logged 3  at: 197.787; Reaction Time: 5.064
+
+   Beginning Part: KAROLINA_3   at exp Time   197.802
+Actual playback duration: 45.031 sec
+   Part ended:     KAROLINA_3   at exp Time   242.834 (Duration: 45.031)
+   Value Logged 2  at: 248.643; Reaction Time: 5.809
+
+   Beginning Part: JANEK_3      at exp Time   248.657
+Actual playback duration: 43.856 sec
+   Part ended:     JANEK_3      at exp Time   292.514 (Duration: 43.856)
+   Value Logged 1  at: 297.203; Reaction Time: 4.689
+
+   Beginning Part: KAROLINA_4   at exp Time   297.215
+Actual playback duration: 47.679 sec
+   Part ended:     KAROLINA_4   at exp Time   344.895 (Duration: 47.679)
+   Value Logged 1  at: 350.426; Reaction Time: 5.532
+
+   Beginning Part: JANEK_4      at exp Time   350.439
+Actual playback duration: 48.284 sec
+   Part ended:     JANEK_4      at exp Time   398.725 (Duration: 48.284)
+   Value Logged 3  at: 402.772; Reaction Time: 4.047
+
+   Beginning Part: KAROLINA_5   at exp Time   402.786
+Actual playback duration: 49.117 sec
+   Part ended:     KAROLINA_5   at exp Time   451.905 (Duration: 49.117)
+   Value Logged 2  at: 456.155; Reaction Time: 4.250
+
+   Beginning Part: JANEK_5      at exp Time   456.167
+Actual playback duration: 47.817 sec
+   Part ended:     JANEK_5      at exp Time   503.985 (Duration: 47.817)
+   Value Logged 1  at: 508.730; Reaction Time: 4.745
+
+   Beginning Part: KAROLINA_6   at exp Time   508.743
+Actual playback duration: 44.040 sec
+   Part ended:     KAROLINA_6   at exp Time   552.785 (Duration: 44.040)
+   Value Logged 1  at: 557.780; Reaction Time: 4.995
+
+   Beginning Part: JANEK_6      at exp Time   557.793
+Actual playback duration: 47.300 sec
+   Part ended:     JANEK_6      at exp Time   605.095 (Duration: 47.300)
+   Value Logged 2  at: 610.178; Reaction Time: 5.083
+
+   Beginning Part: KAROLINA_7   at exp Time   610.191
+Actual playback duration: 47.162 sec
+   Part ended:     KAROLINA_7   at exp Time   657.355 (Duration: 47.162)
+   Value Logged 3  at: 662.379; Reaction Time: 5.025
+
+   Beginning Part: JANEK_7      at exp Time   662.392
+Actual playback duration: 44.291 sec
+   Part ended:     JANEK_7      at exp Time   706.685 (Duration: 44.291)
+   Value Logged 2  at: 711.724; Reaction Time: 5.039
+
+   Beginning Part: KAROLINA_8   at exp Time   711.736
+Actual playback duration: 42.437 sec
+   Part ended:     KAROLINA_8   at exp Time   754.175 (Duration: 42.437)
+   Value Logged 3  at: 760.099; Reaction Time: 5.924
+
+   Beginning Part: JANEK_8      at exp Time   760.111
+Actual playback duration: 46.682 sec
+   Part ended:     JANEK_8      at exp Time   806.795 (Duration: 46.682)
+   Value Logged 2  at: 810.883; Reaction Time: 4.088
+
+   Beginning Part: KAROLINA_9   at exp Time   810.895
+Actual playback duration: 40.998 sec
+   Part ended:     KAROLINA_9   at exp Time   851.895 (Duration: 40.998)
+   Value Logged 3  at: 856.043; Reaction Time: 4.149
+
+   Beginning Part: JANEK_9      at exp Time   856.057
+Actual playback duration: 44.236 sec
+   Part ended:     JANEK_9      at exp Time   900.295 (Duration: 44.236)
+   Value Logged 2  at: 905.540; Reaction Time: 5.245
+
+   Beginning Part: KAROLINA_10  at exp Time   905.553
+Actual playback duration: 44.620 sec
+   Part ended:     KAROLINA_10  at exp Time   950.175 (Duration: 44.620)
+   Value Logged 4  at: 954.715; Reaction Time: 4.540
+
+   Beginning Part: JANEK_10     at exp Time   954.728
+Actual playback duration: 49.485 sec
+   Part ended:     JANEK_10     at exp Time  1004.213 (Duration: 49.485)
+   Value Logged 1  at: 1008.444; Reaction Time: 4.231
+
+Story Ends.
+
+Answer Timing Log:
+       Event    StoryTime        RT  partDuration
+0      BEGIN     0.012759  0.000000      0.000000
+1      PROBE    41.184243  0.000000     41.169951
+2   KEYPRESS    45.451474  4.267233     41.169951
+3      BEGIN    45.463960  0.000000      0.000000
+4      PROBE    87.914017  0.000000     42.448853
+5   KEYPRESS    93.154230  5.240215     42.448853
+6      BEGIN    93.167168  0.000000      0.000000
+7      PROBE   140.624041  0.000000     47.455717
+8   KEYPRESS   145.499984  4.875944     47.455717
+9      BEGIN   145.514132  0.000000      0.000000
+10     PROBE   192.723201  0.000000     47.208185
+11  KEYPRESS   197.787389  5.064189     47.208185
+12     BEGIN   197.802076  0.000000      0.000000
+13     PROBE   242.834343  0.000000     45.030567
+14  KEYPRESS   248.642996  5.808655     45.030567
+15     BEGIN   248.656784  0.000000      0.000000
+16     PROBE   292.513653  0.000000     43.855576
+17  KEYPRESS   297.202924  4.689272     43.855576
+18     BEGIN   297.214832  0.000000      0.000000
+19     PROBE   344.894772  0.000000     47.678557
+20  KEYPRESS   350.426275  5.531504     47.678557
+21     BEGIN   350.438814  0.000000      0.000000
+22     PROBE   398.725344  0.000000     48.284115
+23  KEYPRESS   402.772328  4.046986     48.284115
+24     BEGIN   402.785860  0.000000      0.000000
+25     PROBE   451.905107  0.000000     49.116697
+26  KEYPRESS   456.154697  4.249591     49.116697
+27     BEGIN   456.166592  0.000000      0.000000
+28     PROBE   503.984844  0.000000     47.816626
+29  KEYPRESS   508.729940  4.745097     47.816626
+30     BEGIN   508.742539  0.000000      0.000000
+31     PROBE   552.784669  0.000000     44.039944
+32  KEYPRESS   557.779814  4.995146     44.039944
+33     BEGIN   557.793108  0.000000      0.000000
+34     PROBE   605.095250  0.000000     47.300230
+35  KEYPRESS   610.178182  5.082934     47.300230
+36     BEGIN   610.190914  0.000000      0.000000
+37     PROBE   657.354737  0.000000     47.162071
+38  KEYPRESS   662.379397  5.024661     47.162071
+39     BEGIN   662.392357  0.000000      0.000000
+40     PROBE   706.684747  0.000000     44.291187
+41  KEYPRESS   711.724202  5.039457     44.291187
+42     BEGIN   711.735970  0.000000      0.000000
+43     PROBE   754.174859  0.000000     42.437387
+44  KEYPRESS   760.099097  5.924239     42.437387
+45     BEGIN   760.110986  0.000000      0.000000
+46     PROBE   806.795399  0.000000     46.682108
+47  KEYPRESS   810.882904  4.087506     46.682108
+48     BEGIN   810.895269  0.000000      0.000000
+49     PROBE   851.894793  0.000000     40.998252
+50  KEYPRESS   856.043488  4.148697     40.998252
+51     BEGIN   856.056513  0.000000      0.000000
+52     PROBE   900.295187  0.000000     44.236269
+53  KEYPRESS   905.540012  5.244826     44.236269
+54     BEGIN   905.552953  0.000000      0.000000
+55     PROBE   950.175115  0.000000     44.619911
+56  KEYPRESS   954.714633  4.539520     44.619911
+57     BEGIN   954.728239  0.000000      0.000000
+58     PROBE  1004.213457  0.000000     49.484611
+59  KEYPRESS  1008.444360  4.230905     49.484611
+Check Timing:
+Error Below 5 ms: for PROBE in 1 and BEGIN in 0 (0.0015)
+Error Below 5 ms: for KEYPRESS in 2 and PROBE in 1 (-0.0000)
+Error Below 5 ms: for PROBE in 4 and BEGIN in 3 (0.0012)
+Error Below 5 ms: for KEYPRESS in 5 and PROBE in 4 (-0.0000)
+Error Below 5 ms: for PROBE in 7 and BEGIN in 6 (0.0012)
+Error Below 5 ms: for KEYPRESS in 8 and PROBE in 7 (-0.0000)
+Error Below 5 ms: for PROBE in 10 and BEGIN in 9 (0.0009)
+Error Below 5 ms: for KEYPRESS in 11 and PROBE in 10 (-0.0000)
+Error Below 5 ms: for PROBE in 13 and BEGIN in 12 (0.0017)
+Error Below 5 ms: for KEYPRESS in 14 and PROBE in 13 (-0.0000)
+Error Below 5 ms: for PROBE in 16 and BEGIN in 15 (0.0013)
+Error Below 5 ms: for KEYPRESS in 17 and PROBE in 16 (-0.0000)
+Error Below 5 ms: for PROBE in 19 and BEGIN in 18 (0.0014)
+Error Below 5 ms: for KEYPRESS in 20 and PROBE in 19 (-0.0000)
+Error Below 5 ms: for PROBE in 22 and BEGIN in 21 (0.0024)
+Error Below 5 ms: for KEYPRESS in 23 and PROBE in 22 (-0.0000)
+Error Below 5 ms: for PROBE in 25 and BEGIN in 24 (0.0025)
+Error Below 5 ms: for KEYPRESS in 26 and PROBE in 25 (-0.0000)
+Error Below 5 ms: for PROBE in 28 and BEGIN in 27 (0.0016)
+Error Below 5 ms: for KEYPRESS in 29 and PROBE in 28 (-0.0000)
+Error Below 5 ms: for PROBE in 31 and BEGIN in 30 (0.0022)
+Error Below 5 ms: for KEYPRESS in 32 and PROBE in 31 (-0.0000)
+Error Below 5 ms: for PROBE in 34 and BEGIN in 33 (0.0019)
+Error Below 5 ms: for KEYPRESS in 35 and PROBE in 34 (-0.0000)
+Error Below 5 ms: for PROBE in 37 and BEGIN in 36 (0.0018)
+Error Below 5 ms: for KEYPRESS in 38 and PROBE in 37 (-0.0000)
+Error Below 5 ms: for PROBE in 40 and BEGIN in 39 (0.0012)
+Error Below 5 ms: for KEYPRESS in 41 and PROBE in 40 (-0.0000)
+Error Below 5 ms: for PROBE in 43 and BEGIN in 42 (0.0015)
+Error Below 5 ms: for KEYPRESS in 44 and PROBE in 43 (-0.0000)
+Error Below 5 ms: for PROBE in 46 and BEGIN in 45 (0.0023)
+Error Below 5 ms: for KEYPRESS in 47 and PROBE in 46 (-0.0000)
+Error Below 5 ms: for PROBE in 49 and BEGIN in 48 (0.0013)
+Error Below 5 ms: for KEYPRESS in 50 and PROBE in 49 (-0.0000)
+Error Below 5 ms: for PROBE in 52 and BEGIN in 51 (0.0024)
+Error Below 5 ms: for KEYPRESS in 53 and PROBE in 52 (-0.0000)
+Error Below 5 ms: for PROBE in 55 and BEGIN in 54 (0.0023)
+Error Below 5 ms: for KEYPRESS in 56 and PROBE in 55 (-0.0000)
+Error Below 5 ms: for PROBE in 58 and BEGIN in 57 (0.0006)
+Error Below 5 ms: for KEYPRESS in 59 and PROBE in 58 (-0.0000)
+Difference Between Summed StoryTimes and Summed Event Clock: 0.2910
+
+Recall of Audio  1 (1745924632.612 *** 
+
+Recording Started: (Duration: 2492.03493142128)
+Recording saved as: .\Experiment\data\ADga2904\Recalls\story1.wav
+Recording Ended:   (Duration: 3362.187267303467)
+
+END OF A PROCEDURE (1745925594.095) *** 
+
+Eye Tracking data saved to: C:\Users\Lab\Documents\startegicMW_lite2\Experiment\data\ADga2904\ADga2904.edf
+Error converting EDF: 
+Extracted Event Data: 
+         Event          Type Status      Time  Duration
+0       LISTEN       STORY_1    BEG  1975326        0.0
+1         PART  KAROLINA_1      BEG  1975339       13.0
+2         PART  KAROLINA_1      END  2017911    42572.0
+3     KEYPRESS             0      0  2027531     9620.0
+4         PART  JANEK_1         BEG  2027546       15.0
+5         PART  JANEK_1         END  2075839    48293.0
+6     KEYPRESS             0      0  2083386     7547.0
+7         PART  KAROLINA_2      BEG  2083399       13.0
+8         PART  KAROLINA_2      END  2124038    40639.0
+9     KEYPRESS             0      0  2130602     6564.0
+10        PART  JANEK_2         BEG  2130617       15.0
+11        PART  JANEK_2         END  2173139    42522.0
+12    KEYPRESS             1      0  2178561     5422.0
+13        PART  KAROLINA_3      BEG  2178574       13.0
+14        PART  KAROLINA_3      END  2222107    43533.0
+15    KEYPRESS             1      0  2227031     4924.0
+16        PART  JANEK_3         BEG  2227045       14.0
+17        PART  JANEK_3         END  2271237    44192.0
+18    KEYPRESS             0      0  2276278     5041.0
+19        PART  KAROLINA_4      BEG  2276293       15.0
+20        PART  KAROLINA_4      END  2319565    43272.0
+21    KEYPRESS             0      0  2324894     5329.0
+22        PART  JANEK_4         BEG  2324907       13.0
+23        PART  JANEK_4         END  2368315    43408.0
+24    KEYPRESS             0      0  2373359     5044.0
+25        PART  KAROLINA_5      BEG  2373373       14.0
+26        PART  KAROLINA_5      END  2419565    46192.0
+27    KEYPRESS             1      0  2424254     4689.0
+28        PART  JANEK_5         BEG  2424268       14.0
+29        PART  JANEK_5         END  2474263    49995.0
+30    KEYPRESS             1      0  2481988     7725.0
+31        PART  KAROLINA_6      BEG  2482003       15.0
+32        PART  KAROLINA_6      END  2524484    42481.0
+33    KEYPRESS             1      0  2529636     5152.0
+34        PART  JANEK_6         BEG  2529648       12.0
+35        PART  JANEK_6         END  2577002    47354.0
+36    KEYPRESS             1      0  2582458     5456.0
+37        PART  KAROLINA_7      BEG  2582472       14.0
+38        PART  KAROLINA_7      END  2630581    48109.0
+39    KEYPRESS             1      0  2636849     6268.0
+40        PART  JANEK_7         BEG  2636861       12.0
+41        PART  JANEK_7         END  2682460    45599.0
+42    KEYPRESS             1      0  2687913     5453.0
+43        PART  KAROLINA_8      BEG  2687927       14.0
+44        PART  KAROLINA_8      END  2732080    44153.0
+45    KEYPRESS             2      0  2737505     5425.0
+46        PART  JANEK_8         BEG  2737519       14.0
+47        PART  JANEK_8         END  2777549    40030.0
+48    KEYPRESS             1      0  2783152     5603.0
+49        PART  KAROLINA_9      BEG  2783167       15.0
+50        PART  KAROLINA_9      END  2829679    46512.0
+51    KEYPRESS             1      0  2835103     5424.0
+52        PART  JANEK_9         BEG  2835115       12.0
+53        PART  JANEK_9         END  2879587    44472.0
+54    KEYPRESS             1      0  2883911     4324.0
+55        PART  KAROLINA_10     BEG  2883924       13.0
+56        PART  KAROLINA_10     END  2931035    47111.0
+57    KEYPRESS             2      0  2936766     5731.0
+58        PART  JANEK_10        BEG  2936779       13.0
+59        PART  JANEK_10        END  2981945    45166.0
+60    KEYPRESS             2      0  2985804     3859.0
+61      LISTEN       STORY_1    END  2985805        1.0
+62      LISTEN       STORY_1    BEG  3061720    75915.0
+63        PART  KAROLINA_1      BEG  3061733       13.0
+64        PART  KAROLINA_1      END  3102904    41171.0
+65    KEYPRESS             2      0  3107171     4267.0
+66        PART  JANEK_1         BEG  3107183       12.0
+67        PART  JANEK_1         END  3149633    42450.0
+68    KEYPRESS             2      0  3154873     5240.0
+69        PART  KAROLINA_2      BEG  3154886       13.0
+70        PART  KAROLINA_2      END  3202342    47456.0
+71    KEYPRESS             3      0  3207218     4876.0
+72        PART  JANEK_2         BEG  3207232       14.0
+73        PART  JANEK_2         END  3254440    47208.0
+74    KEYPRESS             3      0  3259504     5064.0
+75        PART  KAROLINA_3      BEG  3259519       15.0
+76        PART  KAROLINA_3      END  3304550    45031.0
+77    KEYPRESS             2      0  3310359     5809.0
+78        PART  JANEK_3         BEG  3310373       14.0
+79        PART  JANEK_3         END  3354229    43856.0
+80    KEYPRESS             1      0  3358918     4689.0
+81        PART  KAROLINA_4      BEG  3358930       12.0
+82        PART  KAROLINA_4      END  3406609    47679.0
+83    KEYPRESS             1      0  3412141     5532.0
+84        PART  JANEK_4         BEG  3412153       12.0
+85        PART  JANEK_4         END  3460439    48286.0
+86    KEYPRESS             3      0  3464486     4047.0
+87        PART  KAROLINA_5      BEG  3464499       13.0
+88        PART  KAROLINA_5      END  3513618    49119.0
+89    KEYPRESS             2      0  3517867     4249.0
+90        PART  JANEK_5         BEG  3517879       12.0
+91        PART  JANEK_5         END  3565697    47818.0
+92    KEYPRESS             1      0  3570442     4745.0
+93        PART  KAROLINA_6      BEG  3570455       13.0
+94        PART  KAROLINA_6      END  3614496    44041.0
+95    KEYPRESS             1      0  3619491     4995.0
+96        PART  JANEK_6         BEG  3619504       13.0
+97        PART  JANEK_6         END  3666805    47301.0
+98    KEYPRESS             2      0  3671888     5083.0
+99        PART  KAROLINA_7      BEG  3671901       13.0
+100       PART  KAROLINA_7      END  3719064    47163.0
+101   KEYPRESS             3      0  3724089     5025.0
+102       PART  JANEK_7         BEG  3724102       13.0
+103       PART  JANEK_7         END  3768393    44291.0
+104   KEYPRESS             2      0  3773433     5040.0
+105       PART  KAROLINA_8      BEG  3773445       12.0
+106       PART  KAROLINA_8      END  3815883    42438.0
+107   KEYPRESS             3      0  3821807     5924.0
+108       PART  JANEK_8         BEG  3821819       12.0
+109       PART  JANEK_8         END  3868502    46683.0
+110   KEYPRESS             2      0  3872590     4088.0
+111       PART  KAROLINA_9      BEG  3872602       12.0
+112       PART  KAROLINA_9      END  3913601    40999.0
+113   KEYPRESS             3      0  3917750     4149.0
+114       PART  JANEK_9         BEG  3917764       14.0
+115       PART  JANEK_9         END  3962001    44237.0
+116   KEYPRESS             2      0  3967245     5244.0
+117       PART  KAROLINA_10     BEG  3967258       13.0
+118       PART  KAROLINA_10     END  4011880    44622.0
+119   KEYPRESS             4      0  4016419     4539.0
+120       PART  JANEK_10        BEG  4016433       14.0
+121       PART  JANEK_10        END  4065917    49484.0
+122   KEYPRESS             1      0  4070148     4231.0
+123     LISTEN       STORY_1    END  4070148        0.0
+124     RECALL       STORY_1    BEG  4070169       21.0
+125     RECALL       STORY_1    END  5031635   961466.0
+126  PROCEDURE             0    END  5031637        2.0
+ 
+        Event    StoryTime     RT  partDuration
+0       BEGIN     0.013000  0.000         0.000
+1       PROBE    42.585000  0.000        42.572
+2    KEYPRESS    52.205000  9.620        42.572
+3       BEGIN    52.207013  0.000         0.000
+4       PROBE   100.513000  0.000        48.293
+5    KEYPRESS   108.060000  7.547        48.293
+6       BEGIN   108.060013  0.000         0.000
+7       PROBE   148.712000  0.000        40.639
+8    KEYPRESS   155.276000  6.564        40.639
+9       BEGIN   155.278013  0.000         0.000
+10      PROBE   197.813000  0.000        42.522
+11   KEYPRESS   203.235000  5.422        42.522
+12      BEGIN   203.235013  0.000         0.000
+13      PROBE   246.781000  0.000        43.533
+14   KEYPRESS   251.705000  4.924        43.533
+15      BEGIN   251.706013  0.000         0.000
+16      PROBE   295.911000  0.000        44.192
+17   KEYPRESS   300.952000  5.041        44.192
+18      BEGIN   300.954013  0.000         0.000
+19      PROBE   344.239000  0.000        43.272
+20   KEYPRESS   349.568000  5.329        43.272
+21      BEGIN   349.568013  0.000         0.000
+22      PROBE   392.989000  0.000        43.408
+23   KEYPRESS   398.033000  5.044        43.408
+24      BEGIN   398.034013  0.000         0.000
+25      PROBE   444.239000  0.000        46.192
+26   KEYPRESS   448.928000  4.689        46.192
+27      BEGIN   448.929013  0.000         0.000
+28      PROBE   498.937000  0.000        49.995
+29   KEYPRESS   506.662000  7.725        49.995
+30      BEGIN   506.664013  0.000         0.000
+31      PROBE   549.158000  0.000        42.481
+32   KEYPRESS   554.310000  5.152        42.481
+33      BEGIN   554.309013  0.000         0.000
+34      PROBE   601.676000  0.000        47.354
+35   KEYPRESS   607.132000  5.456        47.354
+36      BEGIN   607.133013  0.000         0.000
+37      PROBE   655.255000  0.000        48.109
+38   KEYPRESS   661.523000  6.268        48.109
+39      BEGIN   661.522013  0.000         0.000
+40      PROBE   707.134000  0.000        45.599
+41   KEYPRESS   712.587000  5.453        45.599
+42      BEGIN   712.588013  0.000         0.000
+43      PROBE   756.754000  0.000        44.153
+44   KEYPRESS   762.179000  5.425        44.153
+45      BEGIN   762.180013  0.000         0.000
+46      PROBE   802.223000  0.000        40.030
+47   KEYPRESS   807.826000  5.603        40.030
+48      BEGIN   807.828013  0.000         0.000
+49      PROBE   854.353000  0.000        46.512
+50   KEYPRESS   859.777000  5.424        46.512
+51      BEGIN   859.776013  0.000         0.000
+52      PROBE   904.261000  0.000        44.472
+53   KEYPRESS   908.585000  4.324        44.472
+54      BEGIN   908.585013  0.000         0.000
+55      PROBE   955.709000  0.000        47.111
+56   KEYPRESS   961.440000  5.731        47.111
+57      BEGIN   961.440013  0.000         0.000
+58      PROBE  1006.619000  0.000        45.166
+59   KEYPRESS  1010.478000  3.859        45.166
+60      BEGIN  1086.394013  0.000         0.000
+61      PROBE  1127.578000  0.000        41.171
+62   KEYPRESS  1131.845000  4.267        41.171
+63      BEGIN  1131.844013  0.000         0.000
+64      PROBE  1174.307000  0.000        42.450
+65   KEYPRESS  1179.547000  5.240        42.450
+66      BEGIN  1179.547013  0.000         0.000
+67      PROBE  1227.016000  0.000        47.456
+68   KEYPRESS  1231.892000  4.876        47.456
+69      BEGIN  1231.893013  0.000         0.000
+70      PROBE  1279.114000  0.000        47.208
+71   KEYPRESS  1284.178000  5.064        47.208
+72      BEGIN  1284.180013  0.000         0.000
+73      PROBE  1329.224000  0.000        45.031
+74   KEYPRESS  1335.033000  5.809        45.031
+75      BEGIN  1335.034013  0.000         0.000
+76      PROBE  1378.903000  0.000        43.856
+77   KEYPRESS  1383.592000  4.689        43.856
+78      BEGIN  1383.591013  0.000         0.000
+79      PROBE  1431.283000  0.000        47.679
+80   KEYPRESS  1436.815000  5.532        47.679
+81      BEGIN  1436.814013  0.000         0.000
+82      PROBE  1485.113000  0.000        48.286
+83   KEYPRESS  1489.160000  4.047        48.286
+84      BEGIN  1489.160013  0.000         0.000
+85      PROBE  1538.292000  0.000        49.119
+86   KEYPRESS  1542.541000  4.249        49.119
+87      BEGIN  1542.540013  0.000         0.000
+88      PROBE  1590.371000  0.000        47.818
+89   KEYPRESS  1595.116000  4.745        47.818
+90      BEGIN  1595.116013  0.000         0.000
+91      PROBE  1639.170000  0.000        44.041
+92   KEYPRESS  1644.165000  4.995        44.041
+93      BEGIN  1644.165013  0.000         0.000
+94      PROBE  1691.479000  0.000        47.301
+95   KEYPRESS  1696.562000  5.083        47.301
+96      BEGIN  1696.562013  0.000         0.000
+97      PROBE  1743.738000  0.000        47.163
+98   KEYPRESS  1748.763000  5.025        47.163
+99      BEGIN  1748.763013  0.000         0.000
+100     PROBE  1793.067000  0.000        44.291
+101  KEYPRESS  1798.107000  5.040        44.291
+102     BEGIN  1798.106013  0.000         0.000
+103     PROBE  1840.557000  0.000        42.438
+104  KEYPRESS  1846.481000  5.924        42.438
+105     BEGIN  1846.480013  0.000         0.000
+106     PROBE  1893.176000  0.000        46.683
+107  KEYPRESS  1897.264000  4.088        46.683
+108     BEGIN  1897.263013  0.000         0.000
+109     PROBE  1938.275000  0.000        40.999
+110  KEYPRESS  1942.424000  4.149        40.999
+111     BEGIN  1942.425013  0.000         0.000
+112     PROBE  1986.675000  0.000        44.237
+113  KEYPRESS  1991.919000  5.244        44.237
+114     BEGIN  1991.919013  0.000         0.000
+115     PROBE  2036.554000  0.000        44.622
+116  KEYPRESS  2041.093000  4.539        44.622
+117     BEGIN  2041.094013  0.000         0.000
+118     PROBE  2090.591000  0.000        49.484
+119  KEYPRESS  2094.822000  4.231        49.484
