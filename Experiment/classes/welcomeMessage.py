@@ -3,6 +3,9 @@ from pygame.locals import *
 
 
 class welcomeMessage:
+    """
+    Class that governs the displaying of inter-trial messages to participants (those that are not contingent on Trials )
+    """
 
     def __init__(self, textList,font,screen,currentStage,nextStage, msgCount = 0, marginAdjust = 0,):
         self.textList  = textList
@@ -82,6 +85,7 @@ def generateMessages(firstEntityName):
                         "Możesz w każdej chwili wycofać się z badania bez podawania przyczyny.",
                         " ",
                                 "#Naciśnij SPACJĘ, aby przejść dalej #"]
+    
     WelcomeMessage11 = [ "Za chwilę usłyszysz historię trwającą ok. 30 min.",
                         "W trakcie jej słuchania, prosimy o utrzymanie wzroku",
                         "na krzyżyku wyświetlonym na ekranie.",
@@ -104,7 +108,33 @@ def generateMessages(firstEntityName):
                         "% Początek skali oznacza pełną uwagę na historii%",
                         "% Koniec skali oznacza rozproszenie od słuchania historii%",
                         " ",
+                        "Nasz eksperyment ma na celu badanie uważności, nie obawiaj się więc raportować rozproszenia",
+                        "Postaraj się ocenić możliwie jak najbardziej szczerze swój stan uwagowy.",
+                        "",
                                 "#Naciśnij SPACJĘ aby przejść dalej#"] 
+    
+    WelcomeMessage2b =  ["Po udzieleniu odpowiedzi zostaniesz poproszony/a o zastanowienie się nad treścią", 
+                         "swoich myśli od momentu ostatniego przerwania historii w trakcie jej słuchania",
+                        " ",
+                        "Po naciśnięciu spacji, rozpocznie się nagrywanie. Dodatkowo, na ekranie wyświetlany",
+                         "będzie czas mówienia. Prosimy o ograniczenie się do krótkiej 25 sekundowej wypowiedzi",
+                         "W przypadku przekroczenia czasu, procedura będzie kontynowana a dotychczasowe ",
+                         "nagranie zapisane.",
+                        "",
+                         "Nagranie jest całkowicie anonimowe. W przypadku prywatnych myśli, prosimy",
+                         "o wspomnienie o nich na takim poziomie jaki nie przekracza twojego komfortu.",
+                         "",
+                         "Celem odpamiętania jest próba oszacowania myśli nie związanych z zadaniem, ",
+                         "więc nie obawiaj się ich raportowania. Staraj się odpowiadać szczerze.",
+                        "",
+                                "#Naciśnij SPACJĘ aby przejść dalej#"] 
+    
+    WelcomeMessage2c = ["Teraz przejdziemy do próbnego eksperymentu, by lepiej zaznajomić Cię z procedurą.",
+                        "Zostanie Ci przedstawiona historia neizwiązana z eksperymentem.",
+                        "",
+                        "Nałóż słuchawki i przygotuj się.",
+                        "",
+                        "Naciśnij SPACJĘ aby rozpocząć próbny eksperyment"]
 
     WelcomeMessage3 =  [f"Za chwilę przejdziesz do kalibracji okulografu.",
                         "Kieruj wzrok w stronę obiektów wyświetlanych na ekranie.",
@@ -112,7 +142,7 @@ def generateMessages(firstEntityName):
                         "#Naciśnij SPACJĘ aby rozpocząć kalibrację#"]
 
 
-    WelcomeMessage21alt =  [f"Za chwilę usłyszysz historię. Nałóż słuchawki i przygotuj się.",
+    WelcomeMessage21alt =  [f"Za chwilę usłyszysz właściwą historię. Nałóż słuchawki i przygotuj się.",
                         "Postaraj się skupić i zapamiętać wszystkie fragmenty dotyczące"
                         " bohatera imieniem:",
                         "",
@@ -162,4 +192,4 @@ def generateMessages(firstEntityName):
 
     """
     
-    return [WelcomeMessage1,WelcomeMessage11,WelcomeMessage2,WelcomeMessage3,WelcomeMessage21alt,WelcomeMessage4,exitMessage1]
+    return [WelcomeMessage1,WelcomeMessage11,WelcomeMessage2,WelcomeMessage2b,WelcomeMessage2c,WelcomeMessage3,WelcomeMessage21alt,WelcomeMessage4,exitMessage1]

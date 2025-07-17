@@ -511,7 +511,7 @@ class audioTrial:
                     self.audio_playing = True
                     self.attention_value = None
 
-                    self.state = "play"
+                    self.state = "audio"
                     pygame.mouse.set_visible(False)
 
 
@@ -550,6 +550,15 @@ storyTimeDict1c = {
     'partTimes': [35.257, 61.296, 59.525, 56.655, 59.92, 65.147, 57.574, 61.99, 65.329, 60.965, 
                   60.454, 57.947, 64.176, 60.955, 60.241, 59.472, 57.115, 59.387, 57.306, 58.693, 62.267, 58.063, 61.295, 55.909]
 }
+
+
+
+### OUR NEWEST EXPERIMENT:
+storyTimeDictTest = {
+    'partNames': [ 'KASIA_1', 'JANEK_1', 'KASIA_2',],
+    'partTimes': [ 61.296, 59.525, 56.655 ]
+}
+
 
 storyTimeDict3 = {'partNames': [
     'KAROLINA_1', 'JANEK_1',  'KAROLINA_2', 'JANEK_2',  'KAROLINA_3', 'JANEK_3',  'KAROLINA_4', 'JANEK_4',  'KAROLINA_5', 'JANEK_5',  'KAROLINA_6','JANEK_6',  'KAROLINA_7', 'JANEK_7',  'KAROLINA_8', 'JANEK_8',  'KAROLINA_9', 'JANEK_9',

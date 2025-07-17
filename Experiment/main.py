@@ -4,11 +4,11 @@ import pyaudio, wave
 import pylink
 import time
 
-from tests.testFunctions import testTiming,compareEyeTrackingWithBeh,prepareEyeTrackingTiming
+from tests.testFunctions import testTiming,compareEyeTrackingWithBeh,prepareEyeTrackingTiming 
 from classes.fileIDInput import createOutputs
 from classes.CalibrationGraphivs import CalibrationGraphics
 from classes.Audio import audioTrial
-from classes.Audio import storyTimeDict3,storyTimeDict3a,storyTimeDict3b
+from classes.Audio import storyTimeDict3,storyTimeDict3a,storyTimeDict3b,storyTimeDictTest
 from classes.recallTrial import recallTrial
 from classes.welcomeMessage import welcomeMessage
 from classes.welcomeMessage import generateMessages
@@ -19,7 +19,7 @@ import pickle
 import sys,os,subprocess
 import datetime
 
-
+ 
 #### ----- Setups ------ ####
 
 #Getting User Info:
@@ -50,8 +50,9 @@ pygame.display.set_caption("Strategic MW Experiment")
 
 # story Global parameters Setup:
 storyPart = "welcome1"  # Controlling the experiment flow
-dummyMode = True
-TestMode = True
+dummyMode = False
+TestMode = False
+
 SCREEN_WIDTH_CM = 53 #Width
 SCREEN_HEIGHT_CM = 30 # Height 
 VIEWING_DISTANCE_CM = 93 # 
@@ -66,18 +67,25 @@ outputControll.write(f"      Test Mode:             {TestMode}")
 ### Make Experiment Objects
 
 # Experiment  Message Initialization
-[WelcomeMessage1, WelcomeMessage11, WelcomeMessage2, WelcomeMessage3,WelcomeMessage21alt,WelcomeMessage4,exitMessage1] = generateMessages(entityName)
+[WelcomeMessage1, WelcomeMessage11, WelcomeMessage2,WelcomeMessage2b,WelcomeMessage2c, WelcomeMessage3,WelcomeMessage21alt,WelcomeMessage4,exitMessage1] = generateMessages(entityName)
                                             # Message dictionary                               Font, Screen, Next exp Part, prev exp Part
-welcome = welcomeMessage([WelcomeMessage1,WelcomeMessage11, WelcomeMessage2,  WelcomeMessage3],font,screen,"welcome1","calibration1")
+welcome = welcomeMessage([WelcomeMessage1,WelcomeMessage11, WelcomeMessage2,WelcomeMessage2b,  WelcomeMessage2c],font,screen,"welcome1","practicerun")
+welcome1 = welcomeMessage([WelcomeMessage3],font,screen,"welcome_cal","calibration1")
+
 welcome2 = welcomeMessage([WelcomeMessage21alt],font,screen,"welcome2","story1")
 calib2 = welcomeMessage([WelcomeMessage4],font,screen,"calib_text","calibration2")
 exitMessage = welcomeMessage([exitMessage1],font,screen,"exit","")
 
 # Audio File initialization:
 if TestMode:
+    Story_practice = audioTrial(r".\TextToSpeech\Story1_AIsegments1_test",storyTimeDictTest,font,screen,"practicerun","welcome_cal",outputControll,verbose=2) # PracticeRun
+
     Story1 = audioTrial(r".\TextToSpeech\Story3_AIpartTest1",storyTimeDict3a,font,screen,"story1","calib_text",outputControll,verbose=2)
     Story2 = audioTrial(r".\TextToSpeech\Story3_AIpartTest2",storyTimeDict3b,font,screen,"story2","recall1",outputControll,verbose=2)
 else:
+    Story_practice = audioTrial(r".\TextToSpeech\Story3_AIpartTest1",storyTimeDictTest,font,screen,"story1","welcome_cal",outputControll,verbose=2) #PracticeRun
+
+
     Story1 = audioTrial(r".\TextToSpeech\Story3_AIpart1",storyTimeDict3a,font,screen,"story1","calib_text",outputControll,verbose=2)
     Story2 = audioTrial(r".\TextToSpeech\Story3_AIpart2",storyTimeDict3b,font,screen,"story2","recall1",outputControll,verbose=2)
 # Audio Recording Object Initialization:
@@ -115,16 +123,47 @@ running = True
 begBlockFlag = True
 while running: 
     screen.fill((127, 127, 127))  # Clear screen before each frame
-    
+    ### Initial Instructions ###
     if storyPart == "welcome1":
        if begBlockFlag:
-           begBlockFlag = False
+            print(storyPart)
+            begBlockFlag = False
 
        storyPart = welcome.run()
 
        if storyPart != "welcome1":
             begBlockFlag = True
+
+    ### practice Run of Experiments (3 trials) ###
+    elif storyPart == "practicerun":
+
+        if begBlockFlag:
+            print(storyPart)
+            outputControll.write(f"\nPractice Run Beginning ({time.time():.3f})\n")
+
+            begBlockFlag = False
+        storyPart = 'welcome_cal'
+        #storyPart = Story_practice.run()
+    
+        if storyPart != "practicerun":
+            outputControll.write(f"\nPractice Run Ending ({time.time():.3f})\n")
+
+            begBlockFlag = True
+    ### First Calibration Welcome and Execution:
+    elif storyPart == "welcome_cal":
+
+        if begBlockFlag:
+            print(storyPart)
+
+            begBlockFlag = False
+
+        storyPart = welcome1.run()
+        if storyPart != "welcome_cal":  
+            begBlockFlag = True
+
     elif storyPart == "calibration1":
+        print(storyPart)
+
         tempInitialTime = time.time();
         outputControll.write(f"\nCalibration of EyeTracker ({time.time():.3f})\n")
 
@@ -150,20 +189,24 @@ while running:
 
         screen.fill((255/2, 255/2, 255/2))  # Reset screen
         pygame.display.flip()  # Ensure Pygame updates after calibration
-           
+
+    ### Last message before Beginning      
     elif storyPart == "welcome2":
        
         if begBlockFlag:
-           begBlockFlag = False
+            print(storyPart)
+            begBlockFlag = False
 
         storyPart = welcome2.run()
 
         if storyPart != "welcome2":
            begBlockFlag = True
         
+
+    ### First Part of Story Trials (20 trials before Calibration!)
     elif storyPart == "story1":
-        #insert my AudioClass.run() Here!!!
         if begBlockFlag:
+            print(storyPart)
             el_tracker.startRecording(1, 1, 1, 1)
             pylink.pumpDelay(100)  # Small delay to ensure recording starts
 
@@ -179,6 +222,7 @@ while running:
             begBlockFlag = True
             testTiming(Story1.timingLog,outputControll)
 
+    ### Second Calibration ()
     elif storyPart == "calib_text":
         pygame.mouse.set_visible(False)
 
@@ -190,6 +234,7 @@ while running:
         if storyPart != "calibration2":
            begBlockFlag = True
         
+
     elif storyPart == "calibration2":
         tempInitialTime = time.time();
         outputControll.write(f"\nCalibration of EyeTracker ({time.time():.3f})\n")
@@ -213,6 +258,7 @@ while running:
         screen.fill((255/2, 255/2, 255/2))  # Reset screen
         pygame.display.flip()  # Ensure Pygame updates after calibration
 
+    ### Second part of experiment (20 trials after calibration)
     elif storyPart == "story2":
         #insert my AudioClass.run() Here!!!
         if begBlockFlag:
@@ -231,6 +277,7 @@ while running:
             begBlockFlag = True
             testTiming(Story2.timingLog,outputControll)
 
+    ### General Story Recall
     elif storyPart == "recall1":
         pygame.mouse.set_visible(False)
 
@@ -247,6 +294,8 @@ while running:
         if storyPart != "recall1":
             outputControll.writeToEyeLink("\tRECALL\tSTORY_1\tEND")
             begBlockFlag = True
+
+    ### End of Experiment message and writing
     elif storyPart == "exit":
         if begBlockFlag:
             outputControll.write(f"\nEND OF A PROCEDURE ({time.time():.3f}) *** \n")
