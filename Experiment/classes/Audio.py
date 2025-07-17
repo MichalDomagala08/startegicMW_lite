@@ -14,8 +14,13 @@ import time
 from classes.recallTrial import recallTrial  # your existing class
 
 class audioTrial:
+    """
+        Class that manages audio Playing and trials
+        Consists of several methd
+    
+    """
 
-    def __init__(self, audioPath,storyTimeDict, font, screen,currentStage,nextStage, output_control,entity=0,chunk_size=256,verbose=0):
+    def __init__(self, audioPath,storyTimeDict, font, screen,currentStage,nextStage, output_control,entity=0,chunk_size=256,verbose=0,practice=False):
 
         ### Screen
         self.font = font
@@ -54,10 +59,11 @@ class audioTrial:
         self.buttonPressed = False  # Initialize button pressed state
 
         ### Staging and Experiment Mode:
-        self.currentStage = currentStage;
-        self.nextStage = nextStage #What Kind of stage do you expect next  
+        self.practice = practice           # Whether we treat it as a practice run (No Logging of Information)
+        self.currentStage = currentStage;  # Current Name of Stage
+        self.nextStage = nextStage         # What Kind of stage do you expect next  
         self.storyParts = storyTimeDict["partNames"]
-        self.entities = [storyTimeDict["partTimes"][0], storyTimeDict["partTimes"][0]]
+        self.entities = [storyTimeDict["partTimes"][0], storyTimeDict["partTimes"][0]] # Currently Tracked Entity
         self.state = "audio"  # Initial state
 
     def load_audio_files(self):
@@ -81,30 +87,33 @@ class audioTrial:
 
             self.output_control.write(f"WARNING SOMETHING ELSE WAS PRESSED {key}")
         if self.verbose:"""
-            
-        self.output_control.write(f"   Value Logged {key}  at: {self.pausedTime - self.initialTime:.3f}; Reaction Time: {(self.pausedTime - self.probeOnset):.3f}")
+        if self.practice == False:
+            self.output_control.write(f"       Value Logged {key}  at: {self.pausedTime - self.initialTime:.3f}; Reaction Time: {(self.pausedTime - self.probeOnset):.3f}")
 
-        self.output_control.writeToEyeLink(message=f"\tKEYPRESS\t{key}\t0")              # Write KeyPress to Eyelink                  
-        self.timingLog.append(["KEYPRESS",self.pausedTime  - self.initialTime ,(self.pausedTime - self.probeOnset),self.actual_duration])
-        self.responsesTiming.append((key , self.pausedTime  - self.initialTime))
+            self.output_control.writeToEyeLink(message=f"\tKEYPRESS\t{key}\t0")              # Write KeyPress to Eyelink                  
+            self.timingLog.append(["KEYPRESS",self.pausedTime  - self.initialTime ,(self.pausedTime - self.probeOnset),self.actual_duration])
+            self.responsesTiming.append((key , self.pausedTime  - self.initialTime))
             
     def log_part_beg(self):
-        self.timingLog.append(["BEGIN",(time.perf_counter() - self.initialTime),0,0])              
-        self.responsesTiming.append(("BEGIN", (time.perf_counter() - self.initialTime)))
+         if self.practice == False:
+            self.timingLog.append(["BEGIN",(time.perf_counter() - self.initialTime),0,0])              
+            self.responsesTiming.append(("BEGIN", (time.perf_counter() - self.initialTime)))
 
-        message = f"\n   Beginning Part: {self.storyParts[self.currentStoryPart]:12} at exp Time {time.perf_counter()- self.initialTime:9.3f}";
-        self.output_control.write(message)
+            message = f"\n   Beginning Part: {self.storyParts[self.currentStoryPart]:12} at exp Time {time.perf_counter()- self.initialTime:9.3f}";
+            self.output_control.write(message)
 
-        self.output_control.writeToEyeLink(message=f"\tPART\t{self.storyParts[self.currentStoryPart]:12}\tBEG")
+            self.output_control.writeToEyeLink(message=f"\tPART\t{self.storyParts[self.currentStoryPart]:12}\tBEG")
 
     def log_part_end(self):
-        self.timingLog.append(["PROBE",(time.perf_counter() - self.initialTime),0,self.actual_duration])              
-        self.responsesTiming.append(("PROBE", (time.perf_counter() - self.initialTime)))
+        if self.practice == False:
 
-        message = f"   Part ended:     {self.storyParts[self.currentStoryPart]:12} at exp Time {time.perf_counter()- self.initialTime:9.3f} (Duration: {self.actual_duration:.3f})"
-        self.output_control.write(message)
+            self.timingLog.append(["PROBE",(time.perf_counter() - self.initialTime),0,self.actual_duration])              
+            self.responsesTiming.append(("PROBE", (time.perf_counter() - self.initialTime)))
 
-        self.output_control.writeToEyeLink(message=f"\tPART\t{self.storyParts[self.currentStoryPart]:12}\tEND")
+            message = f"   Part ended:     {self.storyParts[self.currentStoryPart]:12} at exp Time {time.perf_counter()- self.initialTime:9.3f} (Duration: {self.actual_duration:.3f})"
+            self.output_control.write(message)
+
+            self.output_control.writeToEyeLink(message=f"\tPART\t{self.storyParts[self.currentStoryPart]:12}\tEND")
         # Write to Psychopy
     def display_fixation_cross(self):
         """
@@ -317,7 +326,7 @@ class audioTrial:
 
             self.audio_playing = False
             self.actual_duration = time.perf_counter() - start_time  # Calculate actual time taken
-            self.output_control.write(f"Actual playback duration: {self.actual_duration:.3f} sec")
+            #self.output_control.write(f"        Actual playback duration: {self.actual_duration:.3f} sec")
 
         # Lof that the audio is beginning:
 
@@ -372,6 +381,8 @@ class audioTrial:
                 super().display_message(lines)
                 for evt in events:
                     if evt.type == pygame.KEYDOWN and evt.key == pygame.K_SPACE:
+                        self.output_control.write(f"        PART {self.storyParts[self.currentStoryPart]:12}: Thought Recording Started: (Duration: {time.time() - self.initialTime})")
+
                         self.welcome_screen = False
                         self.start_time = time.time()
                         super().start_recording()
@@ -498,9 +509,12 @@ class audioTrial:
 
         # --- 3. RECALL (RECORDING) STATE ---
         elif self.state == "recall":
+
                 done = self.currentRecorder.thoughtContentEstimation()
                 
                 if done:
+                    self.output_control.write(f"        PART {self.storyParts[self.currentStoryPart]:12}: Thought Recording Ended:   (Duration: {time.time() - self.initialTime})")
+
                     # flash “saved” message for 1 s
                     self.currentRecorder.display_message(["Nagranie zapisane!"])
                     pygame.time.delay(1000)
@@ -520,7 +534,6 @@ class audioTrial:
         if self.currentStoryPart >= len(self.audio_files):
             self.output_control.write("\nStory Ends.")
             return self.nextStage
-
         return self.currentStage
 
 # A list of Timings of story 1: Used to Clock the Onset of Each Fragment: (in seconds)

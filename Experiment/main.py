@@ -51,7 +51,7 @@ pygame.display.set_caption("Strategic MW Experiment")
 # story Global parameters Setup:
 storyPart = "welcome1"  # Controlling the experiment flow
 dummyMode = False
-TestMode = False
+TestMode = True
 
 SCREEN_WIDTH_CM = 53 #Width
 SCREEN_HEIGHT_CM = 30 # Height 
@@ -78,12 +78,12 @@ exitMessage = welcomeMessage([exitMessage1],font,screen,"exit","")
 
 # Audio File initialization:
 if TestMode:
-    Story_practice = audioTrial(r".\TextToSpeech\Story1_AIsegments1_test",storyTimeDictTest,font,screen,"practicerun","welcome_cal",outputControll,verbose=2) # PracticeRun
+    Story_practice = audioTrial(r".\TextToSpeech\StoryTest_AI",storyTimeDictTest,font,screen,"practicerun","welcome_cal",outputControll,verbose=2,practice=True) # PracticeRun
 
     Story1 = audioTrial(r".\TextToSpeech\Story3_AIpartTest1",storyTimeDict3a,font,screen,"story1","calib_text",outputControll,verbose=2)
     Story2 = audioTrial(r".\TextToSpeech\Story3_AIpartTest2",storyTimeDict3b,font,screen,"story2","recall1",outputControll,verbose=2)
 else:
-    Story_practice = audioTrial(r".\TextToSpeech\Story3_AIpartTest1",storyTimeDictTest,font,screen,"story1","welcome_cal",outputControll,verbose=2) #PracticeRun
+    Story_practice = audioTrial(r".\TextToSpeech\StoryTest_AI",storyTimeDictTest,font,screen,"practicerun","welcome_cal",outputControll,verbose=2,practice=True) #PracticeRun
 
 
     Story1 = audioTrial(r".\TextToSpeech\Story3_AIpart1",storyTimeDict3a,font,screen,"story1","calib_text",outputControll,verbose=2)
@@ -126,7 +126,6 @@ while running:
     ### Initial Instructions ###
     if storyPart == "welcome1":
        if begBlockFlag:
-            print(storyPart)
             begBlockFlag = False
 
        storyPart = welcome.run()
@@ -138,12 +137,10 @@ while running:
     elif storyPart == "practicerun":
 
         if begBlockFlag:
-            print(storyPart)
             outputControll.write(f"\nPractice Run Beginning ({time.time():.3f})\n")
 
             begBlockFlag = False
-        storyPart = 'welcome_cal'
-        #storyPart = Story_practice.run()
+        storyPart = Story_practice.run()
     
         if storyPart != "practicerun":
             outputControll.write(f"\nPractice Run Ending ({time.time():.3f})\n")
@@ -153,7 +150,6 @@ while running:
     elif storyPart == "welcome_cal":
 
         if begBlockFlag:
-            print(storyPart)
 
             begBlockFlag = False
 
@@ -162,7 +158,6 @@ while running:
             begBlockFlag = True
 
     elif storyPart == "calibration1":
-        print(storyPart)
 
         tempInitialTime = time.time();
         outputControll.write(f"\nCalibration of EyeTracker ({time.time():.3f})\n")
@@ -194,7 +189,6 @@ while running:
     elif storyPart == "welcome2":
        
         if begBlockFlag:
-            print(storyPart)
             begBlockFlag = False
 
         storyPart = welcome2.run()
@@ -206,7 +200,6 @@ while running:
     ### First Part of Story Trials (20 trials before Calibration!)
     elif storyPart == "story1":
         if begBlockFlag:
-            print(storyPart)
             el_tracker.startRecording(1, 1, 1, 1)
             pylink.pumpDelay(100)  # Small delay to ensure recording starts
 

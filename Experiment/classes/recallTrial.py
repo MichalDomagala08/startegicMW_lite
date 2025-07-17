@@ -89,7 +89,7 @@ class recallTrial:
         wf.setframerate(self.rate)
         wf.writeframes(b''.join(self.frames))
         wf.close()
-        self.output_control.write(f"Recording saved as: {self.audio_filename}")
+        self.output_control.write(f"    Recording saved as: {self.audio_filename}")
 
 
     def display_message(self,text_lines,line_height=40):
