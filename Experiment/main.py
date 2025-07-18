@@ -140,8 +140,8 @@ while running:
             outputControll.write(f"\nPractice Run Beginning ({time.time():.3f})\n")
 
             begBlockFlag = False
-        storyPart = Story_practice.run()
-    
+        storyPart ="welcome_cal" # Story_practice.run()
+
         if storyPart != "practicerun":
             outputControll.write(f"\nPractice Run Ending ({time.time():.3f})\n")
 
@@ -169,7 +169,10 @@ while running:
                 pylink.pumpDelay(50)
                 pylink.openGraphicsEx(genv)  # Register CalibrationGraphics
 
+                el_tracker.imageModeDisplay()
+
                 el_tracker.sendCommand("automatic_calibration_pacing = 1000")  # Pacing of Targets - allow for automaticity
+       
                 el_tracker.doTrackerSetup()  # Calibration Setup 
 
                 pylink.pumpDelay(50)            

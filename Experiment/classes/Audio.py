@@ -374,14 +374,13 @@ class audioTrial:
             # 1) Welcome screen
             if self.welcome_screen:
                 lines = [
-                    "Opowiedz przebieg swoich myśli od ostatniego fragmentu.",
+                    "Opowiedz przebieg swoich myśli od ostatniego przerwania historii.",
                     "",
                     "Naciśnij SPACJĘ, aby rozpocząć nagranie"
                 ]
                 super().display_message(lines)
                 for evt in events:
                     if evt.type == pygame.KEYDOWN and evt.key == pygame.K_SPACE:
-                        self.output_control.write(f"        PART {self.storyParts[self.currentStoryPart]:12}: Thought Recording Started: (Duration: {time.time() - self.initialTime})")
 
                         self.welcome_screen = False
                         self.start_time = time.time()
