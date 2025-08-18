@@ -76,13 +76,15 @@ paramsDict['baseOffset'] = 0 # How many ms after the trials onset will be consid
 
 
 
-### Subject Choice
-begID = 0;
-endID = 30;
 
 analysisName = f"TEST_withoutCenter_res{paramsDict['resRate']}_dgv{paramsDict['dgvCent']}_bll{paramsDict['maxblength']}_blb{paramsDict['blkboundry']}_smw10_smL{paramsDict['maxcluslen']}_swG{paramsDict['mingaplen']}_trO{paramsDict['trialOffset']}_trB{paramsDict['baseOffset']}"
 # Get all of the IDs for subject froma "data" folder
 subjects = [f for f in os.listdir(path) if  not os.path.isfile(os.path.join(path, f))] # get all the filenames
+
+
+### Subject Choice
+begID =  0             #0;
+endID =  len(subjects) #30;
 
 ### Create a current Analysis Pipeline
 os.makedirs(os.path.join(workingDir,experimentName,analysisName,'individuals'),exist_ok=True)
