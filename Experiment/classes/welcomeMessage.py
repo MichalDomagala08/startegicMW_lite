@@ -113,7 +113,7 @@ def generateMessages(firstEntityName):
                         "",
                                 "#Naciśnij SPACJĘ aby przejść dalej#"] 
     
-    WelcomeMessage2b =  ["Po udzieleniu odpowiedzi zostaniesz poproszony/a o zastanowienie się nad treścią", 
+    WelcomeMessage2b =  ["Po udzieleniu odpowiedzi zostaniesz poproszony/a o przywołanie ustne treści", 
                          "swoich myśli od momentu ostatniego przerwania historii w trakcie jej słuchania",
                         " ",
                         "Po naciśnięciu spacji, rozpocznie się nagrywanie. Dodatkowo, na ekranie wyświetlany",
@@ -125,7 +125,8 @@ def generateMessages(firstEntityName):
                          "o wspomnienie o nich na takim poziomie jaki nie przekracza Twojego komfortu.",
                          "",
                          "Celem odpamiętania jest próba oszacowania myśli nie związanych z zadaniem, ",
-                         "więc nie obawiaj się o nich wspominać. Staraj się szczerze raportować swoje myśli.",
+                         "więc nie obawiaj się o nich wspominać. Staraj się szczerze raportować swoje myśli,",
+                        " Tak dokładnie, jak to jest tylko możliwe.",
                         "",
                                 "#Naciśnij SPACJĘ aby przejść dalej#"] 
     

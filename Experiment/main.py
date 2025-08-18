@@ -50,7 +50,7 @@ pygame.display.set_caption("Strategic MW Experiment")
 
 # story Global parameters Setup:
 storyPart = "welcome1"  # Controlling the experiment flow
-dummyMode = False
+dummyMode = True
 TestMode = False
 
 SCREEN_WIDTH_CM = 53 #Width
@@ -140,8 +140,8 @@ while running:
             outputControll.write(f"\nPractice Run Beginning ({time.time():.3f})\n")
 
             begBlockFlag = False
-        storyPart ="welcome_cal" # Story_practice.run()
 
+        storyPart =  Story_practice.run()
         if storyPart != "practicerun":
             outputControll.write(f"\nPractice Run Ending ({time.time():.3f})\n")
 

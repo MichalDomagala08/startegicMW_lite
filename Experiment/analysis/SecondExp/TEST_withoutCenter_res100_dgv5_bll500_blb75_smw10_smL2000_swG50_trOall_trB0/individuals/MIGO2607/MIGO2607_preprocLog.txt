@@ -1,0 +1,1938 @@
+               ==========================================================
+               =====                PREPROC LOG FILE               ===== 
+               ==========================================================
+
+   General Info: MIGO2607
+      Participant ID: MIGO2607
+      Tracked Entity: KAROLINA
+
+
+===# Load and Prepare Data #=== 
+
+    Loading Participant Data... done 
+    Getting Events...           done 
+    Changing Timing....         done 
+    Getting Own Events...       done 
+
+            Events DataFrame:       
+                beg           end        key       keytime
+count  4.000000e+01  4.000000e+01  40.000000  4.000000e+01
+mean   1.110584e+06  1.155826e+06  22.275000  1.094094e+06
+std    6.762033e+05  6.769208e+05   8.123999  6.129435e+05
+min    1.210000e+02  4.269300e+04  11.000000  4.852100e+04
+25%    5.356502e+05  5.800140e+05  18.750000  5.834472e+05
+50%    1.112134e+06  1.155306e+06  21.500000  1.053454e+06
+75%    1.693895e+06  1.740773e+06  23.250000  1.616514e+06
+max    2.204505e+06  2.258259e+06  61.000000  2.095642e+06
+
+    Splitting by events...      done 
+
+===# Stats and Checks for Experiment Relevant only Data #=== 
+
+ 
+      ===# GeneralCheck Parameters All Length #=== 
+
+ 
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       73.38256   46.67040
+    Rate of No Gaze Data:         0.18708    0.14838
+    Saccade Count:                   2063       2096
+    Blink Count:                      992       1005
+
+    Pupil Relative Diff (L-R):    0.10063 (±0.09529)
+    Eye Position Mismatch (X):   27.88678 (±53.96341)
+
+    (2) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       66.36233   44.55327
+    Rate of No Gaze Data:         0.19993    0.16007
+    Saccade Count:                   2172       2203
+    Blink Count:                     1027       1033
+
+    Pupil Relative Diff (L-R):    0.09492 (±0.09929)
+    Eye Position Mismatch (X):   26.02134 (±57.21966)
+
+      ===# GeneralCheck Parameters 1st Half #=== 
+
+ 
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       67.76600   27.28955
+    Rate of No Gaze Data:         0.13711    0.11263
+    Saccade Count:                   1034       1045
+    Blink Count:                      496        501
+
+    Pupil Relative Diff (L-R):    0.10509 (±0.08456)
+    Eye Position Mismatch (X):   32.41067 (±50.97398)
+
+    (2) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       67.31212   27.22023
+    Rate of No Gaze Data:         0.15565    0.12608
+    Saccade Count:                   1085       1101
+    Blink Count:                      516        514
+
+    Pupil Relative Diff (L-R):    0.09977 (±0.09239)
+    Eye Position Mismatch (X):   22.74556 (±52.04354)
+
+      ===#  GeneralCheck Parameters 2st Half  #=== 
+
+ 
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:      103.77585   89.73164
+    Rate of No Gaze Data:         0.23704    0.18413
+    Saccade Count:                   1028       1051
+    Blink Count:                      495        503
+
+    Pupil Relative Diff (L-R):    0.09561 (±0.10587)
+    Eye Position Mismatch (X):   22.78110 (±56.71798)
+
+    (2) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       85.43619   82.30209
+    Rate of No Gaze Data:         0.24421    0.19406
+    Saccade Count:                   1086       1101
+    Blink Count:                      511        519
+
+    Pupil Relative Diff (L-R):    0.08950 (±0.10620)
+    Eye Position Mismatch (X):   29.67904 (±62.29148)
+
+===# Preprocessing the Data #=== 
+
+     Preproc Parameters: General: 
+        Verbose:              1
+        Resampling Rate:      100
+        DGV from Center:      5
+
+    Preproc Parameters: Blinks: 
+        Blink Interpolation:  0
+        Maximum Blink Length: 500
+        Blink Interp Bound:   75
+        Blink Begining Bound: 1000
+
+    Preproc Parameters: Smooth: 
+        Window size:          10
+        Minimal Cluster len:  2000
+        Maximal Gap Length:   50
+
+    ### Analysing: STORY_1 // KAROLINA_1 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 4 (duration: 2058.0)
+            Blinks interp:  52 (duration: 14640.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4257.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4257.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 5 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=560.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=3750.0.
+        Cluster smoothed for LeftPupil: Duration=35890.0.
+        Cluster replaced with NaN for LeftPupil: Duration=100.0, Gap=230.0.
+        Cluster replaced with NaN for LeftPupil: Duration=160.0, Gap=240.0.
+        Found 5 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=560.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=3750.0.
+        Cluster smoothed for RightPupil: Duration=35890.0.
+        Cluster replaced with NaN for RightPupil: Duration=100.0, Gap=230.0.
+        Cluster replaced with NaN for RightPupil: Duration=160.0, Gap=240.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count   4257.000000  3819.000000  3819.000000  3966.000000  3862.000000  3862.000000  3966.000000
+		mean   21410.000000   952.496413   576.739565  4574.958209   947.151890   567.066546  4094.486975
+		std    12290.343771    37.766359    72.504022   235.106835    35.325296    46.869550   218.786682
+		min      130.000000   560.300000   517.100000  4115.333333   496.000000   458.900000  3677.777778
+		25%    10770.000000   945.800000   551.300000  4390.050000   940.500000   550.800000  3925.684615
+		50%    21410.000000   954.200000   562.800000  4542.850000   951.800000   558.300000  4050.350000
+		75%    32050.000000   967.150000   573.800000  4751.916667   960.800000   569.200000  4247.075000
+		max    42690.000000  1063.900000  1225.900000  5184.400000  1436.200000  1070.100000  4715.100000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 3966 (0.9316420014094433 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       37.89242   30.20580
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                     86         88
+    Blink Count:                       33         34
+
+    Pupil Relative Diff (L-R):    0.10503 (±0.01162)
+    Eye Position Mismatch (X):   15.90556 (±24.53533)
+    ### Analysing: STORY_1 // JANEK_1 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 0 (duration: 0)
+            Blinks interp:  60 (duration: 14944.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4830.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4830.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 1 clusters for LeftPupil.
+        Cluster smoothed for LeftPupil: Duration=48290.0.
+        Found 1 clusters for RightPupil.
+        Cluster smoothed for RightPupil: Duration=48290.0.
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    4830.000000  4551.000000  4551.000000  4830.000000  4599.000000  4599.000000  4830.000000
+		mean    80415.000000   940.960580   588.361877  4487.069985   948.617221   559.083844  3963.210594
+		std     13944.452302    44.802552    75.530376   226.892178    30.877675    39.063010   162.300802
+		min     56270.000000   514.200000   545.200000  4071.758065   481.600000   518.500000  3625.800000
+		25%     68342.500000   936.100000   568.000000  4303.900000   942.400000   544.500000  3826.300000
+		50%     80415.000000   947.200000   574.700000  4448.596875   952.200000   552.300000  3944.493750
+		75%     92487.500000   955.600000   581.800000  4580.764286   958.500000   559.900000  4057.300000
+		max    104560.000000  1028.600000  1312.800000  5084.700000  1409.100000  1040.100000  4393.200000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4830 (1.0 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       52.26082   22.40450
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                     96         98
+    Blink Count:                       31         28
+
+    Pupil Relative Diff (L-R):    0.11630 (±0.01162)
+    Eye Position Mismatch (X):   14.39395 (±36.50307)
+    ### Analysing: STORY_1 // KAROLINA_2 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 3 (duration: 1008.0)
+            Blinks interp:  60 (duration: 16652.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4065.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4065.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 4 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=160.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=38750.0.
+        Cluster replaced with NaN for LeftPupil: Duration=20.0, Gap=270.0.
+        Cluster replaced with NaN for LeftPupil: Duration=660.0, Gap=300.0.
+        Found 4 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=160.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=38750.0.
+        Cluster replaced with NaN for RightPupil: Duration=20.0, Gap=270.0.
+        Cluster replaced with NaN for RightPupil: Duration=660.0, Gap=300.0.
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    4065.000000  3670.000000  3670.000000  3876.000000  3711.000000  3711.000000  3876.000000
+		mean   135040.000000   936.594387   585.613297  4572.923178   944.914713   558.410375  4054.058524
+		std     11736.087508    44.811737    84.189709   192.294494    36.577617    44.109766   154.995199
+		min    114720.000000   552.400000   532.500000  4170.227273   453.400000   503.400000  3737.200000
+		25%    124880.000000   928.700000   560.000000  4449.500000   936.200000   542.050000  3950.175000
+		50%    135040.000000   939.300000   567.800000  4555.650000   946.500000   551.300000  4033.653448
+		75%    145200.000000   951.700000   578.400000  4702.700000   956.600000   560.600000  4155.625000
+		max    155360.000000  1046.300000  1288.600000  4977.800000  1061.600000  1090.600000  4470.500000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 3876 (0.9535055350553505 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       51.48887   23.88164
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                     80         81
+    Blink Count:                       36         34
+
+    Pupil Relative Diff (L-R):    0.11328 (±0.00859)
+    Eye Position Mismatch (X):   19.16261 (±33.51710)
+    ### Analysing: STORY_1 // JANEK_2 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 5 (duration: 1762.0)
+            Blinks interp:  70 (duration: 20052.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4253.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4253.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 5 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=40.0, Gap=None.
+        Cluster replaced with NaN for LeftPupil: Duration=220.0, Gap=290.0.
+        Cluster smoothed for LeftPupil: Duration=19820.0.
+        Cluster smoothed for LeftPupil: Duration=20580.0.
+        Cluster replaced with NaN for LeftPupil: Duration=120.0, Gap=300.0.
+        Found 5 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=40.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=220.0, Gap=290.0.
+        Cluster smoothed for RightPupil: Duration=19820.0.
+        Cluster smoothed for RightPupil: Duration=20580.0.
+        Cluster replaced with NaN for RightPupil: Duration=120.0, Gap=300.0.
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    4253.000000  3697.000000  3697.000000  4042.000000  3806.000000  3806.000000  4042.000000
+		mean   187640.000000   933.627536   597.085204  4567.846477   940.950788   558.855413  4015.863207
+		std     12278.796765    42.361547    79.932910   261.908637    38.732142    51.441133   167.486312
+		min    166380.000000   543.200000   521.000000  3806.160000   446.400000   501.900000  3678.900000
+		25%    177010.000000   927.700000   571.000000  4324.270652   935.700000   539.800000  3869.050031
+		50%    187640.000000   937.200000   577.900000  4587.000000   945.100000   547.500000  4016.534821
+		75%    198270.000000   946.600000   589.900000  4802.775000   954.400000   559.200000  4159.800000
+		max    208900.000000  1043.400000  1267.400000  5023.500000  1511.400000  1145.300000  4315.100000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4042 (0.9503879614389843 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       63.13034   26.80868
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                     91         92
+    Blink Count:                       42         43
+
+    Pupil Relative Diff (L-R):    0.11998 (±0.01731)
+    Eye Position Mismatch (X):   15.99112 (±35.58935)
+    ### Analysing: STORY_1 // KAROLINA_3 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 2 (duration: 1104.0)
+            Blinks interp:  52 (duration: 14360.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4353.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4353.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 3 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=190.0, Gap=None.
+        Cluster replaced with NaN for LeftPupil: Duration=70.0, Gap=530.0.
+        Cluster smoothed for LeftPupil: Duration=42130.0.
+        Found 3 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=190.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=70.0, Gap=530.0.
+        Cluster smoothed for RightPupil: Duration=42130.0.
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    4353.000000  3966.000000  3966.000000  4214.000000  4032.000000  4032.000000  4214.000000
+		mean   246910.000000   869.200101   556.896823  5015.358799   916.804886   528.481771  4416.800183
+		std     12567.471902    77.436194    79.338466   266.610624    60.536213    78.736188   233.415516
+		min    225150.000000   423.700000   403.900000  4408.100000   354.500000   371.100000  3933.600000
+		25%    236030.000000   821.900000   516.100000  4835.525000   908.575000   481.475000  4236.125000
+		50%    246910.000000   902.550000   566.500000  5003.650000   932.400000   551.150000  4392.400000
+		75%    257790.000000   924.500000   586.000000  5223.925000   953.500000   564.500000  4635.520000
+		max    268670.000000  1022.100000  1286.000000  5540.289474  1167.500000  1145.800000  4934.889474
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4214 (0.9680679990810935 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       91.96043   44.09392
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                     51         53
+    Blink Count:                       30         30
+
+    Pupil Relative Diff (L-R):    0.11926 (±0.01047)
+    Eye Position Mismatch (X):   51.21105 (±31.56659)
+    ### Analysing: STORY_1 // JANEK_3 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 4 (duration: 1208.0)
+            Blinks interp:  90 (duration: 25416.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4419.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4419.0
+        (5) Replacing Zeros: 
+            Zeros: N: 8.0
+        (5) Replacing Zeros: 
+            Zeros: N: 7.0
+        (6) Smoothing Out the Data: 
+        Found 5 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=460.0, Gap=None.
+        Cluster replaced with NaN for LeftPupil: Duration=20.0, Gap=310.0.
+        Cluster smoothed for LeftPupil: Duration=41930.0.
+        Cluster replaced with NaN for LeftPupil: Duration=210.0, Gap=290.0.
+        Cluster replaced with NaN for LeftPupil: Duration=230.0, Gap=310.0.
+        Found 5 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=470.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=20.0, Gap=310.0.
+        Cluster smoothed for RightPupil: Duration=41930.0.
+        Cluster replaced with NaN for RightPupil: Duration=210.0, Gap=290.0.
+        Cluster replaced with NaN for RightPupil: Duration=230.0, Gap=310.0.
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    4419.000000  3742.000000  3742.000000  4194.000000  3840.000000  3840.000000  4194.000000
+		mean   300620.000000   932.204703   594.733324  4562.967844   947.992474   562.224089  4036.774393
+		std     12757.997492    49.339537    88.707865   194.910890    45.235669    52.836613   138.344163
+		min    278530.000000   544.600000   541.100000  4030.607143   440.600000   512.200000  3618.535714
+		25%    289575.000000   929.225000   566.900000  4422.975000   941.600000   545.100000  3941.730769
+		50%    300620.000000   939.600000   573.500000  4569.256384   953.800000   552.000000  4051.762500
+		75%    311665.000000   949.400000   583.300000  4695.275000   964.100000   559.900000  4139.675000
+		max    322710.000000  1304.100000  1289.900000  5060.200000  1035.900000  1082.300000  4300.400000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4194 (0.9490835030549898 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       61.60969   25.47170
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    103        105
+    Blink Count:                       49         50
+
+    Pupil Relative Diff (L-R):    0.11497 (±0.01062)
+    Eye Position Mismatch (X):   21.54264 (±40.24484)
+    ### Analysing: STORY_1 // KAROLINA_4 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 3 (duration: 852.0)
+            Blinks interp:  44 (duration: 12392.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4327.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4327.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 4 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=550.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=41090.0.
+        Cluster replaced with NaN for LeftPupil: Duration=430.0, Gap=290.0.
+        Cluster replaced with NaN for LeftPupil: Duration=310.0, Gap=240.0.
+        Found 4 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=550.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=41090.0.
+        Cluster replaced with NaN for RightPupil: Duration=430.0, Gap=290.0.
+        Cluster replaced with NaN for RightPupil: Duration=310.0, Gap=240.0.
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    4327.000000  4027.000000  4027.000000  4110.000000  4059.000000  4059.000000  4110.000000
+		mean   353370.000000   840.407673   543.120040  5118.851554   904.045036   498.790219  4417.001243
+		std     12492.416366    97.366329   123.944661   287.347787    70.625290   112.729913   247.842608
+		min    331740.000000   323.100000   204.100000  4414.789655   320.200000   183.300000  3871.744828
+		25%    342555.000000   792.500000   488.500000  4960.250000   885.650000   440.800000  4220.800000
+		50%    353370.000000   867.800000   569.300000  5162.700000   930.700000   542.900000  4482.350000
+		75%    364185.000000   910.300000   592.200000  5332.675000   943.200000   555.900000  4619.700000
+		max    375000.000000  1111.900000  1263.600000  5629.700000  1402.300000  1208.300000  4934.200000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4110 (0.9498497804483476 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:      119.14733   68.79345
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                     50         50
+    Blink Count:                       24         27
+
+    Pupil Relative Diff (L-R):    0.13702 (±0.01169)
+    Eye Position Mismatch (X):   68.85460 (±40.66520)
+    ### Analysing: STORY_1 // JANEK_4 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 1 (duration: 324.0)
+            Blinks interp:  92 (duration: 27296.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4341.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4341.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 2 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=250.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=42820.0.
+        Found 2 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=250.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=42820.0.
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    4341.000000  3657.000000  3657.000000  4283.000000  3772.000000  3772.000000  4283.000000
+		mean   406170.000000   928.977030   594.330462  4439.004746   946.263574   557.819989  3931.552843
+		std     12532.830885    51.162301    93.350205   161.374812    30.708972    45.903237   105.626787
+		min    384470.000000   526.000000   509.800000  4084.300000   483.100000   483.800000  3650.200000
+		25%    395320.000000   922.400000   562.000000  4328.000000   935.900000   540.275000  3868.900000
+		50%    406170.000000   934.300000   570.900000  4432.600000   946.600000   548.950000  3927.900000
+		75%    417020.000000   944.800000   584.800000  4512.975000   959.200000   560.300000  4003.307407
+		max    427870.000000  1049.200000  1267.900000  4844.872973  1180.300000  1106.100000  4176.178378
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4283 (0.9866390232665284 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       62.75373   22.60144
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    115        116
+    Blink Count:                       48         48
+
+    Pupil Relative Diff (L-R):    0.11396 (±0.01282)
+    Eye Position Mismatch (X):   21.16169 (±47.03062)
+    ### Analysing: STORY_1 // KAROLINA_5 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 3 (duration: 1162.0)
+            Blinks interp:  100 (duration: 28696.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4620.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4620.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 4 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=0.0, Gap=None.
+        Cluster replaced with NaN for LeftPupil: Duration=220.0, Gap=530.0.
+        Cluster smoothed for LeftPupil: Duration=44360.0.
+        Cluster replaced with NaN for LeftPupil: Duration=400.0, Gap=360.0.
+        Found 4 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=0.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=220.0, Gap=530.0.
+        Cluster smoothed for RightPupil: Duration=44360.0.
+        Cluster replaced with NaN for RightPupil: Duration=400.0, Gap=360.0.
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    4620.000000  3856.000000  3856.000000  4437.000000  3971.000000  3971.000000  4437.000000
+		mean   460455.000000   931.021655   588.749429  4428.153868   946.432511   556.566406  3926.462714
+		std     13338.234516    53.258633    90.559962   188.727116    36.500156    50.462660   125.559501
+		min    437360.000000   545.200000   507.400000  3935.500000   466.300000   503.700000  3538.857143
+		25%    448907.500000   927.275000   560.500000  4300.600000   938.100000   539.400000  3841.800000
+		50%    460455.000000   935.300000   566.300000  4409.540000   948.200000   545.600000  3931.537500
+		75%    472002.500000   947.500000   575.000000  4551.900000   957.300000   554.250000  4001.000000
+		max    483550.000000  1559.800000  1267.500000  4947.200000  1370.500000   986.600000  4309.400000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4437 (0.9603896103896103 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       56.89044   21.49469
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    121        118
+    Blink Count:                       53         53
+
+    Pupil Relative Diff (L-R):    0.11286 (±0.01261)
+    Eye Position Mismatch (X):   21.68899 (±49.20141)
+    ### Analysing: STORY_1 // JANEK_5 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 2 (duration: 846.0)
+            Blinks interp:  100 (duration: 28216.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:5000.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:5000.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 3 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=220.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=48840.0.
+        Cluster replaced with NaN for LeftPupil: Duration=50.0, Gap=310.0.
+        Found 3 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=220.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=48840.0.
+        Cluster replaced with NaN for RightPupil: Duration=50.0, Gap=310.0.
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    5000.000000  4284.000000  4284.000000  4885.000000  4372.000000  4372.000000  4885.000000
+		mean   516825.000000   929.404015   590.486134  4324.957079   949.892246   559.868618  3869.286651
+		std     14435.200033    62.043793    96.355450   140.547786    32.588494    45.815858   113.551328
+		min    491830.000000   511.200000   522.900000  4067.700000   483.200000   509.300000  3625.400000
+		25%    504327.500000   928.800000   561.000000  4220.600000   942.600000   542.300000  3783.450000
+		50%    516825.000000   937.600000   568.100000  4298.000000   951.100000   550.800000  3856.745889
+		75%    529322.500000   946.900000   574.200000  4405.650000   958.100000   559.800000  3938.100000
+		max    541820.000000  1032.300000  1272.400000  4730.500000  1155.600000   996.900000  4228.700000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4885 (0.977 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       59.20603   22.52087
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    125        125
+    Blink Count:                       52         52
+
+    Pupil Relative Diff (L-R):    0.10523 (±0.00922)
+    Eye Position Mismatch (X):   23.52705 (±57.66949)
+    ### Analysing: STORY_1 // KAROLINA_6 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 2 (duration: 910.0)
+            Blinks interp:  100 (duration: 31588.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4249.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4249.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 3 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=210.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=40940.0.
+        Cluster replaced with NaN for LeftPupil: Duration=410.0, Gap=310.0.
+        Found 3 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=210.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=40940.0.
+        Cluster replaced with NaN for RightPupil: Duration=410.0, Gap=310.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    4249.00000  3385.000000  3385.000000  4095.000000  3584.000000  3584.000000  4095.000000
+		mean   571500.00000   920.163811   605.588390  4653.138494   937.343443   564.531696  4023.340044
+		std     12267.24976    36.440588    80.929309   150.255868    37.134393    51.768983   115.518206
+		min    550260.00000   522.700000   521.900000  4238.100000   471.500000   495.600000  3789.500000
+		25%    560880.00000   911.500000   577.800000  4543.204284   928.100000   544.500000  3939.141703
+		50%    571500.00000   921.200000   585.900000  4645.550000   939.100000   553.800000  4010.200000
+		75%    582120.00000   931.500000   596.600000  4762.450000   952.100000   564.200000  4095.250000
+		max    592740.00000  1054.400000  1282.600000  5082.900000  1330.900000  1109.400000  4366.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4095 (0.9637561779242174 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       76.90911   33.42901
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    112        117
+    Blink Count:                       55         55
+
+    Pupil Relative Diff (L-R):    0.13521 (±0.00888)
+    Eye Position Mismatch (X):   21.61321 (±30.60277)
+    ### Analysing: STORY_1 // JANEK_6 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 4 (duration: 1416.0)
+            Blinks interp:  102 (duration: 30380.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4736.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4736.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 5 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=80.0, Gap=None.
+        Cluster replaced with NaN for LeftPupil: Duration=300.0, Gap=300.0.
+        Cluster smoothed for LeftPupil: Duration=45060.0.
+        Cluster replaced with NaN for LeftPupil: Duration=250.0, Gap=250.0.
+        Cluster replaced with NaN for LeftPupil: Duration=210.0, Gap=280.0.
+        Found 5 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=80.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=300.0, Gap=300.0.
+        Cluster smoothed for RightPupil: Duration=45060.0.
+        Cluster replaced with NaN for RightPupil: Duration=250.0, Gap=250.0.
+        Cluster replaced with NaN for RightPupil: Duration=210.0, Gap=280.0.
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    4736.000000  3940.000000  3940.000000  4507.000000  4097.000000  4097.000000  4507.000000
+		mean   624705.000000   928.656269   600.100812  4422.376992   947.211179   565.087161  3915.323143
+		std     13673.097674    78.653268   105.548993   213.598668    60.856571    62.493863   150.987687
+		min    601030.000000   500.700000   526.600000  4078.522581   480.500000   509.000000  3616.200000
+		25%    612867.500000   922.600000   563.200000  4253.165000   936.000000   541.700000  3797.722819
+		50%    624705.000000   929.900000   570.800000  4359.900000   944.700000   550.200000  3885.500000
+		75%    636542.500000   942.100000   580.000000  4534.232292   954.300000   560.900000  4011.600000
+		max    648380.000000  1589.700000  1505.700000  5016.900000  1640.600000  1470.900000  4384.500000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4507 (0.9516469594594594 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       67.99849   28.38517
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    127        129
+    Blink Count:                       59         57
+
+    Pupil Relative Diff (L-R):    0.11421 (±0.01218)
+    Eye Position Mismatch (X):   24.49175 (±57.44105)
+    ### Analysing: STORY_1 // KAROLINA_7 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 2 (duration: 1058.0)
+            Blinks interp:  114 (duration: 33444.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4810.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4810.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 3 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=210.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=46670.0.
+        Cluster replaced with NaN for LeftPupil: Duration=130.0, Gap=290.0.
+        Found 3 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=210.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=46670.0.
+        Cluster replaced with NaN for RightPupil: Duration=130.0, Gap=290.0.
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    4810.000000  3927.000000  3927.000000  4668.000000  4054.000000  4054.000000  4668.000000
+		mean   680945.000000   918.511434   601.494449  4437.140331   940.656660   565.835718  3919.130983
+		std     13886.717275    64.056060   110.873367   118.495318    34.616356    49.509589    84.559919
+		min    656900.000000   518.700000   491.100000  4204.800000   484.600000   513.000000  3710.362069
+		25%    668922.500000   916.600000   564.000000  4347.991935   931.700000   548.600000  3863.316935
+		50%    680945.000000   928.000000   573.000000  4412.240421   942.250000   556.600000  3917.650000
+		75%    692967.500000   938.300000   581.300000  4524.369773   954.500000   564.400000  3975.100000
+		max    704990.000000  1053.400000  1261.700000  4778.112121  1414.200000   966.500000  4231.600000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4668 (0.9704781704781705 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       74.31941   32.38273
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    127        128
+    Blink Count:                       61         61
+
+    Pupil Relative Diff (L-R):    0.11655 (±0.01245)
+    Eye Position Mismatch (X):   28.89488 (±60.99136)
+    ### Analysing: STORY_1 // JANEK_7 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 6 (duration: 3066.0)
+            Blinks interp:  86 (duration: 25476.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4560.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4560.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 7 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=110.0, Gap=None.
+        Cluster replaced with NaN for LeftPupil: Duration=70.0, Gap=330.0.
+        Cluster replaced with NaN for LeftPupil: Duration=120.0, Gap=350.0.
+        Cluster smoothed for LeftPupil: Duration=20180.0.
+        Cluster smoothed for LeftPupil: Duration=3350.0.
+        Cluster smoothed for LeftPupil: Duration=18280.0.
+        Cluster replaced with NaN for LeftPupil: Duration=360.0, Gap=330.0.
+        Found 7 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=110.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=70.0, Gap=330.0.
+        Cluster replaced with NaN for RightPupil: Duration=120.0, Gap=350.0.
+        Cluster smoothed for RightPupil: Duration=20180.0.
+        Cluster smoothed for RightPupil: Duration=3350.0.
+        Cluster smoothed for RightPupil: Duration=18280.0.
+        Cluster replaced with NaN for RightPupil: Duration=360.0, Gap=330.0.
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    4560.000000  3748.000000  3748.000000  4184.000000  3948.000000  3948.000000  4184.000000
+		mean   737805.000000   912.446718   600.977428  4553.171767   935.207903   559.743668  3998.932730
+		std     13165.029434    62.898044   108.620213   236.644150    32.786705    51.682436   190.686407
+		min    715010.000000   491.200000   466.100000  4101.900000   472.700000   471.900000  3640.500000
+		25%    726407.500000   906.300000   562.200000  4373.990385   920.400000   540.500000  3876.893750
+		50%    737805.000000   919.600000   574.600000  4526.170968   935.100000   551.100000  3952.301613
+		75%    749202.500000   933.300000   585.300000  4651.441129   945.800000   560.500000  4090.240385
+		max    760600.000000  1077.900000  1286.600000  5316.500000  1448.900000  1031.700000  4605.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4184 (0.9175438596491228 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       77.41760   31.62139
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    105        104
+    Blink Count:                       53         52
+
+    Pupil Relative Diff (L-R):    0.12140 (±0.01534)
+    Eye Position Mismatch (X):   27.43814 (±59.20881)
+    ### Analysing: STORY_1 // KAROLINA_8 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 3 (duration: 1100.0)
+            Blinks interp:  94 (duration: 26148.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4415.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4415.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 4 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=190.0, Gap=None.
+        Cluster replaced with NaN for LeftPupil: Duration=130.0, Gap=300.0.
+        Cluster smoothed for LeftPupil: Duration=42440.0.
+        Cluster replaced with NaN for LeftPupil: Duration=250.0, Gap=240.0.
+        Found 4 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=190.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=130.0, Gap=300.0.
+        Cluster smoothed for RightPupil: Duration=42440.0.
+        Cluster replaced with NaN for RightPupil: Duration=250.0, Gap=240.0.
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    4415.000000  3751.000000  3751.000000  4245.000000  3900.000000  3900.000000  4245.000000
+		mean   791120.000000   909.154999   599.652786  4483.149170   938.107846   561.187179  3948.561102
+		std     12746.450486    62.085741   110.070628   120.516811    37.667637    50.167637    90.493017
+		min    769050.000000   501.300000   509.500000  4116.200000   487.100000   516.400000  3675.600000
+		25%    780085.000000   908.200000   564.300000  4415.666667   932.600000   542.900000  3895.300000
+		50%    791120.000000   919.300000   571.400000  4477.500000   940.400000   551.300000  3956.300000
+		75%    802155.000000   929.550000   580.300000  4569.951613   948.100000   561.700000  4009.400000
+		max    813190.000000   999.700000  1304.000000  4796.900000  1475.100000  1034.400000  4167.500000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4245 (0.9614949037372593 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       78.44091   30.46240
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    115        115
+    Blink Count:                       51         52
+
+    Pupil Relative Diff (L-R):    0.11910 (±0.01032)
+    Eye Position Mismatch (X):   31.85954 (±59.46605)
+    ### Analysing: STORY_1 // JANEK_8 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 2 (duration: 894.0)
+            Blinks interp:  94 (duration: 28288.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4005.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4005.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 2 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=160.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=39010.0.
+        Found 2 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=160.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=39010.0.
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    4005.000000  3222.000000  3222.000000  3902.000000  3374.000000  3374.000000  3902.000000
+		mean   840760.000000   916.897145   620.061887  4403.906707   936.352341   567.450445  3824.731595
+		std     11562.882426    63.601591   130.631883   181.670101    33.433729    95.146351   112.510485
+		min    820740.000000   431.600000   394.400000  3988.545000   443.600000   379.000000  3589.200000
+		25%    830750.000000   917.200000   574.100000  4278.150000   931.300000   541.100000  3740.700676
+		50%    840760.000000   926.900000   583.900000  4376.511290   939.650000   548.900000  3818.761290
+		75%    850770.000000   936.000000   600.500000  4529.527586   948.200000   557.000000  3907.892742
+		max    860780.000000  1080.400000  1593.600000  4850.600000  1055.700000  1493.200000  4132.800000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 3902 (0.9742821473158552 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       91.13298   36.29107
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                     82         86
+    Blink Count:                       48         48
+
+    Pupil Relative Diff (L-R):    0.13103 (±0.01479)
+    Eye Position Mismatch (X):   27.69106 (±60.19714)
+    ### Analysing: STORY_1 // KAROLINA_9 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 2 (duration: 562.0)
+            Blinks interp:  88 (duration: 25380.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4496.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4496.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 3 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=170.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=43710.0.
+        Cluster replaced with NaN for LeftPupil: Duration=490.0, Gap=260.0.
+        Found 3 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=170.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=43710.0.
+        Cluster replaced with NaN for RightPupil: Duration=490.0, Gap=260.0.
+
+        Final Data Stats: 
+		           TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    4496.000000  3878.000000  3878.000000  4372.000000  4020.000000  4020.000000  4372.000000
+		mean   891455.000000   909.581279   600.301289  4449.802498   936.931294   559.762264  3897.430255
+		std     12980.277347    62.620491    99.012066   192.978211    35.883549    48.933767   145.926968
+		min    868980.000000   495.200000   508.000000  4085.800000   484.600000   505.900000  3555.500000
+		25%    880217.500000   909.200000   566.500000  4305.033621   929.500000   541.300000  3792.953125
+		50%    891455.000000   920.400000   573.300000  4438.500000   940.900000   549.900000  3895.401923
+		75%    902692.500000   929.100000   588.000000  4568.700000   950.925000   560.100000  3983.100000
+		max    913930.000000   994.900000  1284.600000  5049.700000  1203.100000  1009.500000  4424.300000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4372 (0.9724199288256228 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       78.66814   30.32995
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    109        111
+    Blink Count:                       48         49
+
+    Pupil Relative Diff (L-R):    0.12385 (±0.01206)
+    Eye Position Mismatch (X):   30.33527 (±60.31136)
+    ### Analysing: STORY_1 // JANEK_9 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 3 (duration: 868.0)
+            Blinks interp:  86 (duration: 26108.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4447.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4447.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 4 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=170.0, Gap=None.
+        Cluster replaced with NaN for LeftPupil: Duration=230.0, Gap=330.0.
+        Cluster smoothed for LeftPupil: Duration=42780.0.
+        Cluster replaced with NaN for LeftPupil: Duration=380.0, Gap=250.0.
+        Found 4 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=170.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=230.0, Gap=330.0.
+        Cluster smoothed for RightPupil: Duration=42780.0.
+        Cluster replaced with NaN for RightPupil: Duration=380.0, Gap=250.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count    4447.00000  3745.000000  3745.000000  4279.000000  3931.000000  3931.000000  4279.000000
+		mean   944020.00000   914.093405   598.653191  4458.290273   939.166421   561.609947  3898.680174
+		std     12838.82653    57.255717    97.894333   207.082168    33.772402    50.047661   163.623790
+		min    921790.00000   488.000000   501.400000  4124.258621   444.400000   484.900000  3640.700000
+		25%    932905.00000   910.700000   565.700000  4307.400000   929.200000   543.200000  3786.373214
+		50%    944020.00000   919.600000   573.600000  4404.300000   942.400000   550.500000  3868.340000
+		75%    955135.00000   931.200000   583.000000  4559.469881   952.350000   560.700000  3963.367857
+		max    966250.00000  1560.500000  1280.800000  5173.000000  1416.000000  1122.600000  4459.700000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4279 (0.962221722509557 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       74.57117   30.03838
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    107        110
+    Blink Count:                       47         49
+
+    Pupil Relative Diff (L-R):    0.12530 (±0.00953)
+    Eye Position Mismatch (X):   29.95057 (±54.39944)
+    ### Analysing: STORY_1 // KAROLINA_10 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 2 (duration: 872.0)
+            Blinks interp:  100 (duration: 28936.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4712.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4712.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 3 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=460.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=45550.0.
+        Cluster replaced with NaN for LeftPupil: Duration=210.0, Gap=290.0.
+        Found 3 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=460.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=45550.0.
+        Cluster replaced with NaN for RightPupil: Duration=210.0, Gap=290.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.712000e+03  3965.000000  3965.000000  4556.000000  4121.000000  4121.000000  4556.000000
+		mean   9.998250e+05   909.407591   597.789559  4401.677871   936.569304   557.725334  3856.038640
+		std    1.360382e+04    67.663263   110.813177   108.688804    34.257710    52.358882    88.377098
+		min    9.762700e+05   492.300000   515.000000  4158.772727   499.900000   505.000000  3619.000000
+		25%    9.880475e+05   908.100000   560.400000  4327.850000   931.300000   539.100000  3789.800000
+		50%    9.998250e+05   922.100000   567.000000  4392.310000   939.500000   546.600000  3851.708876
+		75%    1.011602e+06   932.300000   576.700000  4468.569444   947.200000   555.300000  3917.625000
+		max    1.023380e+06   988.100000  1272.200000  4808.400000  1012.500000   988.500000  4133.200000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4556 (0.966893039049236 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       76.85650   29.29129
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    135        136
+    Blink Count:                       54         55
+
+    Pupil Relative Diff (L-R):    0.12388 (±0.00866)
+    Eye Position Mismatch (X):   30.93967 (±65.28088)
+    ### Analysing: STORY_1 // JANEK_10 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 4 (duration: 2514.0)
+            Blinks interp:  94 (duration: 29120.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4516.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4516.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 5 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=200.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=5920.0.
+        Cluster replaced with NaN for LeftPupil: Duration=430.0, Gap=950.0.
+        Cluster smoothed for LeftPupil: Duration=35500.0.
+        Cluster replaced with NaN for LeftPupil: Duration=550.0, Gap=260.0.
+        Found 5 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=200.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=5920.0.
+        Cluster replaced with NaN for RightPupil: Duration=430.0, Gap=950.0.
+        Cluster smoothed for RightPupil: Duration=35500.0.
+        Cluster replaced with NaN for RightPupil: Duration=550.0, Gap=260.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.516000e+03  3587.000000  3587.000000  4144.000000  3750.000000  3750.000000  4144.000000
+		mean   1.054225e+06   916.391832   604.097909  4360.509795   935.959920   559.981893  3833.840099
+		std    1.303801e+04    65.470485   104.457070   140.912151    33.332575    56.076442   104.230687
+		min    1.031650e+06   479.700000   429.900000  4029.337838   489.800000   394.500000  3605.000000
+		25%    1.042938e+06   914.400000   568.100000  4248.731034   926.800000   539.500000  3754.641003
+		50%    1.054225e+06   925.900000   577.200000  4352.150000   937.000000   546.900000  3832.928261
+		75%    1.065512e+06   935.700000   588.050000  4453.633594   948.100000   560.100000  3909.857812
+		max    1.076800e+06  1032.700000  1265.900000  4756.000000  1064.900000  1000.300000  4240.500000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4144 (0.9176262178919398 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       77.66083   31.20326
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    129        131
+    Blink Count:                       53         53
+
+    Pupil Relative Diff (L-R):    0.12056 (±0.01261)
+    Eye Position Mismatch (X):   23.86431 (±61.20220)
+    ### Analysing: STORY_1 // KAROLINA_11 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 2 (duration: 768.0)
+            Blinks interp:  94 (duration: 26732.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4118.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4118.0
+        (5) Replacing Zeros: 
+            Zeros: N: 2.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 3 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=540.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=39120.0.
+        Cluster replaced with NaN for LeftPupil: Duration=710.0, Gap=240.0.
+        Found 3 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=560.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=39120.0.
+        Cluster replaced with NaN for RightPupil: Duration=710.0, Gap=240.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.118000e+03  3470.000000  3470.000000  3913.000000  3557.000000  3557.000000  3913.000000
+		mean   1.213215e+06   979.843429   592.438127  4186.589403   994.079702   581.991847  3725.735951
+		std    1.188909e+04    74.530160    98.621179    96.524209    28.360991    45.607211    88.540085
+		min    1.192630e+06   541.000000   490.300000  3800.600000   540.300000   489.800000  3527.400000
+		25%    1.202922e+06   980.800000   558.500000  4114.900000   984.100000   564.000000  3660.600000
+		50%    1.213215e+06   992.700000   565.100000  4184.500000   993.800000   572.600000  3717.800000
+		75%    1.223508e+06  1002.000000   575.475000  4248.709677  1004.000000   582.700000  3788.379310
+		max    1.233800e+06  1173.500000  1177.600000  4449.500000  1535.400000   959.400000  3976.200000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 3913 (0.9502185526954833 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       56.71244   54.78424
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    109        107
+    Blink Count:                       52         52
+
+    Pupil Relative Diff (L-R):    0.11005 (±0.00877)
+    Eye Position Mismatch (X):   21.94133 (±70.93171)
+    ### Analysing: STORY_1 // JANEK_11 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 2 (duration: 894.0)
+            Blinks interp:  98 (duration: 31148.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4245.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4245.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 3 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=270.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=40950.0.
+        Cluster replaced with NaN for LeftPupil: Duration=310.0, Gap=310.0.
+        Found 3 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=270.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=40950.0.
+        Cluster replaced with NaN for RightPupil: Duration=310.0, Gap=310.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil      RightX       RightY   RightPupil
+		count  4.245000e+03  3383.000000  3383.000000  4096.000000  3579.00000  3579.000000  4096.000000
+		mean   1.263580e+06   981.220189   593.637275  4159.032293   990.40176   585.601676  3678.541963
+		std    1.225570e+04    64.197658    93.127361   152.016714    28.32261    49.102632   116.856028
+		min    1.242360e+06   558.600000   523.100000  3841.800000   528.30000   537.200000  3432.300000
+		25%    1.252970e+06   979.400000   561.050000  4047.700000   980.90000   565.600000  3592.300000
+		50%    1.263580e+06   989.000000   568.900000  4129.420000   989.50000   573.200000  3660.667742
+		75%    1.274190e+06   999.400000   578.700000  4261.825000  1000.90000   586.250000  3767.250000
+		max    1.284800e+06  1100.200000  1197.600000  4642.500000  1105.40000   971.000000  3992.400000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4096 (0.9648998822143698 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       58.33190   55.50030
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    107        106
+    Blink Count:                       53         53
+
+    Pupil Relative Diff (L-R):    0.11534 (±0.00926)
+    Eye Position Mismatch (X):   18.62353 (±60.02279)
+    ### Analysing: STORY_1 // KAROLINA_12 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 3 (duration: 2670.0)
+            Blinks interp:  100 (duration: 30780.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4746.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4746.0
+        (5) Replacing Zeros: 
+            Zeros: N:51.0
+        (5) Replacing Zeros: 
+            Zeros: N:46.0
+        (6) Smoothing Out the Data: 
+        Found 4 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=60.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=1990.0.
+        Cluster smoothed for LeftPupil: Duration=41840.0.
+        Cluster replaced with NaN for LeftPupil: Duration=350.0, Gap=300.0.
+        Found 4 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=110.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=1990.0.
+        Cluster smoothed for RightPupil: Duration=41840.0.
+        Cluster replaced with NaN for RightPupil: Duration=350.0, Gap=300.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.746000e+03  3713.000000  3713.000000  4385.000000  3974.000000  3974.000000  4385.000000
+		mean   1.317055e+06   963.036844   601.239698  4275.724947   987.474006   587.324811  3768.270293
+		std    1.370197e+04    78.779222   108.776938   118.327915    37.254712    51.187698    85.483655
+		min    1.293330e+06   502.200000   521.800000  3702.612821   518.300000   544.000000  3442.466813
+		25%    1.305192e+06   966.900000   561.600000  4209.700000   981.500000   568.000000  3713.400000
+		50%    1.317055e+06   978.100000   569.400000  4285.651613   992.400000   575.600000  3774.819355
+		75%    1.328918e+06   987.400000   578.000000  4355.015625   999.200000   583.600000  3826.000000
+		max    1.340780e+06  1098.200000  1214.400000  4539.700000  1504.100000  1010.800000  3977.300000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4385 (0.9239359460598399 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       61.84092   55.40539
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    107        109
+    Blink Count:                       56         57
+
+    Pupil Relative Diff (L-R):    0.11850 (±0.01092)
+    Eye Position Mismatch (X):   32.08271 (±76.29677)
+    ### Analysing: STORY_1 // JANEK_12 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 3 (duration: 1516.0)
+            Blinks interp:  90 (duration: 28820.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4721.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4721.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 4 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=30.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=27890.0.
+        Cluster smoothed for LeftPupil: Duration=17200.0.
+        Cluster replaced with NaN for LeftPupil: Duration=540.0, Gap=350.0.
+        Found 4 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=30.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=27890.0.
+        Cluster smoothed for RightPupil: Duration=17200.0.
+        Cluster replaced with NaN for RightPupil: Duration=540.0, Gap=350.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.721000e+03  3851.000000  3851.000000  4511.000000  4041.000000  4041.000000  4511.000000
+		mean   1.371680e+06   944.449104   572.843651  4453.859239   983.698886   560.420985  3899.150738
+		std    1.362980e+04   106.700749   130.544164   332.245248    86.019043   106.861902   252.324297
+		min    1.348080e+06   365.200000   275.700000  3974.532258   416.500000   241.600000  3553.000000
+		25%    1.359880e+06   893.500000   553.400000  4172.196970   947.000000   558.100000  3686.725073
+		50%    1.371680e+06   966.200000   569.500000  4372.605263   981.700000   572.500000  3828.600000
+		75%    1.383480e+06   982.600000   583.600000  4704.500000  1000.000000   583.500000  4101.300000
+		max    1.395280e+06  1884.200000  1445.700000  5198.800000  1876.400000  1409.900000  4510.700000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4511 (0.9555178987502648 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       36.58317   31.98865
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    100        102
+    Blink Count:                       49         51
+
+    Pupil Relative Diff (L-R):    0.12385 (±0.01447)
+    Eye Position Mismatch (X):   41.53545 (±65.66505)
+    ### Analysing: STORY_1 // KAROLINA_13 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 3 (duration: 1310.0)
+            Blinks interp:  106 (duration: 33660.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4503.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4503.0
+        (5) Replacing Zeros: 
+            Zeros: N:15.0
+        (5) Replacing Zeros: 
+            Zeros: N:12.0
+        (6) Smoothing Out the Data: 
+        Found 4 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=430.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=40570.0.
+        Cluster smoothed for LeftPupil: Duration=2430.0.
+        Cluster replaced with NaN for LeftPupil: Duration=90.0, Gap=290.0.
+        Found 4 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=460.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=40570.0.
+        Cluster smoothed for RightPupil: Duration=2430.0.
+        Cluster replaced with NaN for RightPupil: Duration=90.0, Gap=290.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.503000e+03  3518.000000  3518.000000  4302.000000  3759.000000  3759.000000  4302.000000
+		mean   1.425430e+06   967.912337   609.635162  4308.560720   979.320830   595.716148  3784.015589
+		std    1.300048e+04    65.519272   127.614988   178.071960    43.130063    94.657560   120.352258
+		min    1.402920e+06   504.100000   483.700000  3941.000000   467.000000   502.000000  3454.800000
+		25%    1.414175e+06   969.625000   561.800000  4196.591176   972.700000   565.000000  3708.200000
+		50%    1.425430e+06   979.500000   571.450000  4276.111429   984.900000   573.800000  3768.524194
+		75%    1.436685e+06   989.300000   584.800000  4393.197798   994.900000   583.900000  3844.679688
+		max    1.447940e+06  1080.100000  1507.500000  4931.300000  1520.100000  1380.300000  4189.400000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4302 (0.955363091272485 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       70.63787   59.60806
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    110        111
+    Blink Count:                       57         57
+
+    Pupil Relative Diff (L-R):    0.12133 (±0.01447)
+    Eye Position Mismatch (X):   21.26927 (±60.20315)
+    ### Analysing: STORY_1 // JANEK_13 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 4 (duration: 1956.0)
+            Blinks interp:  106 (duration: 34996.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4385.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4385.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 5 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=130.0, Gap=None.
+        Cluster replaced with NaN for LeftPupil: Duration=80.0, Gap=640.0.
+        Cluster smoothed for LeftPupil: Duration=18100.0.
+        Cluster smoothed for LeftPupil: Duration=22910.0.
+        Cluster replaced with NaN for LeftPupil: Duration=620.0, Gap=350.0.
+        Found 5 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=130.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=80.0, Gap=640.0.
+        Cluster smoothed for RightPupil: Duration=18100.0.
+        Cluster smoothed for RightPupil: Duration=22910.0.
+        Cluster replaced with NaN for RightPupil: Duration=620.0, Gap=350.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.385000e+03  3296.000000  3296.000000  4103.000000  3499.000000  3499.000000  4103.000000
+		mean   1.478100e+06   972.054187   603.009254  4267.266359   984.375164   584.499543  3770.495810
+		std    1.265985e+04    77.216252   117.708801    91.853691    33.289486    58.323760    70.067261
+		min    1.456180e+06   563.700000   494.200000  4028.140625   520.300000   520.100000  3585.300000
+		25%    1.467140e+06   975.300000   556.500000  4205.790323   974.500000   559.950000  3723.466630
+		50%    1.478100e+06   984.400000   566.050000  4261.100000   984.900000   571.000000  3767.216667
+		75%    1.489060e+06   997.600000   578.725000  4319.477273   996.300000   580.000000  3806.912879
+		max    1.500020e+06  1078.500000  1233.500000  4588.800000  1494.300000   994.000000  4009.400000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4103 (0.9356898517673888 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       64.73819   51.41724
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    124        126
+    Blink Count:                       58         60
+
+    Pupil Relative Diff (L-R):    0.11628 (±0.01200)
+    Eye Position Mismatch (X):   24.78307 (±72.87727)
+    ### Analysing: STORY_1 // KAROLINA_14 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 4 (duration: 1554.0)
+            Blinks interp:  118 (duration: 38708.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4768.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4768.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 4 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=190.0, Gap=None.
+        Cluster replaced with NaN for LeftPupil: Duration=100.0, Gap=320.0.
+        Cluster smoothed for LeftPupil: Duration=45220.0.
+        Cluster replaced with NaN for LeftPupil: Duration=640.0, Gap=320.0.
+        Found 4 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=190.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=100.0, Gap=320.0.
+        Cluster smoothed for RightPupil: Duration=45220.0.
+        Cluster replaced with NaN for RightPupil: Duration=640.0, Gap=320.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.768000e+03  3648.000000  3648.000000  4523.000000  3905.000000  3905.000000  4523.000000
+		mean   1.532865e+06   978.839117   600.045066  4306.301707   987.712932   588.592241  3780.742502
+		std    1.376547e+04    86.173083   109.719045   187.562524    69.094450    67.443998   107.654503
+		min    1.509030e+06   566.000000   513.700000  4009.500000   518.500000   518.400000  3533.700000
+		25%    1.520948e+06   972.500000   556.900000  4150.241196   973.200000   561.900000  3695.206061
+		50%    1.532865e+06   984.200000   565.000000  4278.700000   984.300000   573.300000  3781.300000
+		75%    1.544782e+06   993.700000   578.925000  4433.558065   994.900000   584.000000  3857.965294
+		max    1.556700e+06  1773.700000  1507.200000  4866.852941  1893.100000  1357.300000  4121.800000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4523 (0.9486157718120806 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       63.55869   56.62171
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    135        137
+    Blink Count:                       66         66
+
+    Pupil Relative Diff (L-R):    0.12133 (±0.02074)
+    Eye Position Mismatch (X):   19.07357 (±60.89933)
+    ### Analysing: STORY_1 // JANEK_14 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 6 (duration: 3012.0)
+            Blinks interp:  96 (duration: 33952.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4828.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4828.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 7 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=110.0, Gap=None.
+        Cluster replaced with NaN for LeftPupil: Duration=90.0, Gap=360.0.
+        Cluster replaced with NaN for LeftPupil: Duration=20.0, Gap=410.0.
+        Cluster smoothed for LeftPupil: Duration=34190.0.
+        Cluster replaced with NaN for LeftPupil: Duration=650.0, Gap=730.0.
+        Cluster smoothed for LeftPupil: Duration=9940.0.
+        Cluster replaced with NaN for LeftPupil: Duration=190.0, Gap=370.0.
+        Found 7 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=110.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=90.0, Gap=360.0.
+        Cluster replaced with NaN for RightPupil: Duration=20.0, Gap=410.0.
+        Cluster smoothed for RightPupil: Duration=34190.0.
+        Cluster replaced with NaN for RightPupil: Duration=650.0, Gap=730.0.
+        Cluster smoothed for RightPupil: Duration=9940.0.
+        Cluster replaced with NaN for RightPupil: Duration=190.0, Gap=370.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.828000e+03  3653.000000  3653.000000  4415.000000  3861.000000  3861.000000  4415.000000
+		mean   1.588295e+06   978.264358   596.198330  4157.994939   982.243564   581.778399  3662.886608
+		std    1.393868e+04    62.205458    92.404286   169.051400    27.375505    54.064771   124.849742
+		min    1.564160e+06   562.400000   509.100000  3805.240000   501.800000   517.300000  3401.300000
+		25%    1.576228e+06   973.600000   562.700000  4032.088235   970.400000   562.400000  3572.038710
+		50%    1.588295e+06   986.900000   571.900000  4124.400000   980.100000   571.700000  3637.200000
+		75%    1.600362e+06  1001.500000   580.600000  4249.750000   995.600000   582.200000  3726.383333
+		max    1.612430e+06  1116.500000  1175.100000  4707.192308  1266.500000  1063.100000  4012.900000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4415 (0.9144573322286661 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       59.72271   48.00763
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    118        120
+    Blink Count:                       56         56
+
+    Pupil Relative Diff (L-R):    0.11878 (±0.01176)
+    Eye Position Mismatch (X):   18.70192 (±56.39209)
+    ### Analysing: STORY_1 // KAROLINA_15 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 5 (duration: 2724.0)
+            Blinks interp:  98 (duration: 32280.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4911.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4911.0
+        (5) Replacing Zeros: 
+            Zeros: N:18.0
+        (5) Replacing Zeros: 
+            Zeros: N:14.0
+        (6) Smoothing Out the Data: 
+        Found 6 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=460.0, Gap=None.
+        Cluster replaced with NaN for LeftPupil: Duration=20.0, Gap=340.0.
+        Cluster smoothed for LeftPupil: Duration=13720.0.
+        Cluster replaced with NaN for LeftPupil: Duration=410.0, Gap=980.0.
+        Cluster smoothed for LeftPupil: Duration=30970.0.
+        Cluster replaced with NaN for LeftPupil: Duration=570.0, Gap=290.0.
+        Found 6 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=500.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=20.0, Gap=340.0.
+        Cluster smoothed for RightPupil: Duration=13720.0.
+        Cluster replaced with NaN for RightPupil: Duration=410.0, Gap=980.0.
+        Cluster smoothed for RightPupil: Duration=30970.0.
+        Cluster replaced with NaN for RightPupil: Duration=570.0, Gap=290.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.911000e+03  3837.000000  3837.000000  4471.000000  4045.000000  4045.000000  4471.000000
+		mean   1.646110e+06  1001.893954   638.729320  4422.669240  1025.035525   613.700742  3821.864517
+		std    1.417828e+04   174.540832   133.519866   203.453386   164.982425   109.342088   133.719162
+		min    1.621560e+06   438.100000   468.000000  3964.900000   495.400000   452.700000  3540.033333
+		25%    1.633835e+06   954.800000   576.400000  4239.185484   975.400000   569.200000  3713.735714
+		50%    1.646110e+06   971.000000   598.200000  4433.600000   991.300000   583.600000  3810.888889
+		75%    1.658385e+06   985.300000   621.100000  4584.050000  1003.200000   612.900000  3920.400000
+		max    1.670660e+06  2012.100000  1509.200000  4937.100000  2068.100000  1421.200000  4181.400000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4471 (0.9104052127876197 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:      107.90600   98.99826
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                     98        102
+    Blink Count:                       56         56
+
+    Pupil Relative Diff (L-R):    0.13531 (±0.01615)
+    Eye Position Mismatch (X):   26.67974 (±50.75306)
+    ### Analysing: STORY_1 // JANEK_15 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 4 (duration: 2206.0)
+            Blinks interp:  114 (duration: 36708.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4782.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4782.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 5 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=30.0, Gap=None.
+        Cluster replaced with NaN for LeftPupil: Duration=50.0, Gap=790.0.
+        Cluster smoothed for LeftPupil: Duration=2850.0.
+        Cluster smoothed for LeftPupil: Duration=41950.0.
+        Cluster replaced with NaN for LeftPupil: Duration=680.0, Gap=350.0.
+        Found 5 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=30.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=50.0, Gap=790.0.
+        Cluster smoothed for RightPupil: Duration=2850.0.
+        Cluster smoothed for RightPupil: Duration=41950.0.
+        Cluster replaced with NaN for RightPupil: Duration=680.0, Gap=350.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.782000e+03  3630.000000  3630.000000  4482.000000  3808.000000  3808.000000  4482.000000
+		mean   1.704025e+06   980.648650   602.672893  4172.815607   990.782327   585.737290  3684.458338
+		std    1.380589e+04    92.855248   111.795895   130.725591    67.255580    66.812262    99.770873
+		min    1.680120e+06   553.500000   504.300000  3879.294118   539.100000   494.200000  3450.193939
+		25%    1.692072e+06   978.525000   560.925000  4087.606250   976.200000   563.600000  3616.058602
+		50%    1.704025e+06   986.500000   570.200000  4153.059537   984.900000   570.800000  3676.740909
+		75%    1.715978e+06   994.700000   582.400000  4245.000000   993.800000   580.100000  3738.121774
+		max    1.727930e+06  1813.300000  1480.000000  4712.400000  1842.100000  1372.800000  4095.600000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4482 (0.9372647427854455 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       66.61891   55.82536
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    121        121
+    Blink Count:                       61         61
+
+    Pupil Relative Diff (L-R):    0.11683 (±0.01262)
+    Eye Position Mismatch (X):   20.25204 (±65.50532)
+    ### Analysing: STORY_1 // KAROLINA_16 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 6 (duration: 3386.0)
+            Blinks interp:  76 (duration: 27688.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4404.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4404.0
+        (5) Replacing Zeros: 
+            Zeros: N: 2.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 7 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=280.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=3020.0.
+        Cluster smoothed for LeftPupil: Duration=10760.0.
+        Cluster smoothed for LeftPupil: Duration=22560.0.
+        Cluster smoothed for LeftPupil: Duration=3450.0.
+        Cluster replaced with NaN for LeftPupil: Duration=10.0, Gap=420.0.
+        Cluster replaced with NaN for LeftPupil: Duration=480.0, Gap=370.0.
+        Found 7 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=300.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=3020.0.
+        Cluster smoothed for RightPupil: Duration=10760.0.
+        Cluster smoothed for RightPupil: Duration=22560.0.
+        Cluster smoothed for RightPupil: Duration=3450.0.
+        Cluster replaced with NaN for RightPupil: Duration=10.0, Gap=420.0.
+        Cluster replaced with NaN for RightPupil: Duration=480.0, Gap=370.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.404000e+03  3391.000000  3391.000000  3983.000000  3618.000000  3618.000000  3983.000000
+		mean   1.757265e+06   940.528782   656.481923  4536.949316   947.114511   640.297595  3942.532129
+		std    1.271470e+04    71.801649   134.069413   287.186324    70.229040   110.225613   220.424768
+		min    1.735250e+06   581.500000   510.800000  3986.355882   509.400000   527.200000  3536.461765
+		25%    1.746258e+06   932.000000   582.900000  4319.500000   937.150000   580.400000  3756.225000
+		50%    1.757265e+06   964.000000   604.000000  4571.200000   973.900000   592.000000  3945.514286
+		75%    1.768272e+06   982.050000   687.500000  4734.712937   987.600000   685.200000  4096.052941
+		max    1.779280e+06  1090.800000  1502.400000  5106.400000  1092.200000  1379.900000  4458.806667
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 3983 (0.9044050862851952 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:      118.51024  101.55568
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                     74         75
+    Blink Count:                       49         50
+
+    Pupil Relative Diff (L-R):    0.13048 (±0.01550)
+    Eye Position Mismatch (X):   19.81834 (±31.46671)
+    ### Analysing: STORY_1 // JANEK_16 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 4 (duration: 3214.0)
+            Blinks interp:  90 (duration: 31332.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4729.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4729.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 4 clusters for LeftPupil.
+        Cluster smoothed for LeftPupil: Duration=3050.0.
+        Cluster smoothed for LeftPupil: Duration=40390.0.
+        Cluster replaced with NaN for LeftPupil: Duration=460.0, Gap=330.0.
+        Cluster replaced with NaN for LeftPupil: Duration=130.0, Gap=330.0.
+        Found 4 clusters for RightPupil.
+        Cluster smoothed for RightPupil: Duration=3050.0.
+        Cluster smoothed for RightPupil: Duration=40390.0.
+        Cluster replaced with NaN for RightPupil: Duration=460.0, Gap=330.0.
+        Cluster replaced with NaN for RightPupil: Duration=130.0, Gap=330.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.729000e+03  3579.000000  3579.000000  4346.000000  3828.000000  3828.000000  4346.000000
+		mean   1.810960e+06   989.792372   604.861190  4337.507070  1009.623459   592.363662  3835.986986
+		std    1.365289e+04   176.312471   140.619501   319.595690   160.698759   119.079871   268.636354
+		min    1.787320e+06   461.100000   436.100000  3872.050000   487.600000   459.000000  3379.690000
+		25%    1.799140e+06   941.900000   560.200000  4102.900000   967.000000   556.900000  3640.725000
+		50%    1.810960e+06   973.500000   570.700000  4216.000000   982.200000   569.000000  3734.050000
+		75%    1.822780e+06   989.900000   585.750000  4583.141667   994.800000   581.100000  4032.325000
+		max    1.834600e+06  2021.200000  1527.900000  5175.800000  1957.000000  1475.300000  4470.400000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4346 (0.9190103615986467 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       72.03966   72.84866
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    107        112
+    Blink Count:                       50         53
+
+    Pupil Relative Diff (L-R):    0.11530 (±0.01340)
+    Eye Position Mismatch (X):   26.40830 (±53.45221)
+    ### Analysing: STORY_1 // KAROLINA_17 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 4 (duration: 2738.0)
+            Blinks interp:  92 (duration: 30224.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4717.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4717.0
+        (5) Replacing Zeros: 
+            Zeros: N: 9.0
+        (5) Replacing Zeros: 
+            Zeros: N: 9.0
+        (6) Smoothing Out the Data: 
+        Found 5 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=150.0, Gap=None.
+        Cluster replaced with NaN for LeftPupil: Duration=400.0, Gap=440.0.
+        Cluster smoothed for LeftPupil: Duration=19890.0.
+        Cluster smoothed for LeftPupil: Duration=21690.0.
+        Cluster smoothed for LeftPupil: Duration=2150.0.
+        Found 5 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=150.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=400.0, Gap=440.0.
+        Cluster smoothed for RightPupil: Duration=19890.0.
+        Cluster smoothed for RightPupil: Duration=21690.0.
+        Cluster smoothed for RightPupil: Duration=2150.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.717000e+03  3704.000000  3704.000000  4376.000000  3924.000000  3924.000000  4376.000000
+		mean   1.864880e+06   978.698515   598.990389  4028.174997   982.594470   589.155556  3615.043882
+		std    1.361825e+04    67.868954   109.192827    99.899335    51.615263    86.092604    84.780071
+		min    1.841300e+06   556.200000   475.400000  3776.711765   519.600000   482.500000  3416.894118
+		25%    1.853090e+06   977.200000   563.900000  3960.098437   975.800000   564.700000  3553.684980
+		50%    1.864880e+06   987.000000   569.900000  4013.707143   985.000000   571.300000  3606.800000
+		75%    1.876670e+06   997.100000   578.100000  4094.100000   994.600000   579.400000  3669.174765
+		max    1.888460e+06  1427.100000  1560.200000  4334.800000  1574.800000  1442.200000  3867.700000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4376 (0.9277082891668433 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       62.51151   54.76339
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    132        133
+    Blink Count:                       53         54
+
+    Pupil Relative Diff (L-R):    0.10250 (±0.00807)
+    Eye Position Mismatch (X):   15.97214 (±53.08640)
+    ### Analysing: STORY_1 // JANEK_17 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 3 (duration: 1358.0)
+            Blinks interp:  116 (duration: 38444.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4430.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4430.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 4 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=220.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=42080.0.
+        Cluster replaced with NaN for LeftPupil: Duration=340.0, Gap=330.0.
+        Cluster replaced with NaN for LeftPupil: Duration=250.0, Gap=360.0.
+        Found 4 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=220.0, Gap=None.
+        Cluster smoothed for RightPupil: Duration=42080.0.
+        Cluster replaced with NaN for RightPupil: Duration=340.0, Gap=330.0.
+        Cluster replaced with NaN for RightPupil: Duration=250.0, Gap=360.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.430000e+03  3273.000000  3273.000000  4209.000000  3534.000000  3534.000000  4209.000000
+		mean   1.918725e+06   983.784632   595.676841  4038.320176   984.935682   583.879598  3596.034927
+		std    1.278975e+04    59.311462    88.992226   110.016103    27.845530    54.348669    78.030580
+		min    1.896580e+06   579.600000   530.800000  3796.800000   530.700000   531.800000  3422.300000
+		25%    1.907652e+06   980.800000   562.400000  3962.900000   973.900000   565.000000  3541.181818
+		50%    1.918725e+06   990.300000   569.800000  4026.596774   985.000000   571.000000  3590.833333
+		75%    1.929798e+06  1000.800000   578.900000  4110.745161   995.400000   577.800000  3644.400000
+		max    1.940870e+06  1096.200000  1154.900000  4481.400000  1132.800000   941.500000  3947.000000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4209 (0.9501128668171558 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       61.20115   51.15196
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    119        121
+    Blink Count:                       61         61
+
+    Pupil Relative Diff (L-R):    0.10932 (±0.01190)
+    Eye Position Mismatch (X):   17.06211 (±54.58977)
+    ### Analysing: STORY_1 // KAROLINA_18 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 7 (duration: 4066.0)
+            Blinks interp:  110 (duration: 38264.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4244.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4244.0
+        (5) Replacing Zeros: 
+            Zeros: N:36.0
+        (5) Replacing Zeros: 
+            Zeros: N:27.0
+        (6) Smoothing Out the Data: 
+        Found 7 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=20.0, Gap=None.
+        Cluster replaced with NaN for LeftPupil: Duration=0.0, Gap=610.0.
+        Cluster replaced with NaN for LeftPupil: Duration=250.0, Gap=400.0.
+        Cluster smoothed for LeftPupil: Duration=12860.0.
+        Cluster smoothed for LeftPupil: Duration=17000.0.
+        Cluster smoothed for LeftPupil: Duration=7140.0.
+        Cluster replaced with NaN for LeftPupil: Duration=660.0, Gap=360.0.
+        Found 7 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=110.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=0.0, Gap=610.0.
+        Cluster replaced with NaN for RightPupil: Duration=250.0, Gap=400.0.
+        Cluster smoothed for RightPupil: Duration=12860.0.
+        Cluster smoothed for RightPupil: Duration=17000.0.
+        Cluster smoothed for RightPupil: Duration=7140.0.
+        Cluster replaced with NaN for RightPupil: Duration=660.0, Gap=360.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.244000e+03  2846.000000  2846.000000  3703.000000  3203.000000  3203.000000  3703.000000
+		mean   1.969315e+06   996.197751   646.413247  4483.755543   998.111552   617.485701  3865.130677
+		std    1.225282e+04   152.701062   138.407481   218.423084   142.956572   113.019047   115.373707
+		min    1.948100e+06   570.800000   437.800000  3959.355814   529.400000   444.800000  3564.829412
+		25%    1.958708e+06   957.025000   580.300000  4316.894796   962.000000   576.400000  3787.500000
+		50%    1.969315e+06   972.400000   595.800000  4530.700000   974.000000   589.100000  3867.555556
+		75%    1.979922e+06   993.300000   622.200000  4649.877339   987.650000   599.950000  3940.013514
+		max    1.990530e+06  1950.500000  1537.800000  4980.600000  1905.000000  1461.900000  4177.600000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 3703 (0.8725259189443921 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:      113.03613   87.02081
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    110        112
+    Blink Count:                       65         66
+
+    Pupil Relative Diff (L-R):    0.13695 (±0.02535)
+    Eye Position Mismatch (X):   17.98749 (±39.16198)
+    ### Analysing: STORY_1 // JANEK_18 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 6 (duration: 3622.0)
+            Blinks interp:  102 (duration: 39680.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4669.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4669.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 7 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=220.0, Gap=None.
+        Cluster replaced with NaN for LeftPupil: Duration=30.0, Gap=300.0.
+        Cluster smoothed for LeftPupil: Duration=4190.0.
+        Cluster smoothed for LeftPupil: Duration=4210.0.
+        Cluster smoothed for LeftPupil: Duration=4850.0.
+        Cluster smoothed for LeftPupil: Duration=29350.0.
+        Cluster replaced with NaN for LeftPupil: Duration=150.0, Gap=320.0.
+        Found 7 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=220.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=30.0, Gap=300.0.
+        Cluster smoothed for RightPupil: Duration=4190.0.
+        Cluster smoothed for RightPupil: Duration=4210.0.
+        Cluster smoothed for RightPupil: Duration=4850.0.
+        Cluster smoothed for RightPupil: Duration=29350.0.
+        Cluster replaced with NaN for RightPupil: Duration=150.0, Gap=320.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.669000e+03  3193.000000  3193.000000  4264.000000  3528.000000  3528.000000  4264.000000
+		mean   2.021280e+06  1000.761322   611.544472  4006.408776   999.947194   593.874348  3580.365555
+		std    1.347969e+04   103.988344   100.797218   139.892745    86.563568    71.157827    98.291586
+		min    1.997940e+06   574.900000   505.700000  3702.046154   552.400000   500.000000  3374.700000
+		25%    2.009610e+06   981.300000   566.200000  3911.534184   974.600000   565.400000  3508.189706
+		50%    2.021280e+06   992.600000   576.000000  3984.200000   984.300000   572.400000  3577.563514
+		75%    2.032950e+06  1006.700000   594.700000  4067.437500   997.900000   590.925000  3637.131081
+		max    2.044620e+06  1915.700000  1464.500000  4574.325000  1834.400000  1426.600000  3945.400000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4264 (0.9132576568858428 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       83.02351   67.76832
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    120        120
+    Blink Count:                       59         59
+
+    Pupil Relative Diff (L-R):    0.10602 (±0.01468)
+    Eye Position Mismatch (X):   18.50445 (±51.77274)
+    ### Analysing: STORY_1 // KAROLINA_19 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 3 (duration: 3126.0)
+            Blinks interp:  90 (duration: 29564.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4100.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4100.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 3 clusters for LeftPupil.
+        Cluster smoothed for LeftPupil: Duration=34620.0.
+        Cluster smoothed for LeftPupil: Duration=2950.0.
+        Cluster replaced with NaN for LeftPupil: Duration=340.0, Gap=350.0.
+        Found 3 clusters for RightPupil.
+        Cluster smoothed for RightPupil: Duration=34620.0.
+        Cluster smoothed for RightPupil: Duration=2950.0.
+        Cluster replaced with NaN for RightPupil: Duration=340.0, Gap=350.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.100000e+03  3056.000000  3056.000000  3759.000000  3269.000000  3269.000000  3759.000000
+		mean   2.072525e+06   987.977749   598.906348  4024.463492   984.070419   588.045763  3601.859586
+		std    1.183712e+04    59.959379    90.072792   105.275538    23.095015    53.766421    88.323817
+		min    2.052030e+06   584.700000   531.000000  3733.055882   567.900000   532.900000  3283.594118
+		25%    2.062278e+06   985.600000   566.100000  3958.300000   973.300000   566.200000  3553.372269
+		50%    2.072525e+06   993.400000   571.350000  4029.300000   983.000000   573.800000  3608.470588
+		75%    2.082772e+06  1002.800000   577.300000  4090.358115   991.100000   583.200000  3655.085714
+		max    2.093020e+06  1110.600000  1171.100000  4325.508571  1137.500000   946.300000  3988.691429
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 3759 (0.916829268292683 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       65.87941   54.40953
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    108        113
+    Blink Count:                       51         52
+
+    Pupil Relative Diff (L-R):    0.10491 (±0.01045)
+    Eye Position Mismatch (X):   21.73004 (±53.58079)
+    ### Analysing: STORY_1 // JANEK_19 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 1 (duration: 320.0)
+            Blinks interp:  52 (duration: 15900.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4424.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4424.0
+        (5) Replacing Zeros: 
+            Zeros: N:59.0
+        (5) Replacing Zeros: 
+            Zeros: N:56.0
+        (6) Smoothing Out the Data: 
+        Found 2 clusters for LeftPupil.
+        Cluster smoothed for LeftPupil: Duration=43180.0.
+        Cluster replaced with NaN for LeftPupil: Duration=130.0, Gap=330.0.
+        Found 2 clusters for RightPupil.
+        Cluster smoothed for RightPupil: Duration=43210.0.
+        Cluster replaced with NaN for RightPupil: Duration=130.0, Gap=330.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.424000e+03  3935.000000  3935.000000  4319.000000  4064.000000  4064.000000  4322.000000
+		mean   2.122115e+06   949.440305   485.442058  4440.187599  1006.445374   473.039862  3935.729375
+		std    1.277243e+04    58.687809   144.207798   408.017186    46.221298   135.232428   349.072471
+		min    2.100000e+06   388.900000   106.800000  3516.562500   503.600000   109.500000  3150.837500
+		25%    2.111058e+06   935.100000   357.650000  4065.450000   974.500000   345.775000  3607.552083
+		50%    2.122115e+06   948.000000   528.100000  4508.636364   993.250000   524.650000  4006.600000
+		75%    2.133172e+06   984.250000   571.500000  4804.200000  1050.100000   569.300000  4249.585870
+		max    2.144230e+06  1669.800000  1247.000000  5198.700000  1467.600000  1102.500000  4615.006897
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 4319 (0.9762658227848101 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:       54.98598   81.36841
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                     44         43
+    Blink Count:                       27         27
+
+    Pupil Relative Diff (L-R):    0.11316 (±0.01529)
+    Eye Position Mismatch (X):   65.85540 (±64.57587)
+    ### Analysing: STORY_1 // KAROLINA_20 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 7 (duration: 7196.0)
+            Blinks interp:  64 (duration: 23704.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:4463.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:4463.0
+        (5) Replacing Zeros: 
+            Zeros: N: 2.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 6 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=580.0, Gap=None.
+        Cluster smoothed for LeftPupil: Duration=13110.0.
+        Cluster smoothed for LeftPupil: Duration=7070.0.
+        Cluster smoothed for LeftPupil: Duration=8050.0.
+        Cluster smoothed for LeftPupil: Duration=7850.0.
+        Cluster replaced with NaN for LeftPupil: Duration=710.0, Gap=300.0.
+        Found 7 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=10.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=580.0, Gap=2990.0.
+        Cluster smoothed for RightPupil: Duration=13110.0.
+        Cluster smoothed for RightPupil: Duration=7070.0.
+        Cluster smoothed for RightPupil: Duration=8050.0.
+        Cluster smoothed for RightPupil: Duration=7850.0.
+        Cluster replaced with NaN for RightPupil: Duration=710.0, Gap=300.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  4.463000e+03  3167.000000  3167.000000  3612.000000  3464.000000  3464.000000  3612.000000
+		mean   2.174200e+06  1041.367572   886.729334  4426.938959  1026.231322   845.335970  3936.304032
+		std    1.288501e+04   170.430543   326.632742   484.236973   199.365079   306.222797   414.552114
+		min    2.151890e+06   365.800000   538.700000  3649.650000   397.800000   524.800000  3440.600000
+		25%    2.163045e+06   964.100000   577.850000  4033.375000   963.000000   569.900000  3612.891263
+		50%    2.174200e+06   987.700000   659.300000  4250.568750   983.750000   647.800000  3767.050000
+		75%    2.185355e+06  1190.850000  1251.550000  4714.850000  1204.200000  1214.600000  4179.465541
+		max    2.196510e+06  1482.500000  1670.100000  5540.700000  1536.000000  1492.900000  4884.100000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 3612 (0.809321084472328 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:      356.74993  313.03148
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                     94        100
+    Blink Count:                       42         45
+
+    Pupil Relative Diff (L-R):    0.11027 (±0.01815)
+    Eye Position Mismatch (X):   30.95785 (±49.91688)
+    ### Analysing: STORY_1 // JANEK_20 ###
+        (1) Downsampling to rate 100.0 Hz
+        (3) Interpolating Blinks: 
+            Blinks removed: 10 (duration: 11860.0)
+            Blinks interp:  96 (duration: 35696.0)
+        (4) Interpolating or NaN Outliers in LeftPupil eye N:5375.0
+        (4) Interpolating or NaN Outliers in RightPupil eye N:5375.0
+        (5) Replacing Zeros: 
+            No zeros present in the data
+        (6) Smoothing Out the Data: 
+        Found 11 clusters for LeftPupil.
+        Cluster replaced with NaN for LeftPupil: Duration=170.0, Gap=None.
+        Cluster replaced with NaN for LeftPupil: Duration=60.0, Gap=1310.0.
+        Cluster smoothed for LeftPupil: Duration=7960.0.
+        Cluster smoothed for LeftPupil: Duration=7500.0.
+        Cluster replaced with NaN for LeftPupil: Duration=1910.0, Gap=1700.0.
+        Cluster replaced with NaN for LeftPupil: Duration=30.0, Gap=1480.0.
+        Cluster replaced with NaN for LeftPupil: Duration=680.0, Gap=1800.0.
+        Cluster replaced with NaN for LeftPupil: Duration=1530.0, Gap=690.0.
+        Cluster smoothed for LeftPupil: Duration=3670.0.
+        Cluster smoothed for LeftPupil: Duration=17620.0.
+        Cluster replaced with NaN for LeftPupil: Duration=650.0, Gap=580.0.
+        Found 11 clusters for RightPupil.
+        Cluster replaced with NaN for RightPupil: Duration=170.0, Gap=None.
+        Cluster replaced with NaN for RightPupil: Duration=60.0, Gap=1310.0.
+        Cluster smoothed for RightPupil: Duration=7960.0.
+        Cluster smoothed for RightPupil: Duration=7500.0.
+        Cluster replaced with NaN for RightPupil: Duration=1910.0, Gap=1700.0.
+        Cluster replaced with NaN for RightPupil: Duration=30.0, Gap=1480.0.
+        Cluster replaced with NaN for RightPupil: Duration=680.0, Gap=1800.0.
+        Cluster replaced with NaN for RightPupil: Duration=1530.0, Gap=690.0.
+        Cluster smoothed for RightPupil: Duration=3670.0.
+        Cluster smoothed for RightPupil: Duration=17620.0.
+        Cluster replaced with NaN for RightPupil: Duration=650.0, Gap=580.0.
+
+        Final Data Stats: 
+		          TimePoint        LeftX        LeftY    LeftPupil       RightX       RightY   RightPupil
+		count  5.375000e+03  3398.000000  3398.000000  3679.000000  3765.000000  3765.000000  3679.000000
+		mean   2.231380e+06  1242.393202   902.394879  4330.728033  1216.488101   865.157450  3886.841192
+		std    1.551773e+04   433.547068   325.199277   209.414072   453.651031   300.510082   215.571371
+		min    2.204510e+06   199.400000   456.100000  3987.250000    78.400000   482.500000  3569.227273
+		25%    2.217945e+06   977.200000   561.900000  4191.229305   963.900000   565.300000  3738.336190
+		50%    2.231380e+06  1001.600000   975.900000  4303.337500   987.800000   832.200000  3869.181818
+		75%    2.244815e+06  1794.200000  1150.900000  4415.704372  1796.400000  1112.600000  3980.750000
+		max    2.258250e+06  2023.800000  1679.300000  5376.700000  2056.700000  1601.700000  5235.700000
+
+        Sanity Checks on Final Data: 
+            Number of Non-missing Data events: 3679 (0.6844651162790698 %)
+
+    (1) Quality Metrics:
+    Metric                           Left      Right
+    Coordinate Difference:      460.13178  414.84414
+    Rate of No Gaze Data:         0.00000    0.00000
+    Saccade Count:                    132        136
+    Blink Count:                       71         72
+
+    Pupil Relative Diff (L-R):    0.10258 (±0.01917)
+    Eye Position Mismatch (X):   38.08449 (±60.71136)
+
+===# Preprocessing Completed Successfully #===
+  Total trials processed: 40
+  FinalDataStruct contains stories: ['STORY_1', 'STORY_2']
+===# End of Preprocessing Section #===
+

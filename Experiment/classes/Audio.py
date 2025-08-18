@@ -531,6 +531,7 @@ class audioTrial:
 
         # ─── 4) END‑OF‑BLOCK CHECK ─────────────────────────────────────────────────────
         if self.currentStoryPart >= len(self.audio_files):
+            print(self.nextStage,self.currentStage)
             self.output_control.write("\nStory Ends.")
             return self.nextStage
         return self.currentStage

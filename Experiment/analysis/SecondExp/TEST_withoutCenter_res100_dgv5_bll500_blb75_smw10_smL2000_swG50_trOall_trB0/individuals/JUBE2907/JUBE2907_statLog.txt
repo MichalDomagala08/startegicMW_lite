@@ -1,0 +1,53 @@
+               ==========================================================
+               =====                STATISTIC LOG FILE               ===== 
+               ==========================================================
+
+   General Info: JUBE2907
+      Participant ID: JUBE2907
+      Tracked Entity: JANEK
+
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 25.0p-value: 0.845703125Z-score: -2.9866135717862297
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 24.0p-value: 0.76953125Z-score: -3.023946241433557
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 26.0p-value: 0.921875Z-score: -2.9492809021389017
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 27.0p-value: 1.0Z-score: -2.9119482324915738
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 26.0p-value: 0.921875Z-score: -2.9492809021389017
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 27.0p-value: 1.0Z-score: -2.9119482324915738
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 27.0p-value: 1.0Z-score: -2.9119482324915738
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 23.0p-value: 0.6953125Z-score: -3.061278911080885
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 27.0p-value: 1.0Z-score: -2.9119482324915738
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 24.0p-value: 0.76953125Z-score: -3.023946241433557
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 25.0p-value: 0.845703125Z-score: -2.9866135717862297
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 23.0p-value: 0.6953125Z-score: -3.061278911080885
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 103.0p-value: 0.956329345703125Z-score: -4.126478273891203
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 94.0p-value: 0.7011814117431641Z-score: -4.247449949673029
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 101.0p-value: 0.8983173370361328Z-score: -4.153360868509386
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 102.0p-value: 0.9272785186767578Z-score: -4.139919571200294
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 97.0p-value: 0.7841262817382812Z-score: -4.207126057745754
+---- Signed-rank test results  for Pupil Diameter: ----Wilcoxon signed-rank test statistic: 94.0p-value: 0.7011814117431641Z-score: -4.247449949673029
+===# Wilcoxon Test Summary #===
+                                      Statistic   p-value   Z-score       meanT      meanUT
+Analysis Name  Part   Mode Eye                                                             
+MW Estimate    first                       12.0  0.130859 -3.471938   10.801234   15.664894
+               All                         45.5  0.046306 -4.899353   15.050791   14.906286
+               second                      12.0  0.213524 -3.471938   13.474255   12.256518
+Pupil Diameter All    Std  Right Eye      102.0  0.927279 -4.139920  119.226961   95.244765
+                           Left Eye       101.0  0.898317 -4.153361  118.146259   97.134879
+                      Mean Right Eye       94.0  0.701181 -4.247450  465.643472  448.797811
+                           Left Eye       103.0  0.956329 -4.126478  431.315617  422.458019
+               second diff Right Eye       23.0  0.695312 -3.061279    0.287588    0.170542
+                           Left Eye        25.0  0.845703 -2.986614    0.266087    0.187350
+                      Std  Right Eye       24.0  0.769531 -3.023946  113.692969   89.417216
+                           Left Eye        27.0  1.000000 -2.911948  106.825124   94.996183
+                      Mean Right Eye       23.0  0.695312 -3.061279  418.161998  350.163042
+                           Left Eye        27.0  1.000000 -2.911948  375.826094  314.573017
+               first  diff Right Eye       27.0  1.000000 -2.911948    0.121654    0.137657
+                           Left Eye        26.0  0.921875 -2.949281    0.128554    0.131625
+                      Std  Right Eye       27.0  1.000000 -2.911948  130.012247  104.791927
+                           Left Eye        26.0  0.921875 -2.949281  134.117485  103.354269
+                      Mean Right Eye       24.0  0.769531 -3.023946  516.326390  523.896076
+                           Left Eye        25.0  0.845703 -2.986614  483.315096  492.587049
+               All    diff Left Eye        97.0  0.784126 -4.207126    0.203417    0.158121
+                           Right Eye       94.0  0.701181 -4.247450    0.214933    0.152475===# End Wilcoxon Summary #===
+
+Saved pickle to JUBE2907_preprocessed.pickle (11.75 MB)
+===# End of Statistics Logging #===

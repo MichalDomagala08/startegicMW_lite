@@ -21,11 +21,14 @@ from scipy import stats
 import openpyxl
 import pickle
 
+
+dataFolder = "\\data_second"
+experimentName = "SecondExp"
 ### Setup Working Directory and all necessery paths
 workingDir =  os.path.dirname(os.path.abspath(__file__));
 print("Working Directory: ", workingDir)
 print("Current Directory: ", os.path.dirname(os.path.abspath(__file__)))
-path = os.path.split(workingDir)[0] + "\\data" #data path
+path = os.path.split(workingDir)[0] + dataFolder #data path
 
 
 ######## --> SETUP ALL PARAMETERS <-- ########
@@ -62,7 +65,7 @@ paramsDict['maxcluslen'   ]  = 2000; # Minimum length  (in ms) of a cluster to b
 paramsDict['mingaplen'    ]  = 50;  # Maximum gap (in ms) between timestamps within a cluster.
 
 # Pupil Diameter Computation 
-paramsDict['trialOffset'  ]  = 10000 #"all"  # How many ms before the trial offset do we compute our measure (10s default)
+paramsDict['trialOffset'  ]  = "all" #"all"  # How many ms before the trial offset do we compute our measure (10s default)
                                       # - "All" -for a whole trial (then optional begTrialOff - for excluding first and last N ms )
 paramsDict['begTrialOff']    = 5000; # if All is selected we cut the trial at the beginning by N ms
 paramsDict['endTrialOff']    = 5000; # if All is selected we cut the trial at the End       by N ms
@@ -82,18 +85,18 @@ analysisName = f"TEST_withoutCenter_res{paramsDict['resRate']}_dgv{paramsDict['d
 subjects = [f for f in os.listdir(path) if  not os.path.isfile(os.path.join(path, f))] # get all the filenames
 
 ### Create a current Analysis Pipeline
-os.makedirs(os.path.join(workingDir,analysisName,'individuals'),exist_ok=True)
+os.makedirs(os.path.join(workingDir,experimentName,analysisName,'individuals'),exist_ok=True)
 allList = [];
 
 ### Createa an excel for data:
-filepath = os.path.join(workingDir,analysisName,'individuals',"analysis_results.xlsx")
+filepath = os.path.join(workingDir,experimentName,analysisName,'individuals',"analysis_results.xlsx")
 wb = openpyxl.Workbook()
 wb.save(filepath)
 
 ### Setup All Data Structures and PDFs 
 
 # General Raw Plots:
-output_dir = os.path.join(workingDir,analysisName, "individuals") #output path
+output_dir = os.path.join(workingDir,experimentName,analysisName, "individuals") #output path
 
 pdf_path_raweyegaze = os.path.join(output_dir, "RawEyeGaze.pdf")
 pdf_raweyegaze = PdfPages(pdf_path_raweyegaze)
@@ -121,9 +124,9 @@ for subj in range(begID,endID+1):
     filename = subjects[subj]
 
     # Open Log File
-    os.makedirs(os.path.join(workingDir,analysisName,'individuals',filename),exist_ok=True)
-    log_file = open(os.path.join(workingDir,analysisName,'individuals',filename,filename+"_preprocLog.txt"),'w+')
-    log_fileSt = open(os.path.join(workingDir,analysisName,'individuals',filename,filename+"_statLog.txt"),'w+')
+    os.makedirs(os.path.join(workingDir,experimentName,analysisName,'individuals',filename),exist_ok=True)
+    log_file = open(os.path.join(workingDir,experimentName,analysisName,'individuals',filename,filename+"_preprocLog.txt"),'w+')
+    log_fileSt = open(os.path.join(workingDir,experimentName,analysisName,'individuals',filename,filename+"_statLog.txt"),'w+')
 
     # Get the tracked entity name and display parameters (TBD)
     with open(os.path.join(path, filename,filename + '_log.txt'), 'r') as fp:
@@ -483,7 +486,7 @@ for subj in range(begID,endID+1):
         with pd.ExcelWriter(filename, mode='a', engine='openpyxl', if_sheet_exists='replace') as writer:
             df.to_excel(writer, sheet_name=sheet_name)
     # Save stats_df to Excel
-    save_df_to_excel(statsDF, os.path.join(workingDir,analysisName,'individuals','analysis_results.xlsx'), sheet_name=filename)
+    save_df_to_excel(statsDF, os.path.join(workingDir,experimentName,analysisName,'individuals','analysis_results.xlsx'), sheet_name=filename)
     #===============================================#
     #### -->    SAVING PREPROCESSED DATA    <--- ####
     #===============================================#
@@ -510,16 +513,16 @@ for subj in range(begID,endID+1):
         'pupilMW':      resultsDF,
         'statistics':   statsDF}
     
-    with open(os.path.join(workingDir,analysisName,'individuals',filename,filename+"_preprocessed.pickle"), 'wb') as handle:
+    with open(os.path.join(workingDir,experimentName,analysisName,'individuals',filename,filename+"_preprocessed.pickle"), 'wb') as handle:
         pickle.dump(finalData, handle, protocol=pickle.HIGHEST_PROTOCOL)
-    log_fileSt.write(f"Saved pickle to {filename}_preprocessed.pickle ({os.path.getsize(os.path.join(workingDir,analysisName,'individuals',filename,filename+'_preprocessed.pickle'))/1e6:.2f} MB)\n")
+    log_fileSt.write(f"Saved pickle to {filename}_preprocessed.pickle ({os.path.getsize(os.path.join(workingDir,experimentName,analysisName,'individuals',filename,filename+'_preprocessed.pickle'))/1e6:.2f} MB)\n")
     log_fileSt.write("===# End of Statistics Logging #===\n")
     log_fileSt.close() # Closing the preprocessing log file)
 
     allList.append(finalData)
 
 
-with open(os.path.join(workingDir,analysisName,'individuals',"preprocessed.pickle"), 'wb') as handle:
+with open(os.path.join(workingDir,experimentName,analysisName,'individuals',"preprocessed.pickle"), 'wb') as handle:
     pickle.dump(allList, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 pdf_raweyegaze.close()

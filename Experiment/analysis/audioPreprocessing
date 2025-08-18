@@ -4,37 +4,27 @@
 """
     This script aimes at transcring the audio files of the participants
     Maybe I will use it to my advantage in the future to analyse more of the audio files
+
+    Procedure:
+    1. Uses Whisperer from OpenAI to get every
 """
 
 ####    Get the Paths to data:
 import os 
-from storyTools import loadStory,splitStoryEntity
-
-### Options and globabl Variables
-analysisName = "TEST_withoutCenter_res100_dgv5_bll500_blb75_smw10_smL2000_swG50_trO10000_trB0"
-
-makeTranscriptions = 1; # Whether to consider Transcriptions: 
+from storyTools import loadStory,splitStoryEntity,transcibeText
 
 ### Get Subjects and set up proper Directories
 workingDir = os.getcwd();
 print( f"Current Firectory: {workingDir}")
 path =workingDir + "\\Experiment\\" #data path
 print( os.getcwd())
-savePath = os.path.join(path,"analysis",analysisName,'individuals')
-path = path +"\\data"
+savePath = os.path.join(path,"analysis",'Recalls')
+path = path +"\\data_second"
 print( f"Current Directory: {savePath}")
 print( f"Data Directory: {path}")
 
-#subjects = [f for f in os.listdir(path) if  not os.path.isfile(os.path.join(path, f))] # get all the filenames
+subjects = [f for f in os.listdir(path) if  not os.path.isfile(os.path.join(path, f))] # get all the filenames
 
-subjects = ['ALPR1107','BEBA1207','JUSZ1107','KIGI1207','ZURY1007']
 ### Load Stories and differentiate between entitites
-[Story1,Story1_raw] = loadStory("story3.txt")
-Story1_bundle = splitStoryEntity(Story1_raw)
-karolinaStory = " ".join(Story1_bundle['firstEntity'])
-janekStory    = " ".join(Story1_bundle['secondEntity'])
 
-
-from storyTools import createTranscribedSimilarity
-
-createTranscribedSimilarity(path,savePath,subjects,Story1,janekStory,karolinaStory,makeTranscriptions,device="cuda")
+transcibeText(path,savePath,subjects,device="cuda",langCorr=2)
