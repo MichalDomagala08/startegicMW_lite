@@ -1,0 +1,102 @@
+---
+title: "Ordinal LMER Strategic MW "
+output: html_notebook
+---
+
+### Load Data
+
+```{r}
+library(ordinal)
+library(tidyverse)
+path = "C:\\Users\\barak\\Documents\\GitHub\\startegicMW_lite\\Experiment\\analysis\\SecondExp\\RecallAnalysis"
+
+
+analysisName = "\\NewAnalysis_AutobiografyCheck_4_NoShort_sFiltered\\"
+data = read.csv(paste(path,analysisName,"all_data_behav_only2.csv",sep=""),sep=',')
+view(data2)
+
+```
+
+```{r}
+
+library(lmerTest)
+results.lme.count <- lmer(MW_Estimate ~ Attention3 +(1|DS) +trialNum, data = data)
+summary(results.lme.count)
+```
+
+```{r}
+library(dplyr)
+
+data %>%
+  group_by(Tracking, Attention) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  arrange(Tracking, Attention)
+```
+
+
+```{r}
+
+
+data_filtered <- data %>%
+  filter(!DS %in% c("DS03", "DS08", "DS14", "DS23"))
+
+data_filtered %>%
+  group_by(Tracking, Attention3) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  arrange(Tracking, Attention3)
+```
+### Ordinal LMERs 
+```{r}
+
+data$Attention2 <- factor(
+  data$Attention,
+  levels = c(1,2,3,4),              # tu są Twoje stare numery
+  labels = c("Focus", "TRI", "MW", "MB"),  # nowe, czytelne nazwy
+  ordered = TRUE
+)
+
+
+
+data$Tracking <- factor(data$Tracking)
+m <- clmm(
+  Attention2 ~  Tracking+ trialNum  + (1 | DS),
+  data = data,
+  link = "logit"
+)
+
+summary(m)
+print(summary(m)$coefficients)
+
+
+```
+
+
+```{r}
+```
+
+```{r}
+
+
+data$Attention3 <- recode(
+  data$Attention2,
+  "Focus" = "Focus",
+  "TRI"   = "Focus",
+  "MW"    = "MW",
+  "MB"    = "MW"
+)
+
+
+m <- clmm(
+  Attention3 ~  Tracking+ trialNum  + (1 | DS),
+  data = data,
+  link = "logit"
+)
+
+summary(m)
+
+print(summary(m)$coefficients)
+
+```
+
+
+

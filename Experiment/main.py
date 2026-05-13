@@ -41,7 +41,8 @@ outputControll.write(f"      Height: {disp.height}\n")
 
 width = disp.width
 height =disp.height
-screen = pygame.display.set_mode((width, height))
+screen = pygame.display.set_mode((width, height),
+                                 pygame.FULLSCREEN | pygame.HWSURFACE | pygame.DOUBLEBUF)
 tempInitialTime = 0; # For Gathering Realtive Timestamps
 # PyGame setups
 font = pygame.font.Font(None, 50)

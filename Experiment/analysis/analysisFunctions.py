@@ -910,6 +910,91 @@ def qualiryMetrics(RawDFs, saccadesDFs, blinkDFs, gazeCoords, log_file=None,verb
                                         ##### ------------  PUPIL PREPROCESSINF FUNCTIONS ------------ #####
                                         ####################################################################
 
+import math, pywt, numpy as np  
+
+def modmax(d):
+        """
+        Purpose:
+        This will find where the modulus is grater than both of its 
+        neighbours. 
+        
+        ...
+        
+        Features:
+        cD2 : array
+            This is the normalization of Detail coefficients at level 2
+        
+        ...
+        
+        Output:
+        detect : array
+        
+        
+        """    
+        m = [0.0] * len(d)
+        for i in range(len(d)):
+            m[i] = math.fabs(d[i])
+            
+        t = [0.0] * len(d)
+        for i in range(len(d)):    
+            ll = m[i-1] if i >= 1 else m[i]
+            oo = m[i]
+            rr = m[i+1] if i < len(d)-2 else m[i]
+            
+            if (ll <= oo and oo >= rr) and (ll < oo or oo > rr):
+                t[i] = math.sqrt(d[i]**2)
+            else:
+                t[i] = 0.0
+#         print("\nModmax Calculation:")
+#         print(detect)
+        return t
+
+def lhipa(d,time):  
+    w = pywt.Wavelet('sym16') 
+    maxlevel = pywt.dwt_max_level(len(d),filter_len=w.dec_len)  
+
+    # set high and low frequency band indeces 
+    hif, lof = 1, int(maxlevel/2) 
+        
+    # get detail coefficients of pupil diameter signal d 
+    cD_H = pywt.downcoef('d',d,'sym16','per',level=hif) 
+    cD_L = pywt.downcoef('d',d,'sym16','per',level=lof)    
+                            
+    # normalize by 1/ 2 j  
+    cD_H[:] = [x / math.sqrt(2**hif) for x in cD_H] 
+    cD_L[:] = [x / math.sqrt(2**lof) for x in cD_L]  
+
+    # obtain the LH:HF ratio 
+    # 
+    cD_LH = cD_L  
+    for i in range(len(cD_L)):  
+        cD_LH[i] = cD_L[i] / cD_H[int(((2**lof)/(2**hif))*i)] 
+        
+    # detect modulus maxima , see Duchowski et al. [15] 
+    # 
+    cD_LHm = modmax(cD_LH)  
+
+    # threshold using universal threshold λuniv = σˆ (2 log n) 
+    # where σˆ is the standard deviation of the noise  
+
+    l_univ =  np.std(cD_LHm) * math.sqrt(2.0*np.log2(len(cD_LHm))) 
+    cD_LHt = pywt. threshold (cD_LHm ,l_univ ,mode ="less")  
+
+    # get signal duration (in seconds)  
+    tt = time.iloc[-1] -  time.iloc[0] 
+
+    # compute LHIPA 
+    ctr = 0  
+    for i in range(len(cD_LHt)):  
+        if math.fabs(cD_LHt[i]) > 0: ctr += 1
+        
+    LHIPA = float(ctr)/tt 
+        
+
+        
+    return LHIPA
+
+
 
 
 def preprocessingPipeline(blinkDF,RawDF,saccadesDF,gazeCoords,story="",part="",fixationDF=None,log_file=[],pdfs=[None],downs=1,centering=1,binterp=1,outrmv=1,nanrmv=1,smth=1,verbose=0,interp_type=0,interpBoundary=50,maxBlinkDur=500,resampleRate=100,dgvCenter=5,smoothwin=5,min_cluster_duration=2000,max_gap_duration=50):
@@ -1761,7 +1846,7 @@ def meanPupilShade(last10sDF1,last10sDF2,ds='',pvals = [], mltpl = 0,nsamp = 100
 
 def getPupilDiamLast(allData,last10sDF = [],beg = 10000,end=0,mode="ls"):
     """
-        Function to get a s;ice of Raw PupilometricData:
+        Function to get a slice of Raw PupilometricData:
 
         ARGUMENTS:
         allData   - structure containing All the data - Pupilometric and event wise
@@ -1827,34 +1912,64 @@ import statsmodels.api  as sm
 
 
 def plotTrialTrack(m,name,grand_df,ax,titl,paramNum=[0,1,2],anlysisName = 'Tracking',firstContrast='TRACKED',lastContrast = 'UNTRACKED'):
-  ### QUick Linear Model 
-  quick_untracked_lm = lambda x: m.params[m.params.keys()[paramNum[0]]] + m.params[m.params.keys()[paramNum[1]]]+m.params[m.params.keys()[paramNum[2]]]*x 
-  quick_tracked_lm = lambda x: m.params[m.params.keys()[paramNum[0]]] + m.params[m.params.keys()[paramNum[2]]]*x
+    ### QUick Linear Model 
+    quick_untracked_lm = lambda x: m.params[m.params.keys()[paramNum[0]]] + m.params[m.params.keys()[paramNum[1]]]+m.params[m.params.keys()[paramNum[2]]]*x 
+    quick_tracked_lm = lambda x: m.params[m.params.keys()[paramNum[0]]] + m.params[m.params.keys()[paramNum[2]]]*x
 
-  trialN = np.linspace(0,len(np.unique(grand_df['trialNum'])),len(np.unique(grand_df['trialNum']))+1);
-  mw_est_utr = pd.Series(trialN).apply(quick_untracked_lm)
-  mw_est_tr = pd.Series(trialN).apply(quick_tracked_lm)
+    trialN = np.linspace(0,len(np.unique(grand_df['trialNum'])),len(np.unique(grand_df['trialNum']))+1);
+    mw_est_utr = pd.Series(trialN).apply(quick_untracked_lm)
+    mw_est_tr = pd.Series(trialN).apply(quick_tracked_lm)
 
-  ax.set_title(titl)
-  ax.plot(trialN,mw_est_tr,label="Tracked model slope",color="blue")
-  ax.plot(trialN,mw_est_utr,label="Tracked model slope",color="orange")
-  grTr = grand_df[[name,'trialNum',anlysisName]].groupby([anlysisName,'trialNum'])
-  ax.fill_between(trialN, 
-                  mw_est_tr - grTr.std().loc[firstContrast][name], 
-                    mw_est_tr+   grTr.std().loc[firstContrast][name], 
-                  color='mediumslateblue', alpha=0.7, label=f'{firstContrast} (STD Envelope)')
+    ax.set_title(titl)
+    ax.plot(trialN,mw_est_tr,label="Tracked model slope",color="blue")
+    ax.plot(trialN,mw_est_utr,label="Tracked model slope",color="orange")
+    grTr = grand_df[[name,'trialNum',anlysisName]].groupby([anlysisName,'trialNum'])
+    from scipy.stats import t
+
+    # --- pieces from the fitted model ---
+    Vbeta  = m.cov_params().loc[m.params.index, m.params.index]  # Cov(beta)
+    tval   = t.ppf(0.975, df=m.df_resid)                         # 95% PI; change if needed
+
+    # --- build X matrices consistent with your lambdas: [1, Tracking, trialNum] ---
+    pnames = list(m.params.index)                # keeps exact column order used by model
+    col = {name:i for i, name in enumerate(pnames)}
+
+    def build_X(tracking): # Build simple model matrix (for tracked and untracked separately)
+        X = np.zeros((len(trialN), len(pnames)))
+        # these names match the terms in your formula
+        X[:, col.get('Intercept', 0)] = 1.0
+        if anlysisName == "Tracking":
+            ttr =  'Tracking[T.UNTRACKED]'
+        else:
+            ttr =  'C(Attention)[T.3]'
+
+        if ttr in col: X[:, col[ttr]] = tracking
+        if 'trialNum' in col: X[:, col['trialNum']] = trialN
+        return X
+
+    X_tr  = build_X(1.0)   # tracked
+    X_un  = build_X(0.0)   # untracked
+    # --- se of mean and se of prediction at each trial ---
+    se_mean_tr = np.sqrt(np.einsum('ij,jk,ik->i', X_tr, Vbeta.values, X_tr))
+    se_mean_un = np.sqrt(np.einsum('ij,jk,ik->i', X_un, Vbeta.values, X_un))
 
 
-  ax.fill_between(trialN, 
-                  mw_est_utr - grTr.std().loc[lastContrast][name], 
-                    mw_est_utr+   grTr.std().loc[lastContrast][name], 
-                  color='moccasin', alpha=0.7, label=f'{lastContrast} (STD Envelope)')
-  ax.scatter(grTr.mean().loc[firstContrast].index,grTr.mean().loc[firstContrast],label="Subj Mean Tracked",color = 'blue')
-  ax.scatter(grTr.mean().loc[lastContrast].index,grTr.mean().loc[lastContrast],label="Subj Mean Untracked",color = 'orange')
-  ax.set_xlabel="Trial Number"
-  ax.legend()
+    # --- add ribbons using your lambdas' fitted lines ---
+    ax.fill_between(trialN, mw_est_tr  - tval*se_mean_tr, mw_est_tr  + tval*se_mean_tr,
+                    color='mediumslateblue', alpha=0.25, label='TRACKED 95% PI')
+    ax.fill_between(trialN, mw_est_utr - tval*se_mean_un, mw_est_utr + tval*se_mean_un,
+                color='moccasin', alpha=0.25, label='UNTRACKED 95% PI')
+
+
+    ax.scatter(grTr.mean().loc[firstContrast].index,grTr.mean().loc[firstContrast],label="Subj Mean Tracked",color = 'blue')
+    ax.scatter(grTr.mean().loc[lastContrast].index,grTr.mean().loc[lastContrast],label="Subj Mean Untracked",color = 'orange')
+    ax.set_xlabel="Trial Number"
+    ax.legend()
   
+
 ####### (3) ---- MW vs Gaze ----- #######
+
+
 
 
 def plot_pupil_vs_mw(m, currentDf, ind, ax=None,meas='Pupil',target='MW_Estimate',meas1=1,meas2=2,tracking=True):
@@ -1893,10 +2008,11 @@ def plot_pupil_vs_mw(m, currentDf, ind, ax=None,meas='Pupil',target='MW_Estimate
 
         ax.scatter(currentDf[target],
                 currentDf[meas],
-                color='orange', label=f"Trial: (Coef: {m.params[m.params.keys()[2]]:1.4f} | P: {m.pvalues[m.params.keys()[2]]:1.4f})")
+                color='orange', label=f"Trial: (Coef: {m.params[m.params.keys()[meas1]]:1.4f} | P: {m.pvalues[m.params.keys()[meas1]]:1.4f})")
+
         ax.plot(currentDf[target], linfun(currentDf[target]), 'b--', label="Tracked Fit")
     # Add labels, title, and legend
-    ax.set_xlabel('MW Estimate')
+    ax.set_xlabel(target)
     ax.set_ylabel(f"{meas} Measure: {ind[0]} // {ind[1]}")
     ax.set_title(f"{ind[0]} // {ind[1]}: (Coef: {m.params[m.params.keys()[meas2]]:1.4f} // P: {m.pvalues[m.params.keys()[meas2]]:1.4f})")
     ax.legend()
@@ -1905,6 +2021,7 @@ def plot_pupil_vs_mw(m, currentDf, ind, ax=None,meas='Pupil',target='MW_Estimate
     if ax is None:
         plt.suptitle(f"MW Estimate vs {meas} Measure")
         plt.show()
+
 
 ###### ---- (6) Correlational Analysis F ----- #######
 
@@ -1956,7 +2073,7 @@ def pairwiseCorrMatrix(dfList,column = 'LeftPupil'):
     return corr_matrix,meanPupilDiam
 
 
-def diffRainPlot(lis, titl, ax=None):
+def diffRainPlot(lis, titl, ax=None,axTitle=['Tracked', 'Untracked']):
     from matplotlib import pyplot as plt
     import seaborn as sns
     import numpy as np
@@ -2023,7 +2140,7 @@ def diffRainPlot(lis, titl, ax=None):
     ax.set_ylim(ylim)
     ax.set_xticks([0, 1])
     ax.set_ylabel("Mean Correlation Coefficient", fontsize=16)
-    ax.set_xticklabels(['Tracked', 'Untracked'], fontsize=16)
+    ax.set_xticklabels(axTitle, fontsize=16)
     ax.set_title(titl, fontsize=16)
 
 
@@ -2089,7 +2206,7 @@ def qualityChecks(grand_df,column):
     return partiaclCheck1,partiaclCheck2,trmw1,untrmw1,trmw2,untrmw2
 
 
-def linearModelChecks(m,grand_df):
+def linearModelChecks(m,grand_df,formula =  "MW_Estimate ~ Tracking + trialNum"):
     # trial-level diagnostics
     resid   = m.resid                   # raw (conditional) residuals
     fitted  = m.fittedvalues            # conditional fitted values
@@ -2111,7 +2228,7 @@ def linearModelChecks(m,grand_df):
     # (3) Colinearity:
     from patsy import dmatrices
 
-    formula_fixed = "MW_Estimate ~ Tracking + trialNum"   # your fixed part
+    formula_fixed = formula  # your fixed part
     y, X = dmatrices(formula_fixed, data=grand_df[['DS','trialNum','Tracking','MW_Estimate']], return_type="dataframe")
     from statsmodels.stats.outliers_influence import variance_inflation_factor
 

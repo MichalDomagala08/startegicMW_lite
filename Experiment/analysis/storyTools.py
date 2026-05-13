@@ -236,7 +236,6 @@ def tagStory(Story1):
 
 
 ##### COSINE SIMILARITY
-
 def cosineSim(text1,text2):
     """
         Calculates Cosine Similarity between two texts. Can be used as a proxy to assess which kind of text to choose.
@@ -247,20 +246,17 @@ def cosineSim(text1,text2):
     from sklearn.metrics.pairwise import cosine_similarity
   
     #Preprocess Words - Tokenize, and remove Stopwords
-    tokens1 = preprocess(text1.lower())
-    tokens2 = preprocess(text2.lower())
 
     # Create the TF-IDF vectors
     vectorizer = TfidfVectorizer()
 
 
-    vector1 = vectorizer.fit_transform(tokens1)
-    vector2 = vectorizer.transform(tokens2)
+    vector1 = vectorizer.fit_transform([text1])
+    vector2 = vectorizer.transform([text2])
 
     # Mean Similarity ( between each word)
     similarity = np.sum(sum(cosine_similarity(vector1, vector2)))/np.shape(vector2)[0]
     return similarity
-
 
 
 preNorm = {
@@ -281,10 +277,31 @@ lems= {
     "swoić":  "swój",
     "tyli" : "tyle",
     "pewne": "pewny",
+    "dzienić" : "dzień",
+    "miecić" : "mieć",
+    "Janko" : "Janek",
+    "słowić": "słowo",
+    "spokoić": "spokój",
+    "wzorzać": "wzór",
+    "stola": "stół",
+    "ciszyć": "cisza",
+    "wieczor": "wieczór",
+    "potrzeb": "potrzeba",
+    "got" :"gotowy",
+    "ciężeć" : "ciężko",
+    "odbiegły": "odbiegać",
+    "rozprószać" : "rozproszyć",
+    "rozprószyć" : "rozproszyć"
+
 }
 
 
 def dictStemmer(text,morf,norms= None,lems=None):
+
+    """
+        This function stemms the current text using Morpheus:
+
+    """
 
     tokens = preprocess(text)
     if norms !=  None:
@@ -308,7 +325,6 @@ def dictStemmer(text,morf,norms= None,lems=None):
             if lems !=  None:
                 lemma = lems.get(lemma, lemma)
             
-                
             if analysis[0][2][2] != 'ign': # Jeśli coś nei jest rozpoznane jako słowo, jest IGNOROWANE
                 stemmed.append(lemma)
 
@@ -331,7 +347,7 @@ def preprocess(text):
     filtered_tokens = [word for word in tokens if word.lower() not in plstopwords]
 
     # Filtering Non-words
-    filtered_tokens = [word for word in filtered_tokens if word.lower() not in [',','.',':',';','?','!',')','(','...']]
+    filtered_tokens = [word for word in filtered_tokens if word.lower() not in [',','.',':',';','?','!',')','(','...','„','”','—','-']]
     return filtered_tokens
 
 
@@ -354,13 +370,13 @@ def bertCosineSim(text1, text2, tokenizer, model):
     """
     import torch
     import numpy as np
-    from sklearn.metrics.pairwise import cosine_similarity  # kept to minimize changes, but we won’t use the diagonal trick
+    from sklearn.metrics.pairwise import cosine_similarity  # kept to minimize changes, but we won't use the diagonal trick
 
     # --- 1) Tokenize (same as you had) --------------------------------------
     tokens1 = tokenizer(text1, return_tensors="pt", padding=True, truncation=True, max_length=300)
     tokens2 = tokenizer(text2, return_tensors="pt", padding=True, truncation=True, max_length=300)
 
-    # Attention masks as tensors (we’ll still keep your numpy version if you like)
+    # Attention masks as tensors (we'll still keep your numpy version if you like)
     attention_mask1 = tokens1["attention_mask"]  # [1, L1]
     attention_mask2 = tokens2["attention_mask"]  # [1, L2]
 
@@ -373,7 +389,7 @@ def bertCosineSim(text1, text2, tokenizer, model):
     hidden_states1 = outputs1.hidden_states  # tuple: [embeddings, layer1, ..., layerN]
     hidden_states2 = outputs2.hidden_states
 
-    # --- 3) Pick layers and combine (you used 6 & 7; that’s fine) ----------
+    # --- 3) Pick layers and combine (you used 6 & 7; that's fine) ----------
     # Reminder: hidden_states[0] is the embedding layer, so [6] and [7] are transformer blocks 6 and 7.
     layer11 = hidden_states1[6]  # [batch, L1, H]
     layer12 = hidden_states1[7]  # [batch, L1, H]
@@ -385,7 +401,7 @@ def bertCosineSim(text1, text2, tokenizer, model):
     # layer21 = layer22 = (hidden_states2[-1] + hidden_states2[-2] + hidden_states2[-3] + hidden_states2[-4]) / 4.0
 
     # --- 4) Build outputs in the same outer structure you had ---------------
-    cosSim = []   # we’ll store the full similarity matrices here if you want to inspect
+    cosSim = []   # we'll store the full similarity matrices here if you want to inspect
     avgSim = []   # final scalar similarity per item (we keep the list to match your return type)
 
     # Special-token ids to drop (CLS/SEP/PAD/MASK, etc.)
@@ -513,10 +529,26 @@ def quickLangCorrection(originalText,mode=0):
     return correctedText
 
 def transcibeText(path,savePath,subjects,device="cpu",langCorr = 0):
+    """
+        This function transcribes a story Recalls in a path to a Text 
+
+        
+        Arguments:
+        - path - has a path to recalls
+        - savePath - path where we want to save our recalls
+        - subjects - folder names in which my recalls are located
+        - device - whether to transcirbe using CUDA or CPU 
+        - langCorr - Whether to correct language after transcrption
+            - opt 1: Using Morfeusz - polish syntax parser- to establish closest sounding word
+            - opt 2: Using Language_tool_python language corrector for polish language 
+    
+    """
     nltk.download('punkt_tab')
      # Load Whisper model (can use "base", "small", "medium", etc.)
     model = WhisperModel("medium", device=device)  # or "cuda" if you have a GPU
 
+
+    ### Select Language Correction at hand 
     if langCorr == 2:
         tool = language_tool_python.LanguageTool('pl')
     elif  langCorr == 1:
@@ -546,7 +578,7 @@ def transcibeText(path,savePath,subjects,device="cpu",langCorr = 0):
 
             wf.rewind()                          # make sure we start at the beginning
             rms = audioop.rms(wf.readframes(wf.getnframes()) , wf.getsampwidth())            # audioop.rms returns root-mean-square amplitude for the whole buffer
-            SILENCE_THRESHOLD = 100   # adjust to taste (0..32767 for 16-bit audio)
+            SILENCE_THRESHOLD = 20   # adjust to taste (0..32767 for 16-bit audio)
             if rms < SILENCE_THRESHOLD:
                 print("          File seems silent – skipping transcription.")
                 continue              # jump to the next .wav
@@ -617,12 +649,17 @@ def createTranscribedSimilarity(path,savePath,subjects,Story1,janekStory,karolin
 
 def spacyMorph(text,NLP,morf,polish_stopwords,verbosity=0):
 
+    """
+        This function uses either Spacy or Morfeusz based stemming and lemmatisation to get
+        Syntactic and Semantic Features of current text 
+    
+    """
+
 
     def is_participle_adj(tok):
         # Detect adjectival participles like "wchodzący/wchodzącą".
         # In spaCy (UD), they are ADJ tokens with morph feature VerbForm=Part.
         return tok.pos_ == "ADJ" and tok.morph.get("VerbForm") == ["Part"]
-
 
     doc = NLP(text)  # spaCy builds tokens, POS, lemmas, morphology, and dependency parse.
 
@@ -638,11 +675,15 @@ def spacyMorph(text,NLP,morf,polish_stopwords,verbosity=0):
 
     noun_phrases = []
     verb_phrases = []
-    lemmas       = dictStemmer(text,morf,norms=preNorm,lems=lems) # === Raw Lemmas Extraction ===
+
+    ### TEMP RECONFIGURE!!!
+
+    lemmas       = dictStemmer(text,morf,norms=preNorm,lems=lems) # === Raw Lemmas Extraction === - based SOLELY on MORFEUSZ
 
     sentences   = [s.text for s in doc.sents]  # Get sentences from the document
-
+    #lemmas = [token.lemma_ for token in doc if not token.is_punct and not token.is_space and token.text not in polish_stopwords]
     for token in doc:
+        # Getting Verb/Noun with spacy 
 
         
 
@@ -665,7 +706,7 @@ def spacyMorph(text,NLP,morf,polish_stopwords,verbosity=0):
 
         Note (Polish UD nuance, FYI only): in UD-Polish the preposition (ADP) is typically a 'case'
         child of the NOUN that anchors the PP, not the head. This simple "look for ADP on the right"
-        can miss some cases. It’s fine for a lightweight extractor; just be aware it’s a heuristic.
+        can miss some cases. It's fine for a lightweight extractor; just be aware it's a heuristic.
         """
         if token.pos_ in ("NOUN", "PROPN"):
             # LEFT modifiers = children that appear before the noun in the text.
@@ -704,8 +745,8 @@ def spacyMorph(text,NLP,morf,polish_stopwords,verbosity=0):
         In this minimal version we take the dependent node text and then append its children that are
         NOUN/PROPN/ADJ to make the complement a bit fuller.
 
-        Note: This is intentionally simple. It won’t always reconstruct the full PP ('przy porcie')
-        if the preposition is attached differently in the parse, but it’s a good lightweight heuristic.
+        Note: This is intentionally simple. It won't always reconstruct the full PP ('przy porcie')
+        if the preposition is attached differently in the parse, but it's a good lightweight heuristic.
         """
         if token.pos_ == "VERB":
             parts = []
@@ -795,11 +836,26 @@ def bertSentenceCosineSim(text1, text2, model,aggregation="mean_pairs",mode=1):
     # --- encode all sentences in one batch ---
     texts = text1 + text2 # No Worrries since it is a Batch Mode so there is no corss-sentence interactions!
 
-    if mode: ### SEntence BERT Type Model
+    if mode ==0: ### SEntence BERT Type Model
         # normalize_embeddings=True -> L2-normalized vectors; dot == cosine
         E = model.encode(texts, convert_to_tensor=True, normalize_embeddings=True)  # [F+U, D]
-    else:    ### Fast-text Type Embedding: (Warning! Usefull ONLY for Single Word Lemmas)
+    elif mode == 1:    ### Fast-text Type Embedding: (Warning! Usefull ONLY for Single Word Lemmas)
         E =  [model.wv[lemma] for lemma in texts]
+
+    elif mode == 2: ### GloVe embeddings
+        vecs = []
+        for token in texts:
+            if token in model:
+                vecs.append(model[token])
+            else:
+                continue
+        if not vecs:
+            return float("nan")
+        E = torch.tensor(np.vstack(vecs), dtype=torch.float32)
+        E = torch.nn.functional.normalize(E, p=2, dim=-1)
+
+    else:
+        None
         
     F = E[:len(text1)]      # [F, D]
     U = E[len(text1):]      # [U, D]
@@ -824,6 +880,8 @@ def bertSentenceCosineSim(text1, text2, model,aggregation="mean_pairs",mode=1):
         return float(0.5 * (row_max + col_max).item())
 
     if aggregation == "max":
+        S[[i for i,u in enumerate(text2) for j,f in enumerate(text1) if u==f], 
+         [j for i,u in enumerate(text2) for j,f in enumerate(text1) if u==f]] = -float("inf")
         row_max = S.max(dim=1).values.mean()   # default: utterance-centric
         return float(row_max.item())
     
@@ -1426,14 +1484,16 @@ class PPPL():
     #                                             group_size=4))
 
 
+from transformers import BitsAndBytesConfig
 
 class PPL():
 
     def __init__(self,model_name="facebook/xglm-564M",device="cuda",max_length =None):
         self.device = device or "cuda" if torch.cuda.is_available() else "cpu"
+        bnb_config = BitsAndBytesConfig(load_in_4bit=True)
 
         torch_dtype = torch.float16 if self.device == "cuda" else None
-        self.lm2 = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch_dtype)
+        self.lm2 = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch_dtype, quantization_config=bnb_config)
         self.lm2.to(self.device).eval()
 
         self.tok2 = AutoTokenizer.from_pretrained(model_name, use_fast=True)
@@ -1454,9 +1514,10 @@ class PPL():
 
         model_max = max_length or getattr(self.lm2.config, "n_positions", self.tok2.model_max_length)
 
+        ### When all my text is fitting in a context window there is no need to slide, so we 
         seq_len = int(input_ids.size(1))
         if seq_len <= model_max:
-            with torch.inference_mode():
+            with torch.inference_mode(): # Gettinh to Context Manager - automtaically casting operation of reduced floating point to reduce comp time!
                 with torch.autocast(device_type=self.device, dtype=torch.float16, enabled=(fp16 and self.device == "cuda")):
                     out = self.lm2(input_ids=input_ids, attention_mask=attn_mask, labels=input_ids)
             return float(math.exp(out.loss.item()))
@@ -1475,9 +1536,12 @@ class PPL():
             end_loc   = min(i + model_max, seq_len)
             trg_len   = end_loc - i  # how many new tokens we learn this step
 
+         
             input_ids_window = input_ids[:, begin_loc:end_loc]
             attn_window      = attn_mask[:, begin_loc:end_loc]
             labels_window    = input_ids_window.clone()
+            window_len = input_ids_window.size(1)
+            trg_len = max(0, min(trg_len, window_len))  # 🩹 fix
 
             # Mask out the loss on the "context" tokens at the left of the window
             labels_window[:, : (labels_window.size(1) - trg_len)] = -100
@@ -1628,6 +1692,7 @@ def inspectRelationsChildren(dfRelations,keyword = None):
 
 
 
+
 def showRelationExamples(dfWn, relList = None,N=3):
     """
         Prints N examples of a given Relation from a current Named Dataset or a List provided
@@ -1637,8 +1702,12 @@ def showRelationExamples(dfWn, relList = None,N=3):
         relList = list(dfWn['name'].unique())
 
     for i,rel in enumerate(relList):
-        print(f"\n\n ==== Current Relation: {rel} ==== \n")
-        print(dfWn[dfWn['name']==rel][['NamesFirst','name','NamesSecond']].head(N).to_string())
+        print(f"\n\n ==== Current Relation: {rel} ==== N: {len(dfWn[dfWn['name']==rel][['NamesFirst','name','NamesSecond']])} \n")
+        if len(dfWn[dfWn['name']==rel][['NamesFirst','name','NamesSecond']]) >= N:
+            print(dfWn[dfWn['name']==rel][['NamesFirst','name','NamesSecond']].sample(n=N).to_string())
+        else:
+            print(dfWn[dfWn['name']==rel][['NamesFirst','name','NamesSecond']].sample(n=len(dfWn[dfWn['name']==rel][['NamesFirst','name','NamesSecond']])).to_string())
+
 
     
 
@@ -1692,7 +1761,7 @@ def showRelationExamples(dfWn, relList = None,N=3):
         relList = list(dfWn['name'].unique())
 
     for i,rel in enumerate(relList):
-        print(f"\n\n ==== Current Relation: {rel} ==== \n")
+        print(f"\n\n ==== Current Relation: {rel} ==== N: {len(dfWn[dfWn['name']==rel][['NamesFirst','name','NamesSecond']])} \n")
         print(dfWn[dfWn['name']==rel][['NamesFirst','name','NamesSecond']].head(N).to_string())
 
 ### Get All Relations
@@ -1745,8 +1814,11 @@ def ownGraphMaking(dfWn,dfRelationsW,dfSynsets):
         if not len(dfRelationsW[dfRelationsW['id'] == dfWn['id'].iloc[i]]['Weight']):
             omitted +=1
             #print(f" on {i}/{dfWn['name'].iloc[i]} there are no Weights: - Probably an English Word: AddingDefault ")
-            currWeight = DEFAULT_WEIGHT
+            #currWeight = DEFAULT_WEIGHT
+            continue  # ← CHANGED: SKIP when weight is missing (no default)
+
         else:
+            print( dfRelationsW[dfRelationsW['id'] == dfWn['id'].iloc[i]]['Weight'])
             currWeight = dfRelationsW[dfRelationsW['id'] == dfWn['id'].iloc[i]]['Weight'].iloc[0]
 
         u, v = ("syn", dfWn['firstSynset'].iloc[i]), ("syn", dfWn['SecondSynset'].iloc[i])
@@ -1867,4 +1939,631 @@ def GetUtteranceWeights(G,lemmas,mode = "min",avg1=False):
 
     return pd.DataFrame([lemmas[:-1],lemmas[1:],minimWeights,minimPath,minimNames],index = ['firstEnt','secondEnt','Weights','Path','Synsets']).transpose(),pathsDict,outOfPlaceLemmas
 
+def get_Subgraph():
+    """
+        Gets a subgraph based on provided synset list:
+    """
 
+
+def weightlessPath():
+    
+
+    """ A function that just Recomputes the Path Weights based SOLELY on number of nodes - assuming equidistant relations.
+      
+        Less Linguistcally and semantically viable, but less ambigious
+          
+        Returns --> new Data Frame containing "Weights" for each Lemma Pair  """
+    
+
+def computeMinimalViableTree():
+    """
+        Computes minimal Viable tree by taking eighter weights between all the nodes in a 
+    
+    """
+
+
+
+
+#############################################
+##### ---- FAULTY FUNCTIONS ------- ######
+#############################################
+
+
+
+# This section is about functions that are faulty or Old - can be reused in some capacity at some point! 
+
+
+
+
+
+
+# def getNodeSympathsIDs(lemma,G):
+#     """
+#     Returns list of IDs and Names of Lemma adjacent Synsets
+#     """
+
+#     if len([synpos[1]['obj'] for synpos in G.nodes.items()  if lemma in synpos[1]['obj']]):
+#         return ([synpos[1]['obj'] for synpos in G.nodes.items()  if lemma in synpos[1]['obj']],
+#             [synpos[0] for synpos in G.nodes.items()  if lemma in synpos[1]['obj']])
+#     else: #### Look for Words inside Synsets:
+#         return ([synpos[1]['obj'] for synpos in G.nodes.items()  if len([True for word in synpos[1]['obj'] if lemma in word.split(" ")])],
+#             [synpos[0] for synpos in G.nodes.items()  if len([True for word in synpos[1]['obj'] if lemma in word.split(" ")])])
+
+
+
+# #### Compute Every Path Variation between conjoined Synsets 
+
+# def GetUtteranceWeights(G,lemmas,mode = "min",avg1=False):
+#     """
+#         gets Weight for Every Concept transition in an Utterance.
+#         Computes Shortest Path in our Semantic Graph G: Computing it for every possible Synset combination between two lemmas
+
+#         Returns - Dictionairy of all path specific
+#                 - DataFrame   of Weights for every subsequent Concept Pairs with Paths and OnPath Synsets
+#     """
+
+#     if mode == "min":
+#         aggr = lambda x: min(x);
+#     elif mode == "max":
+#         aggr = lambda x: max(x);
+#     minimNames = []
+#     minimPath = []
+#     minimWeights = []
+#     pathsDict = {}
+#     outOfPlaceLemmas = []
+#     for i in range(len(lemmas)-1):
+#         synsFirst = getNodeSympathsIDs(lemmas[i],G)
+#         synsSecond = getNodeSympathsIDs(lemmas[i+1],G)
+#         print(synsFirst)
+#         print()
+#         SynsetPathsIds = []
+#         SynsetPathsNames = []
+#         SynsetPathWeights = []
+
+#          # Handle missing synsets for either lemma
+#         if len(synsFirst[1]) == 0 or len(synsSecond[1]) == 0:
+#             SynsetPathsIds.append(None)
+#             SynsetPathsNames.append([lemmas[i], lemmas[i+1]])
+#         if len(synsFirst[1]) == 0:
+#             outOfPlaceLemmas.append([lemmas[i]])
+#             print(f"    No Synset found for 1st lemma: {lemmas[i]}. Setting the distance to 100")
+#             SynsetPathWeights.append(100)
+#         elif len(synsSecond[1]) == 0:
+#             print(f"    No Synset found for 2nd lemma: {lemmas[i+1]}. Omitting!")
+#             SynsetPathWeights.append(None)
+
+#         for firstSyns in synsFirst[1]:
+
+#             for secondSyns in synsSecond[1]:
+
+#                 synp,namep = computePaths(G,firstSyns,secondSyns)
+#                 SynsetPathsIds.append(synp)
+#                 SynsetPathsNames.append(namep)
+#                 if synp is not None:
+#                     w,_  = computePathWeights(synp,G,avg1)
+#                 else:
+#                     w = None # Figure Out what to do with it 
+#                 SynsetPathWeights.append(w)
+
+#         pathsDict[f"{lemmas[i]}-{lemmas[i+1]}"]= pd.DataFrame([SynsetPathsIds,SynsetPathsNames,SynsetPathWeights],index=['PathIds','Synsets','Weights']).transpose()
+
+#         minimWeights.append(aggr(SynsetPathWeights))
+#         minimPath.append(SynsetPathsIds[SynsetPathWeights.index(aggr(SynsetPathWeights))])
+#         minimNames.append(SynsetPathsNames[SynsetPathWeights.index(aggr(SynsetPathWeights))])
+
+#     return pd.DataFrame([lemmas[:-1],lemmas[1:],minimWeights,minimPath,minimNames],index = ['firstEnt','secondEnt','Weights','Path','Synsets']).transpose(),pathsDict,outOfPlaceLemmas
+
+
+
+# import networkx as nx
+# import numpy as np
+# from collections import defaultdict
+
+# def disambiguate_lemma(lemma, context_lemmas, G, window=2, verbose=False):
+#     """
+#     Word-Sense Disambiguation (graph-based, simplified PPR-like version).
+
+#     Parameters
+#     ----------
+#     lemma : str
+#         The target lemma whose correct synset we want.
+#     context_lemmas : list[str]
+#         Nearby lemmas in the same utterance (left/right window).
+#     G : nx.Graph
+#         Your weighted WordNet graph: nodes = synset IDs, 
+#         node['obj'] = list of lemmas; edge['weight'] = semantic cost.
+#     window : int
+#         How many neighbours on each side to treat as context.
+#     verbose : bool
+#         Print diagnostic info.
+
+#     Returns
+#     -------
+#     best_synset : hashable
+#         The ID of the synset in G chosen for the lemma.
+#     scores : dict
+#         Score assigned to every candidate synset.
+#     """
+
+#     dataSyns,candidates = getNodeSympathsIDs(lemma,G)
+
+#     # ---- 1. collect candidate synsets for the lemma ----
+#    # candidates = [n for n, data in G.nodes(data=True)
+#    #               if lemma in data.get('obj', [])]
+    
+#     if not candidates:
+#         if verbose:
+#             print(f"[WSD] no synsets for {lemma}")
+#         return None, {}
+
+#     # ---- 2. gather context synsets (for neighbouring lemmas) ----
+#     context_nodes = set()
+#     for neigh in context_lemmas:
+#         for n, data in G.nodes(data=True):
+#             if neigh in data.get('obj', []):
+#                 context_nodes.add(n)
+
+#     # ---- 3. compute connectivity score to context ----
+#     scores = defaultdict(float)
+#     for cand in candidates:
+#         total = 0.0
+#         count = 0
+#         for ctx in context_nodes:
+#             if cand == ctx:
+#                 continue
+#             if nx.has_path(G, cand, ctx):
+#                 # shortest path cost (lower = closer)
+#                 path_len = nx.shortest_path_length(G, cand, ctx, weight='weight')
+#                 total += 1.0 / (1.0 + path_len)   # convert to similarity
+#                 count += 1
+#         if count > 0:
+#             scores[cand] = total / count
+#         else:
+#             scores[cand] = 0.0
+
+#     # ---- 4. choose the synset with max average similarity ----
+    
+#     best_synset = max(scores, key=scores.get)
+#     if verbose:
+#         synsetSayings = candidates.index(best_synset)
+#         print(f"[WSD] {lemma:15s} → {best_synset} (score={scores[best_synset]:.3f})")
+#     return best_synset, scores
+
+
+
+
+
+
+
+# import networkx as nx
+# from functools import lru_cache
+
+# def build_lemma_index(G):
+#     """
+#     Build lemma -> list[synset_id] once. Expects node['obj'] to be list of lemmas.
+#     """
+#     idx = {}
+#     iddata = {}
+#     for nid, data in G.nodes(data=True):
+#         for lemma in data.get('obj', []):
+#             idx.setdefault(lemma, []).append(nid)
+#             iddata.setdefault(nid,[]).append(data)
+#     return idx,iddata
+
+# def induce_khop_subgraph(G, seeds, k=2):
+#     """
+#     Induce a subgraph containing nodes within k hops (unweighted hop count) of seeds.
+#     Greatly reduces Dijkstra's search space.
+#     """
+#     visited = set(seeds)
+#     frontier = set(seeds)
+#     for _ in range(k):
+#         nbrs = set()
+#         for u in frontier:
+#             nbrs.update(G.predecessors(u) if G.is_directed() else G.neighbors(u))
+#             if G.is_directed():
+#                 nbrs.update(G.successors(u))
+#         frontier = nbrs - visited
+#         visited |= frontier
+#     return G.subgraph(visited).copy()
+
+# def average_similarity_from_context(dist_map, candidates):
+#     """
+#     Convert distances to mean similarity for each candidate.
+#     dist_map: dict[node -> distance] returned by multi-source Dijkstra
+#     """
+#     scores = {}
+#     for c in candidates:
+#         d = dist_map.get(c, None)
+#         # multi-source dijkstra gives the best (min) distance from any context node
+#         # We can use 1/(1+d) as similarity; if you want an average over all context nodes,
+#         # switch to single-source for each context, but that defeats the purpose.
+#         if d is None:
+#             scores[c] = 0.0
+#         else:
+#             scores[c] = 1.0 / (1.0 + d)
+#     return scores
+
+# def disambiguate_lemma_fast(lemma, ctx_lemmas, lemma2syn, G,
+#                             window=2, khop=2, use_subgraph=True):
+#     """
+#     Fast, corpus-free WSD:
+#     - collect candidate synsets for target lemma
+#     - collect candidate synsets for context window
+#     - (optional) induce small k-hop subgraph around seeds
+#     - run ONE multi-source Dijkstra from all context synsets
+#     - score each candidate by 1/(1+dist)
+#     """
+#     # candidates for the target lemma
+#     candidates = lemma2syn.get(lemma, [])
+#     if not candidates:
+#         return None, {}
+
+
+
+#     # context synsets (union)
+#     context_syns = set()
+#     for w in ctx_lemmas:
+#         context_syns.update(lemma2syn.get(w, []))
+#     if not context_syns:
+#         # no context evidence; default to first or any prior you may keep
+#         return candidates[0], {c: 0.0 for c in candidates}
+
+#     # optionally work on a tiny induced subgraph to speed up Dijkstra
+#     Guse = G
+#     if use_subgraph:
+#         seeds = set(candidates) | set(context_syns)
+#         Guse = induce_khop_subgraph(G, seeds, k=khop)
+
+#     # multi-source Dijkstra once per lemma
+#     # NOTE: weights must be "costs" (lower=closer)
+#     dist = nx.multi_source_dijkstra_path_length(Guse, context_syns, weight='weight')
+
+#     scores = average_similarity_from_context(dist, candidates)
+#     best = max(scores, key=scores.get)
+#     return best, scores
+
+
+
+
+# def getNodeSympathsIDs(lemma,G):
+#     """
+#     Returns list of IDs and Names of Lemma adjacent Synsets
+#     """
+
+#     if len([synpos[1]['obj'] for synpos in G.nodes.items()  if lemma in synpos[1]['obj']]):
+#         return ([synpos[1]['obj'] for synpos in G.nodes.items()  if lemma in synpos[1]['obj']],
+#             [synpos[0] for synpos in G.nodes.items()  if lemma in synpos[1]['obj']])
+#     else: #### Look for Words inside Synsets:
+#         return ([synpos[1]['obj'] for synpos in G.nodes.items()  if len([True for word in synpos[1]['obj'] if lemma in word.split(" ")])],
+#             [synpos[0] for synpos in G.nodes.items()  if len([True for word in synpos[1]['obj'] if lemma in word.split(" ")])])
+
+
+# def computePaths(G,firstSyns,secondSyns):
+#     """
+#         get shortest path between two Synsets:
+#         Returns Ids of Nodes n Path and additionally the lsit of Names of Synsets on a Path
+#     """
+#     if nx.has_path(G,firstSyns, secondSyns):
+#         path = nx.shortest_path(G,firstSyns,secondSyns)
+#         names = [G.nodes[nd].get('obj', []) for nd in path]
+
+#     else:
+#         print(f"     Warning! No Path between {firstSyns[0]} and {secondSyns[0]}" )
+#         path = [None]
+#         names = [firstSyns,secondSyns]
+    
+#     return path,names
+
+
+# def computePathWeights(path,G,avg1):
+#     """
+#         Returns computed weights in a Path Both as list and a single Number: 
+#     """
+#     allWeights = []
+#     for i in range(len(path)-1):
+#         allWeights.append(G.edges[path[i],path[i+1]]['weight'])
+#     if avg1:
+#         avgNum = len(allWeights)
+#         hopP = 0.05*np.median*(allWeights)*(len(allWeights)-1)
+#     else:
+#         avgNum = 1;
+#         hopP = 0
+#     return sum(allWeights)/avgNum +hopP,allWeights
+
+
+
+# #### Compute Every Path Variation between conjoined Synsets 
+
+# def GetUtteranceWeights(G,lemmas,mode = "min",avg1=False):
+#     """
+#         gets Weight for Every Concept transition in an Utterance.
+#         Computes Shortest Path in our Semantic Graph G: Computing it for every possible Synset combination between two lemmas
+
+#         Returns - Dictionairy of all path specific
+#                 - DataFrame   of Weights for every subsequent Concept Pairs with Paths and OnPath Synsets
+#     """
+
+#     if mode == "min":
+#         aggr = lambda x: min(x);
+#     elif mode == "max":
+#         aggr = lambda x: max(x);
+#     minimNames = []
+#     minimPath = []
+#     minimWeights = []
+#     pathsDict = {}
+#     outOfPlaceLemmas = []
+#     for i in range(len(lemmas)-1):
+
+
+#         lemmaFirst = tempL[i]
+#         lemmaSecond = tempL[i+1]
+
+#         contextEnvelopeBeg1 = 0
+#         contextEnvelopeEnd1 = 5
+#         if i >2 and i <=  len(tempL)-3 :
+#             contextEnvelopeBeg1 = 0+i-2
+#             contextEnvelopeEnd1 = 5+i-2
+            
+#             context = tempL[contextEnvelopeBeg1:contextEnvelopeEnd1]
+#             contextSecond = context[contextEnvelopeBeg1+1:contextEnvelopeEnd1+1]
+#             contextSecond.remove(contextSecond[2]) 
+
+#             context.remove(context[2]) 
+#         elif i > len(tempL)-3:
+#             contextEnvelopeEnd1 = len(tempL)
+#             contextEnvelopeBeg1 =  len(tempL)-5
+#             context = tempL[contextEnvelopeBeg1:contextEnvelopeEnd1]
+#             contextSecond = context[contextEnvelopeBeg1+1:contextEnvelopeEnd1+1]
+#             contextSecond.remove(context[len(tempL) -i]) 
+#             context.remove(context[ len(tempL) -i-1]) 
+
+#         else:
+#             context = tempL[contextEnvelopeBeg1:contextEnvelopeEnd1]
+#             contextSecond = context[contextEnvelopeBeg1+1:contextEnvelopeEnd1+1]
+#             contextSecond.remove(context[i+1]) 
+#             context.remove(context[i]) 
+
+#         #disambiguate_lemma(currentLemma, context, G, window=2, verbose=True)
+#         synsFirst1,_ = disambiguate_lemma_fast(lemmaFirst, context, lemma2syn,G, window=2)
+#         synsSecond1,_ = disambiguate_lemma_fast(lemmaSecond, contextSecond, lemma2syn,G, window=2)
+
+
+#         synsFirst = (synsFirst1,lemma2synwords[synsFirst1])
+#         synsSecond =  (synsSecond1,lemma2synwords[synsSecond1])
+#         # Get better search with this Dictionairy:
+#         # synsFirst = getNodeSympathsIDs(lemmas[i],G)
+#         # synsSecond = getNodeSympathsIDs(lemmas[i+1],G)
+
+#         SynsetPathsIds = []
+#         SynsetPathsNames = []
+#         SynsetPathWeights = []
+
+#          # Handle missing synsets for either lemma
+#         if len(synsFirst[1]) == 0 or len(synsSecond[1]) == 0:
+#             SynsetPathsIds.append(None)
+#             SynsetPathsNames.append([lemmas[i], lemmas[i+1]])
+#         if len(synsFirst[1]) == 0:
+#             outOfPlaceLemmas.append([lemmas[i]])
+#             print(f"    No Synset found for 1st lemma: {lemmas[i]}.Omitting")
+#             SynsetPathWeights.append(100)
+#         elif len(synsSecond[1]) == 0:
+#             print(f"    No Synset found for 2nd lemma: {lemmas[i+1]}. Setting distance to NAN for later !")
+#             SynsetPathWeights.append(None)
+
+
+#         computePaths(G,synsFirst,synsSecond)
+#         for firstSyns in synsFirst[1]:
+
+#             for secondSyns in synsSecond[1]:
+
+#                 synp,namep = computePaths(G,firstSyns,secondSyns)
+#                 SynsetPathsIds.append(synp)
+#                 SynsetPathsNames.append(namep)
+#                 if synp is not None:
+#                     w,_  = computePathWeights(synp,G,avg1)
+#                 else:
+#                     w = None # Figure Out what to do with it 
+#                 SynsetPathWeights.append(w)
+
+#         pathsDict[f"{lemmas[i]}-{lemmas[i+1]}"]= pd.DataFrame([SynsetPathsIds,SynsetPathsNames,SynsetPathWeights],index=['PathIds','Synsets','Weights']).transpose()
+
+#         minimWeights.append(aggr(SynsetPathWeights))
+#         minimPath.append(SynsetPathsIds[SynsetPathWeights.index(aggr(SynsetPathWeights))])
+#         minimNames.append(SynsetPathsNames[SynsetPathWeights.index(aggr(SynsetPathWeights))])
+
+#     return pd.DataFrame([lemmas[:-1],lemmas[1:],minimWeights,minimPath,minimNames],index = ['firstEnt','secondEnt','Weights','Path','Synsets']).transpose(),pathsDict,outOfPlaceLemmas
+
+
+
+# import networkx as nx
+# import numpy as np
+# from collections import defaultdict
+
+# def disambiguate_lemma(lemma, context_lemmas, G, window=2, verbose=False):
+#     """
+#     Word-Sense Disambiguation (graph-based, simplified PPR-like version).
+
+#     Parameters
+#     ----------
+#     lemma : str
+#         The target lemma whose correct synset we want.
+#     context_lemmas : list[str]
+#         Nearby lemmas in the same utterance (left/right window).
+#     G : nx.Graph
+#         Your weighted WordNet graph: nodes = synset IDs, 
+#         node['obj'] = list of lemmas; edge['weight'] = semantic cost.
+#     window : int
+#         How many neighbours on each side to treat as context.
+#     verbose : bool
+#         Print diagnostic info.
+
+#     Returns
+#     -------
+#     best_synset : hashable
+#         The ID of the synset in G chosen for the lemma.
+#     scores : dict
+#         Score assigned to every candidate synset.
+#     """
+
+#     dataSyns,candidates = getNodeSympathsIDs(lemma,G)
+
+#     # ---- 1. collect candidate synsets for the lemma ----
+#    # candidates = [n for n, data in G.nodes(data=True)
+#    #               if lemma in data.get('obj', [])]
+    
+#     if not candidates:
+#         if verbose:
+#             print(f"[WSD] no synsets for {lemma}")
+#         return None, {}
+
+#     # ---- 2. gather context synsets (for neighbouring lemmas) ----
+#     context_nodes = set()
+#     for neigh in context_lemmas:
+#         for n, data in G.nodes(data=True):
+#             if neigh in data.get('obj', []):
+#                 context_nodes.add(n)
+
+#     # ---- 3. compute connectivity score to context ----
+#     scores = defaultdict(float)
+#     for cand in candidates:
+#         total = 0.0
+#         count = 0
+#         for ctx in context_nodes:
+#             if cand == ctx:
+#                 continue
+#             if nx.has_path(G, cand, ctx):
+#                 # shortest path cost (lower = closer)
+#                 path_len = nx.shortest_path_length(G, cand, ctx, weight='weight')
+#                 total += 1.0 / (1.0 + path_len)   # convert to similarity
+#                 count += 1
+#         if count > 0:
+#             scores[cand] = total / count
+#         else:
+#             scores[cand] = 0.0
+
+#     # ---- 4. choose the synset with max average similarity ----
+    
+#     best_synset = max(scores, key=scores.get)
+#     if verbose:
+#         synsetSayings = candidates.index(best_synset)
+#         print(f"[WSD] {lemma:15s} → {best_synset} (score={scores[best_synset]:.3f})")
+#     return best_synset, scores
+
+
+# _PAIR_DIST_CACHE = {}
+
+
+# def pair_cost(G, a, b, khop=30, use_subgraph=True):
+#     """
+#     Weighted shortest-path COST between two *chosen* synset IDs a,b.
+#     Returns float cost or None if no path.
+#     """
+#     if a is None or b is None:
+#         return None
+#     key = (a, b)
+#     if key in _PAIR_DIST_CACHE:
+#         return _PAIR_DIST_CACHE[key]
+
+#     Guse = induce_khop_subgraph(G, {a, b}, k=khop) if use_subgraph else G
+#     try:
+#         d = nx.shortest_path_length(Guse, a, b, weight='weight')
+#     except nx.NetworkXNoPath:
+#         # try once on the full graph before giving up
+#         try:
+#             d = nx.shortest_path_length(G, a, b, weight='weight')
+#         except nx.NetworkXNoPath:
+#             d = None
+
+#     _PAIR_DIST_CACHE[key] = d
+#     return d
+
+
+
+# import networkx as nx
+# from functools import lru_cache
+
+# def build_lemma_index(G):
+#     """
+#     Build lemma -> list[synset_id] once. Expects node['obj'] to be list of lemmas.
+#     """
+#     idx = {}
+#     iddata = {}
+#     for nid, data in G.nodes(data=True):
+#         for lemma in data.get('obj', []):
+#             idx.setdefault(lemma, []).append(nid)
+#             iddata.setdefault(nid,[]).append(data)
+#     return idx,iddata
+
+# def induce_khop_subgraph(G, seeds, k=2):
+#     """
+#     Induce a subgraph containing nodes within k hops (unweighted hop count) of seeds.
+#     Greatly reduces Dijkstra's search space.
+#     """
+#     visited = set(seeds)
+#     frontier = set(seeds)
+#     for _ in range(k):
+#         nbrs = set()
+#         for u in frontier:
+#             nbrs.update(G.predecessors(u) if G.is_directed() else G.neighbors(u))
+#             if G.is_directed():
+#                 nbrs.update(G.successors(u))
+#         frontier = nbrs - visited
+#         visited |= frontier
+#     return G.subgraph(visited).copy()
+
+# def average_similarity_from_context(dist_map, candidates):
+#     """
+#     Convert distances to mean similarity for each candidate.
+#     dist_map: dict[node -> distance] returned by multi-source Dijkstra
+#     """
+#     scores = {}
+#     for c in candidates:
+#         d = dist_map.get(c, None)
+#         # multi-source dijkstra gives the best (min) distance from any context node
+#         # We can use 1/(1+d) as similarity; if you want an average over all context nodes,
+#         # switch to single-source for each context, but that defeats the purpose.
+#         if d is None:
+#             scores[c] = 0.0
+#         else:
+#             scores[c] = 1.0 / (1.0 + d)
+#     return scores
+
+# def disambiguate_lemma_fast(lemma, ctx_lemmas, lemma2syn, G,
+#                             window=2, khop=2, use_subgraph=True):
+#     """
+#     Fast, corpus-free WSD:
+#     - collect candidate synsets for target lemma
+#     - collect candidate synsets for context window
+#     - (optional) induce small k-hop subgraph around seeds
+#     - run ONE multi-source Dijkstra from all context synsets
+#     - score each candidate by 1/(1+dist)
+#     """
+#     # candidates for the target lemma
+#     candidates = lemma2syn.get(lemma, [])
+#     if not candidates:
+#         return None, {}
+
+
+
+#     # context synsets (union)
+#     context_syns = set()
+#     for w in ctx_lemmas:
+#         context_syns.update(lemma2syn.get(w, []))
+#     if not context_syns:
+#         # no context evidence; default to first or any prior you may keep
+#         return candidates[0], {c: 0.0 for c in candidates}
+
+#     # optionally work on a tiny induced subgraph to speed up Dijkstra
+#     Guse = G
+#     if use_subgraph:
+#         seeds = set(candidates) | set(context_syns)
+#         Guse = induce_khop_subgraph(G, seeds, k=khop)
+
+#     # multi-source Dijkstra once per lemma
+#     # NOTE: weights must be "costs" (lower=closer)
+#     dist = nx.multi_source_dijkstra_path_length(Guse, context_syns, weight='weight')
+
+#     scores = average_similarity_from_context(dist, candidates)
+#     best = max(scores, key=scores.get)
+#     return best, scores

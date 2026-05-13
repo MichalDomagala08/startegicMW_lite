@@ -1,0 +1,84 @@
+(1.2.1) Competent Judge Memory Score (MemoryScoreCJ ~  MW_Estimate +trialNum +(1|Subjects)) 
+      Pupil Diameter          (Coef: -0.006| Z: -2.887| P: 0.004 | Conf: -0.010 -0.002)
+      Trial Number Effect     (Coef: -0.002| Z: -0.756| P: 0.450 | Conf: -0.008 0.003)
+(1.2.2)Cosine Similarity Memory Score (MemoryScoreCS ~  MW_Estimate +trialNum +(1|Subjects)) 
+      Pupil Diameter          (Coef: -0.002| Z: -2.292| P: 0.022 | Conf: -0.003 -0.000)
+      Trial Number Effect     (Coef: 0.005| Z: 4.262| P: 0.000 | Conf: 0.003 0.007)
+(1.2) Competent Judge Memory Score (MemoryScoreCS ~  MW_Estimate_ms +trialNum +(1|Subjects)) 
+      Pupil Diameter          (Coef: 0.049| Z: 1.407| P: 0.159 | Conf: -0.019 0.116)
+      Trial Number Effect     (Coef: 0.004| Z: 3.977| P: 0.000 | Conf: 0.002 0.006)
+(1.2) Competent Judge Memory Score (MemoryScoreCJ ~  MW_Estimate_ms +trialNum +(1|Subjects)) 
+      Pupil Diameter          (Coef: 0.254| Z: 2.919| P: 0.004 | Conf: 0.084 0.425)
+      Trial Number Effect     (Coef: -0.003| Z: -1.059| P: 0.289 | Conf: -0.008 0.003)
+(1.1) Cosine Similarity Memory Score (MemoryScoreCS ~ Tracking +MW_Estimate+TrialNum +(1|Subjects)) 
+      Memory Effect          (Coef: -0.389| Z: -17.359| P: 0.000 | Conf: -0.432 -0.345)
+      Mw Estimate Effect     (Coef: 0.004| Z: 4.286| P: 0.000 | Conf: 0.002 0.006)
+      Trial Number Effect    (Coef: 1.036| Z: 3.737| P: 0.000 | Conf: 0.493 1.580)
+(1.1) Cosine Similarity Memory Score (MemoryScoreCJ ~ Tracking +MW_Estimate+TrialNum +(1|Subjects)) 
+      Memory Effect          (Coef: -0.721| Z: -11.876| P: 0.000 | Conf: -0.840 -0.602)
+      Mw Estimate Effect     (Coef: -0.004| Z: -1.549| P: 0.121 | Conf: -0.009 0.001)
+      Trial Number Effect    (Coef: 0.469| Z: 3.632| P: 0.000 | Conf: 0.216 0.723)
+(1.1) Cosine Similarity Memory Score (MemoryScoreCS ~ Tracking +MW_Estimate+TrialNum +(1|Subjects)) 
+      Memory Effect          (Coef: -0.393| Z: -17.194| P: 0.000 | Conf: -0.438 -0.348)
+      Mw Estimate Effect     (Coef: 0.001| Z: 0.985| P: 0.325 | Conf: -0.001 0.002)
+      Trial Number Effect    (Coef: 0.004| Z: 3.911| P: 0.000 | Conf: 0.002 0.006)
+(1.2) Competent Judge Memory Score (MemoryScoreCJ ~ Tracking +MW_Estimate+TrialNum +(1|Subjects)) 
+      Memory Effect          (Coef: -0.712| Z: -11.494| P: 0.000 | Conf: -0.834 -0.591)
+      Mw Estimate Effect     (Coef: -0.001| Z: -0.682| P: 0.495 | Conf: -0.005 0.003)
+      Trial Number Effect    (Coef: -0.004| Z: -1.336| P: 0.181 | Conf: -0.009 0.002)
+(1.4.1) Pupil Diamater and Memory Score (MemoryScoreCS ~  Pupil +trialNum +(1|Subjects)) 
+    Mean // Left_Eye  
+      Pupil Diameter          (Coef: 0.000| Z: 0.045| P: 0.964 | Conf: -0.000 0.000)
+      Trial Number Effect     (Coef: 0.004| Z: 4.106| P: 0.000 | Conf: 0.002 0.006)
+    Mean // Right_Eye  
+      Pupil Diameter          (Coef: 0.000| Z: 0.298| P: 0.766 | Conf: -0.000 0.000)
+      Trial Number Effect     (Coef: 0.004| Z: 4.102| P: 0.000 | Conf: 0.002 0.006)
+    Std // Left_Eye  
+      Pupil Diameter          (Coef: -0.000| Z: -0.900| P: 0.368 | Conf: -0.000 0.000)
+      Trial Number Effect     (Coef: 0.004| Z: 3.940| P: 0.000 | Conf: 0.002 0.006)
+    Std // Right_Eye  
+      Pupil Diameter          (Coef: -0.000| Z: -0.956| P: 0.339 | Conf: -0.000 0.000)
+      Trial Number Effect     (Coef: 0.004| Z: 3.932| P: 0.000 | Conf: 0.002 0.006)
+    diff // Left_Eye  
+      Pupil Diameter          (Coef: 0.135| Z: 1.983| P: 0.047 | Conf: 0.002 0.268)
+      Trial Number Effect     (Coef: 0.004| Z: 4.089| P: 0.000 | Conf: 0.002 0.006)
+    diff // Right_Eye  
+      Pupil Diameter          (Coef: 0.107| Z: 1.511| P: 0.131 | Conf: -0.032 0.245)
+      Trial Number Effect     (Coef: 0.004| Z: 4.126| P: 0.000 | Conf: 0.002 0.006)
+    auc // Left_Eye  
+      Pupil Diameter          (Coef: 0.000| Z: 0.044| P: 0.965 | Conf: -0.000 0.000)
+      Trial Number Effect     (Coef: 0.004| Z: 4.106| P: 0.000 | Conf: 0.002 0.006)
+    auc // Right_Eye  
+      Pupil Diameter          (Coef: 0.000| Z: 0.298| P: 0.766 | Conf: -0.000 0.000)
+      Trial Number Effect     (Coef: 0.004| Z: 4.102| P: 0.000 | Conf: 0.002 0.006)
+(1.4.2) Pupil Diamater and Memory Score (MemoryScoreCJ ~  Pupil +trialNum +(1|Subjects)) 
+    Mean // Left_Eye  
+      Pupil Diameter          (Coef: -0.000| Z: -0.735| P: 0.462 | Conf: -0.000 0.000)
+      Trial Number Effect     (Coef: -0.004| Z: -1.660| P: 0.097 | Conf: -0.010 0.001)
+    Mean // Right_Eye  
+      Pupil Diameter          (Coef: -0.000| Z: -0.835| P: 0.404 | Conf: -0.000 0.000)
+      Trial Number Effect     (Coef: -0.004| Z: -1.664| P: 0.096 | Conf: -0.010 0.001)
+    Std // Left_Eye  
+      Pupil Diameter          (Coef: 0.000| Z: 0.340| P: 0.734 | Conf: -0.000 0.000)
+      Trial Number Effect     (Coef: -0.004| Z: -1.440| P: 0.150 | Conf: -0.009 0.001)
+    Std // Right_Eye  
+      Pupil Diameter          (Coef: -0.000| Z: -0.123| P: 0.902 | Conf: -0.000 0.000)
+      Trial Number Effect     (Coef: -0.004| Z: -1.427| P: 0.154 | Conf: -0.009 0.001)
+    diff // Left_Eye  
+      Pupil Diameter          (Coef: 0.273| Z: 1.454| P: 0.146 | Conf: -0.095 0.641)
+      Trial Number Effect     (Coef: -0.004| Z: -1.566| P: 0.117 | Conf: -0.009 0.001)
+    diff // Right_Eye  
+      Pupil Diameter          (Coef: 0.271| Z: 1.390| P: 0.164 | Conf: -0.111 0.653)
+      Trial Number Effect     (Coef: -0.004| Z: -1.680| P: 0.093 | Conf: -0.010 0.001)
+    auc // Left_Eye  
+      Pupil Diameter          (Coef: -0.000| Z: -0.735| P: 0.462 | Conf: -0.000 0.000)
+      Trial Number Effect     (Coef: -0.004| Z: -1.660| P: 0.097 | Conf: -0.010 0.001)
+    auc // Right_Eye  
+      Pupil Diameter          (Coef: -0.000| Z: -0.835| P: 0.404 | Conf: -0.000 0.000)
+      Trial Number Effect     (Coef: -0.004| Z: -1.664| P: 0.096 | Conf: -0.010 0.001)
+(1.6.1 )MW Estimate predicted by Memory Score Groups (MW_Estimate ~  LowMemoryScoreCS +trialNum +(1|Subjects)) 
+      Pupil Diameter          (Coef: 4.000| Z: 3.621| P: 0.000 | Conf: 1.835 6.165)
+      Trial Number Effect     (Coef: 0.340| Z: 9.108| P: 0.000 | Conf: 0.267 0.413)
+(1.6.3 )MW Estimate predicted by Memory Score CJ Groups (MW_Estimate ~  LowMemoryScoreCJ +trialNum +(1|Subjects)) 
+      Pupil Diameter          (Coef: 1.528| Z: 1.580| P: 0.114 | Conf: -0.367 3.423)
+      Trial Number Effect     (Coef: 0.328| Z: 8.781| P: 0.000 | Conf: 0.255 0.401)

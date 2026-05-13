@@ -473,6 +473,19 @@ class audioTrial:
    
             self.display_fixation_cross()
             pygame.mouse.set_visible(False)
+            
+            # Drain/handle events safely to avoid crashes when participant clicks during playback
+            # Quickly drop mouse events, then check only for quit/escape.
+            pygame.event.clear((pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION))
+            for evt in pygame.event.get((pygame.QUIT, pygame.KEYDOWN)):
+                if evt.type == pygame.QUIT or (evt.type == pygame.KEYDOWN and evt.key == pygame.K_ESCAPE):
+                    try:
+                        if self.stream:
+                            self.stream.stop_stream()
+                            self.stream.close()
+                    except Exception:
+                        pass
+                    return "exit"
 
             # Check if the audio has finished
             if not self.audio_playing:

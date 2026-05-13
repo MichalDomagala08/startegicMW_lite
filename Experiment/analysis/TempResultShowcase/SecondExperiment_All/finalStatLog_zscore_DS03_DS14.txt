@@ -1,0 +1,223 @@
+               ==========================================================
+               =====                FINAL STATISTICS LOG:               ===== 
+               ==========================================================
+
+
+===# Descriptives #=== 
+
+      N.Subjects                   29
+      N. Trials                    40
+      Mean Good Data across Subj:  0.934
+      Tracked MW across Subj:      18.103 (20.082)
+      Untracked MW across Subj:    22.333 (22.136)
+
+===# (1) Uncorrected Samples #=== 
+
+(1.1) Uncorrected Samples (MW ~ Tracking +TrialNum +(1|Subjects)) 
+      Tracking Effect        (Coef: 0.236| Z: 3.927| P: 0.000 | Conf: 0.118 0.353)
+      Trial Number Effect    (Coef: 0.008| Z: 3.116| P: 0.002 | Conf: 0.003 0.013)
+
+(1.2) Pupil Diameter vs Tracking (Pupil ~ Tracking +TrialNum +(1|Subjects)) 
+    Mean // Left_Eye  
+      Tracking Effect        (Coef: 0.005| Z: 0.463| P: 0.644 | Conf: -0.017 0.027)
+      Trial Number Effect    (Coef: 0.003| Z: 5.565| P: 0.000 | Conf: 0.002 0.004)
+    Mean // Right_Eye  
+      Tracking Effect        (Coef: 0.001| Z: 0.091| P: 0.928 | Conf: -0.023 0.025)
+      Trial Number Effect    (Coef: 0.004| Z: 6.833| P: 0.000 | Conf: 0.003 0.005)
+    Std // Left_Eye  
+      Tracking Effect        (Coef: -0.001| Z: -0.742| P: 0.458 | Conf: -0.004 0.002)
+      Trial Number Effect    (Coef: -0.000| Z: -2.386| P: 0.017 | Conf: -0.000 -0.000)
+    Std // Right_Eye  
+      Tracking Effect        (Coef: -0.001| Z: -0.433| P: 0.665 | Conf: -0.004 0.003)
+      Trial Number Effect    (Coef: -0.000| Z: -3.421| P: 0.001 | Conf: -0.000 -0.000)
+    diff // Left_Eye  
+      Tracking Effect        (Coef: 0.002| Z: 0.175| P: 0.861 | Conf: -0.018 0.021)
+      Trial Number Effect    (Coef: 0.002| Z: 3.959| P: 0.000 | Conf: 0.001 0.003)
+    diff // Right_Eye  
+      Tracking Effect        (Coef: -0.001| Z: -0.053| P: 0.958 | Conf: -0.020 0.019)
+      Trial Number Effect    (Coef: 0.002| Z: 4.572| P: 0.000 | Conf: 0.001 0.003)
+    auc // Left_Eye  
+      Tracking Effect        (Coef: 6.394| Z: 0.463| P: 0.643 | Conf: -20.656 33.445)
+      Trial Number Effect    (Coef: 3.326| Z: 5.566| P: 0.000 | Conf: 2.155 4.498)
+    auc // Right_Eye  
+      Tracking Effect        (Coef: 1.234| Z: 0.091| P: 0.927 | Conf: -25.235 27.703)
+      Trial Number Effect    (Coef: 3.996| Z: 6.834| P: 0.000 | Conf: 2.850 5.142)
+
+(1.3) Pupil Diameter vs MW (Pupil ~ MW +Tracking +(1|Subjects)) 
+    Mean // Left_Eye  
+      Tracking Effect        (Coef: 0.003| Z: 0.225| P: 0.822 | Conf: -0.019 0.024)
+      MW Estimate Effect     (Coef: 0.011| Z: 2.008| P: 0.045 | Conf: 0.000 0.023)
+    Mean // Right_Eye  
+      Tracking Effect        (Coef: -0.001| Z: -0.105| P: 0.916 | Conf: -0.025 0.023)
+      MW Estimate Effect     (Coef: 0.010| Z: 1.669| P: 0.095 | Conf: -0.002 0.022)
+    Std // Left_Eye  
+      Tracking Effect        (Coef: -0.001| Z: -0.916| P: 0.360 | Conf: -0.004 0.002)
+      MW Estimate Effect     (Coef: 0.001| Z: 1.542| P: 0.123 | Conf: -0.000 0.003)
+    Std // Right_Eye  
+      Tracking Effect        (Coef: -0.001| Z: -0.504| P: 0.614 | Conf: -0.005 0.003)
+      MW Estimate Effect     (Coef: 0.001| Z: 0.631| P: 0.528 | Conf: -0.001 0.002)
+    diff // Left_Eye  
+      Tracking Effect        (Coef: 0.002| Z: 0.238| P: 0.812 | Conf: -0.017 0.022)
+      MW Estimate Effect     (Coef: -0.003| Z: -0.509| P: 0.611 | Conf: -0.013 0.008)
+    diff // Right_Eye  
+      Tracking Effect        (Coef: -0.000| Z: -0.002| P: 0.999 | Conf: -0.020 0.020)
+      MW Estimate Effect     (Coef: -0.002| Z: -0.403| P: 0.687 | Conf: -0.012 0.008)
+    auc // Left_Eye  
+      Tracking Effect        (Coef: 3.129| Z: 0.225| P: 0.822 | Conf: -24.070 30.328)
+      MW Estimate Effect     (Coef: 14.127| Z: 2.008| P: 0.045 | Conf: 0.341 27.913)
+    auc // Right_Eye  
+      Tracking Effect        (Coef: -1.424| Z: -0.105| P: 0.917 | Conf: -28.054 25.205)
+      MW Estimate Effect     (Coef: 11.499| Z: 1.670| P: 0.095 | Conf: -1.998 24.997)
+(1.4.1) Uncorrected Samples (GazeDifference ~ Tracking +TrialNum +(1|Subjects)) 
+      Tracking Effect        (Coef: 0.847| Z: 0.612| P: 0.540 | Conf: -1.864 3.559)
+      Trial Number Effect    (Coef: 0.073| Z: 1.212| P: 0.225 | Conf: -0.045 0.190)
+(1.4.2) Uncorrected Samples (MW_Estimate ~ GazeDifference+Tracking +TrialNum +(1|Subjects)) 
+      GazeDiff Effect        (Coef: 0.000| Z: 0.384| P: 0.701 | Conf: -0.001 0.002)
+      Trial Number Effect    (Coef: 0.008| Z: 3.104| P: 0.002 | Conf: 0.003 0.013)
+(1.6.1) Subject Similarity (MW) (meanCorrMW_Tracked ~ meanCorrMW_Untracked) 
+      Wilcoxon Difference Stat:        (Stat: 136.000| P: 0.211
+(1.6.2) Subject Similarity (Gaze) (meanCorrGaze_Tracked ~ meanCorrGaze_Untracked) 
+      Wilcoxon Difference Stat Pupil/Left:        (Stat: 134.000| P: 0.194
+      Wilcoxon Difference Stat Pupil/Right:        (Stat: 179.000| P: 0.822
+      Wilcoxon Difference Stat X/Left:        (Stat: 123.000| P: 0.117
+      Wilcoxon Difference Stat X/Right:        (Stat: 132.000| P: 0.178
+      Wilcoxon Difference Stat Y/Left:        (Stat: 131.000| P: 0.170
+      Wilcoxon Difference Stat Y/Right:        (Stat: 137.000| P: 0.220
+
+(1.8.1) Gaze Parameters vs Tracking (Gaze ~ Tracking +TrialNum +(1|Subjects)) 
+    mean // LeftX  
+      Tracking Effect        (Coef: -0.562| Z: -0.173| P: 0.862 | Conf: -6.918 5.793)
+      Trial Number Effect    (Coef: -0.890| Z: -6.336| P: 0.000 | Conf: -1.165 -0.614)
+    mean // RightX  
+      Tracking Effect        (Coef: 0.127| Z: 0.039| P: 0.969 | Conf: -6.190 6.444)
+      Trial Number Effect    (Coef: -0.478| Z: -3.423| P: 0.001 | Conf: -0.752 -0.204)
+    mean // LeftY  
+      Tracking Effect        (Coef: 0.724| Z: 0.400| P: 0.689 | Conf: -2.821 4.269)
+      Trial Number Effect    (Coef: 0.089| Z: 1.129| P: 0.259 | Conf: -0.065 0.243)
+    mean // RightY  
+      Tracking Effect        (Coef: -1.130| Z: -0.425| P: 0.671 | Conf: -6.345 4.086)
+      Trial Number Effect    (Coef: 0.349| Z: 3.019| P: 0.003 | Conf: 0.123 0.576)
+    std // LeftX  
+      Tracking Effect        (Coef: -0.091| Z: -0.030| P: 0.976 | Conf: -6.133 5.952)
+      Trial Number Effect    (Coef: 0.497| Z: 3.705| P: 0.000 | Conf: 0.234 0.760)
+    std // RightX  
+      Tracking Effect        (Coef: 1.056| Z: 0.318| P: 0.751 | Conf: -5.460 7.572)
+      Trial Number Effect    (Coef: 0.472| Z: 3.265| P: 0.001 | Conf: 0.189 0.756)
+    std // LeftY  
+      Tracking Effect        (Coef: 1.472| Z: 0.637| P: 0.524 | Conf: -3.055 5.999)
+      Trial Number Effect    (Coef: 0.365| Z: 3.642| P: 0.000 | Conf: 0.169 0.562)
+    std // RightY  
+      Tracking Effect        (Coef: -0.956| Z: -0.401| P: 0.688 | Conf: -5.627 3.715)
+      Trial Number Effect    (Coef: 0.602| Z: 5.829| P: 0.000 | Conf: 0.400 0.804)
+
+(1.8.2) Gaze Parameters vs MW (Gaze ~ MW_Estimate+ Tracking +TrialNum +(1|Subjects)) 
+    mean // LeftX  
+      Tracking Effect        (Coef: -0.009| Z: -0.003| P: 0.998 | Conf: -6.413 6.395)
+      Trial Number Effect    (Coef: -2.252| Z: -1.350| P: 0.177 | Conf: -5.521 1.018)
+    mean // RightX  
+      Tracking Effect        (Coef: 0.552| Z: 0.170| P: 0.865 | Conf: -5.817 6.921)
+      Trial Number Effect    (Coef: -1.699| Z: -1.025| P: 0.305 | Conf: -4.946 1.549)
+    mean // LeftY  
+      Tracking Effect        (Coef: 0.738| Z: 0.405| P: 0.686 | Conf: -2.835 4.311)
+      Trial Number Effect    (Coef: -0.058| Z: -0.063| P: 0.950 | Conf: -1.879 1.762)
+    mean // RightY  
+      Tracking Effect        (Coef: -0.174| Z: -0.065| P: 0.948 | Conf: -5.413 5.065)
+      Trial Number Effect    (Coef: -3.897| Z: -2.857| P: 0.004 | Conf: -6.571 -1.223)
+    std // LeftX  
+      Tracking Effect        (Coef: -0.433| Z: -0.139| P: 0.889 | Conf: -6.522 5.657)
+      Trial Number Effect    (Coef: 1.411| Z: 0.892| P: 0.372 | Conf: -1.687 4.509)
+    std // RightX  
+      Tracking Effect        (Coef: 0.396| Z: 0.118| P: 0.906 | Conf: -6.162 6.954)
+      Trial Number Effect    (Coef: 2.783| Z: 1.636| P: 0.102 | Conf: -0.550 6.117)
+    std // LeftY  
+      Tracking Effect        (Coef: 1.248| Z: 0.536| P: 0.592 | Conf: -3.315 5.810)
+      Trial Number Effect    (Coef: 0.933| Z: 0.791| P: 0.429 | Conf: -1.379 3.245)
+    std // RightY  
+      Tracking Effect        (Coef: -1.077| Z: -0.449| P: 0.654 | Conf: -5.783 3.629)
+      Trial Number Effect    (Coef: 0.512| Z: 0.422| P: 0.673 | Conf: -1.867 2.890)
+
+(1.9.1) Saccade vs Tracking (Saccade ~ Tracking +TrialNum +(1|Subjects)) 
+     // SaccDistance  
+      Tracking Effect        (Coef: 3.093| Z: 1.154| P: 0.249 | Conf: -2.160 8.346)
+      Trial Number Effect    (Coef: 0.815| Z: 7.018| P: 0.000 | Conf: 0.587 1.042)
+     // SaccNumber  
+      Tracking Effect        (Coef: 0.593| Z: 0.833| P: 0.405 | Conf: -0.802 1.988)
+      Trial Number Effect    (Coef: 0.463| Z: 14.997| P: 0.000 | Conf: 0.402 0.523)
+     // SaccVelocity  
+      Tracking Effect        (Coef: 1.329| Z: 0.338| P: 0.736 | Conf: -6.381 9.038)
+      Trial Number Effect    (Coef: -0.065| Z: -0.381| P: 0.703 | Conf: -0.400 0.270)
+     // SaccVelocitySd  
+      Tracking Effect        (Coef: 4.274| Z: 0.950| P: 0.342 | Conf: -4.544 13.092)
+      Trial Number Effect    (Coef: 0.209| Z: 1.066| P: 0.286 | Conf: -0.175 0.592)
+     // SaccAmplitude  
+      Tracking Effect        (Coef: 0.050| Z: 1.157| P: 0.247 | Conf: -0.035 0.135)
+      Trial Number Effect    (Coef: 0.013| Z: 7.061| P: 0.000 | Conf: 0.010 0.017)
+     // SaccAmplitudeSd  
+      Tracking Effect        (Coef: 0.098| Z: 1.559| P: 0.119 | Conf: -0.025 0.222)
+      Trial Number Effect    (Coef: 0.015| Z: 5.348| P: 0.000 | Conf: 0.009 0.020)
+     // SaccDuration  
+      Tracking Effect        (Coef: 0.744| Z: 0.558| P: 0.577 | Conf: -1.872 3.360)
+      Trial Number Effect    (Coef: 0.317| Z: 5.463| P: 0.000 | Conf: 0.203 0.431)
+     // SaccDurationeSd  
+      Tracking Effect        (Coef: 1.738| Z: 0.686| P: 0.493 | Conf: -3.228 6.704)
+      Trial Number Effect    (Coef: 0.359| Z: 3.244| P: 0.001 | Conf: 0.142 0.575)
+     // FixLength  
+      Tracking Effect        (Coef: -17.217| Z: -0.834| P: 0.404 | Conf: -57.683 23.248)
+      Trial Number Effect    (Coef: -6.177| Z: -6.911| P: 0.000 | Conf: -7.929 -4.426)
+     // FixLengthSd  
+      Tracking Effect        (Coef: -14.610| Z: -0.605| P: 0.545 | Conf: -61.906 32.687)
+      Trial Number Effect    (Coef: -6.654| Z: -6.382| P: 0.000 | Conf: -8.697 -4.610)
+
+(1.9.2) Saccades vs MW (Saccade ~ MW +Tracking +(1|Subjects)) 
+     // SaccDistance  
+      Tracking Effect        (Coef: 2.181| Z: 0.809| P: 0.418 | Conf: -3.100 7.462)
+      MW Estimate Effect     (Coef: 3.635| Z: 2.650| P: 0.008 | Conf: 0.947 6.322)
+     // SaccNumber  
+      Tracking Effect        (Coef: 0.583| Z: 0.813| P: 0.416 | Conf: -0.823 1.989)
+      MW Estimate Effect     (Coef: 0.043| Z: 0.119| P: 0.906 | Conf: -0.669 0.756)
+     // SaccVelocity  
+      Tracking Effect        (Coef: 0.877| Z: 0.221| P: 0.825 | Conf: -6.888 8.642)
+      MW Estimate Effect     (Coef: 1.916| Z: 0.955| P: 0.340 | Conf: -2.018 5.850)
+     // SaccVelocitySd  
+      Tracking Effect        (Coef: 4.956| Z: 1.094| P: 0.274 | Conf: -3.921 13.833)
+      MW Estimate Effect     (Coef: -2.935| Z: -1.282| P: 0.200 | Conf: -7.423 1.553)
+     // SaccAmplitude  
+      Tracking Effect        (Coef: 0.036| Z: 0.828| P: 0.408 | Conf: -0.049 0.122)
+      MW Estimate Effect     (Coef: 0.056| Z: 2.528| P: 0.011 | Conf: 0.013 0.100)
+     // SaccAmplitudeSd  
+      Tracking Effect        (Coef: 0.079| Z: 1.248| P: 0.212 | Conf: -0.045 0.203)
+      MW Estimate Effect     (Coef: 0.084| Z: 2.614| P: 0.009 | Conf: 0.021 0.147)
+     // SaccDuration  
+      Tracking Effect        (Coef: 0.583| Z: 0.433| P: 0.665 | Conf: -2.053 3.219)
+      MW Estimate Effect     (Coef: 0.674| Z: 0.975| P: 0.330 | Conf: -0.681 2.029)
+     // SaccDurationeSd  
+      Tracking Effect        (Coef: 1.862| Z: 0.728| P: 0.466 | Conf: -3.148 6.871)
+      MW Estimate Effect     (Coef: -0.494| Z: -0.377| P: 0.706 | Conf: -3.061 2.073)
+     // FixLength  
+      Tracking Effect        (Coef: -14.407| Z: -0.693| P: 0.488 | Conf: -55.168 26.354)
+      MW Estimate Effect     (Coef: -11.693| Z: -1.116| P: 0.264 | Conf: -32.232 8.845)
+     // FixLengthSd  
+      Tracking Effect        (Coef: -16.159| Z: -0.665| P: 0.506 | Conf: -63.806 31.488)
+      MW Estimate Effect     (Coef: 6.610| Z: 0.539| P: 0.590 | Conf: -17.427 30.647)
+
+(1.9.1) Blinks vs Tracking (Blinks ~ Tracking +TrialNum +(1|Subjects)) 
+     // BlinkNumber  
+      Tracking Effect        (Coef: 0.692| Z: 2.109| P: 0.035 | Conf: 0.049 1.335)
+      Trial Number Effect    (Coef: 0.188| Z: 13.215| P: 0.000 | Conf: 0.160 0.216)
+     // BlinkDuration  
+      Tracking Effect        (Coef: 3.550| Z: 1.065| P: 0.287 | Conf: -2.983 10.083)
+      Trial Number Effect    (Coef: 0.614| Z: 4.237| P: 0.000 | Conf: 0.330 0.899)
+     // BlinkDurationSd  
+      Tracking Effect        (Coef: 1.545| Z: 0.363| P: 0.717 | Conf: -6.800 9.891)
+      Trial Number Effect    (Coef: 0.572| Z: 3.086| P: 0.002 | Conf: 0.209 0.936)
+
+(1.9.2) Blinks vs MW (Blinks ~ MW +Tracking +(1|Subjects)) 
+     // BlinkNumber  
+      Tracking Effect        (Coef: 0.663| Z: 2.007| P: 0.045 | Conf: 0.016 1.311)
+      MW Estimate Effect     (Coef: 0.119| Z: 0.710| P: 0.478 | Conf: -0.209 0.447)
+     // BlinkDuration  
+      Tracking Effect        (Coef: 3.827| Z: 1.139| P: 0.255 | Conf: -2.761 10.415)
+      MW Estimate Effect     (Coef: -1.127| Z: -0.653| P: 0.514 | Conf: -4.508 2.255)
+     // BlinkDurationSd  
+      Tracking Effect        (Coef: 1.375| Z: 0.320| P: 0.749 | Conf: -7.041 9.791)
+      MW Estimate Effect     (Coef: 0.693| Z: 0.315| P: 0.753 | Conf: -3.625 5.011)

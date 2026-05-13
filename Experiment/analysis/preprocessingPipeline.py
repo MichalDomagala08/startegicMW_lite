@@ -22,10 +22,10 @@ import openpyxl
 import pickle
 
 
-dataFolder = "\\data_second"
-experimentName = "SecondExp"
+dataFolder = "\\data" # Folder on which we have our data
+experimentName = "FirstExperiment" # Save Folder in which the data will be saved - which experiment
 ### Setup Working Directory and all necessery paths
-workingDir =  os.path.dirname(os.path.abspath(__file__));
+workingDir =  os.path.dirname(os.path.abspath(__file__)); # Current Dir where this file is located 
 print("Working Directory: ", workingDir)
 print("Current Directory: ", os.path.dirname(os.path.abspath(__file__)))
 path = os.path.split(workingDir)[0] + dataFolder #data path
@@ -67,24 +67,27 @@ paramsDict['mingaplen'    ]  = 50;  # Maximum gap (in ms) between timestamps wit
 # Pupil Diameter Computation 
 paramsDict['trialOffset'  ]  = "all" #"all"  # How many ms before the trial offset do we compute our measure (10s default)
                                       # - "All" -for a whole trial (then optional begTrialOff - for excluding first and last N ms )
-paramsDict['begTrialOff']    = 5000; # if All is selected we cut the trial at the beginning by N ms
-paramsDict['endTrialOff']    = 5000; # if All is selected we cut the trial at the End       by N ms
+paramsDict['begTrialOff']    = 0; # if All is selected we cut the trial at the beginning by N ms
+paramsDict['endTrialOff']    = 0; # if All is selected we cut the trial at the End       by N ms
 
 # Baseline Pupil Computation
-paramsDict['baseOffset'] = 0 # How many ms after the trials onset will be considered a baseline:  0 if you do not want baseline
+paramsDict['baseOffset'] = 200; # How many ms after the trials onset will be considered a baseline:  0 if you do not want baseline
+paramsDict['baseType'] = "mean";  # type of a baseline "mean", "median" , "percent"
 ### Setup all testing parameters 
 
 
 
+### Subject Choice
 
-analysisName = f"TEST_withoutCenter_res{paramsDict['resRate']}_dgv{paramsDict['dgvCent']}_bll{paramsDict['maxblength']}_blb{paramsDict['blkboundry']}_smw10_smL{paramsDict['maxcluslen']}_swG{paramsDict['mingaplen']}_trO{paramsDict['trialOffset']}_trB{paramsDict['baseOffset']}"
+
+analysisName = f"Length Testing_TEST_withoutCenter_resVAR{paramsDict['resRate']}_dgv{paramsDict['dgvCent']}_bll{paramsDict['maxblength']}_blb{paramsDict['blkboundry']}_smw10_smL{paramsDict['maxcluslen']}_swG{paramsDict['mingaplen']}_trO{paramsDict['trialOffset']}_trB{paramsDict['baseOffset']}{paramsDict['baseType']}"
 # Get all of the IDs for subject froma "data" folder
 subjects = [f for f in os.listdir(path) if  not os.path.isfile(os.path.join(path, f))] # get all the filenames
-
+print(subjects)
 
 ### Subject Choice
-begID =  0             #0;
-endID =  len(subjects) #30;
+begID =  0           #0;
+endID =  len(subjects)-1 #30;
 
 ### Create a current Analysis Pipeline
 os.makedirs(os.path.join(workingDir,experimentName,analysisName,'individuals'),exist_ok=True)
@@ -115,6 +118,12 @@ pdf_mwHist  = PdfPages(pdf_path_mwHist)
 
 pdf_path_scatres = os.path.join(output_dir, "scatterResults.pdf")
 pdf_scatres  = PdfPages(pdf_path_scatres)
+
+
+
+### Global Checks and Vars:
+storyLengthsAll = [];
+storyLengthsAll2 = [];
 
 #=========================================#
 ##### --->    EXTRACTION LOOP    <--- #####
@@ -174,6 +183,7 @@ for subj in range(begID,endID+1):
     # Parse your own events getting a Wide format getting only PARTS with their Timing  (Maybe Write Checks?)
     log_file.write("    Getting Own Events...       ")
     event_dfs = parse_events(own)
+ 
     event_dfs = rename_parts(event_dfs) # Be sure that the numeration for each entity part is Correct! 
     log_file.write("done \n")
     if len(event_dfs) != 40:
@@ -275,8 +285,11 @@ for subj in range(begID,endID+1):
     #### -->   PREPROCESSING AND PLOTTING   <--- ####
     #===============================================#
 
+
     # Other Checks:
     storyIndCheck = {}
+    storyLengthsSubj = [] # Get the differing lengths of each Trial
+    storyLengthsSubj2 = [] # Get the differing lengths of each Trial
 
     # Define PDF paths
     pdf_path_downsampled = os.path.join(output_dir,filename, "Downsampled_Pupil_Data.pdf")
@@ -310,8 +323,8 @@ for subj in range(begID,endID+1):
     log_file.write(f"        Maximal Gap Length:   {paramsDict['mingaplen']}\n\n")
     # Iterate through events of split_data
     data = {};
-    resultsL = np.zeros((len(split_data['STORY_1']['RawDF']), 5))
-    resultsR = np.zeros((len(split_data['STORY_1']['RawDF']), 5))
+    resultsL = np.zeros((len(split_data['STORY_1']['RawDF']), 7))
+    resultsR = np.zeros((len(split_data['STORY_1']['RawDF']), 7))
 
     ### Loop thtough Stories X Parts: 
     iterCounter = 0;
@@ -336,7 +349,10 @@ for subj in range(begID,endID+1):
             blinkDF = data_dict['blinkDF'][part]
             saccadesDF = data_dict['saccadesDF'][part]
 
+            print(saccadesDF);
 
+            storyLengthsSubj2.append(RawDF['TimePoint'].iloc[-1] - RawDF['TimePoint'].iloc[0])
+     
             finalData = preprocessingPipeline(blinkDF,RawDF,saccadesDF,gazeCoords,story,part,log_file=log_file,pdfs=[pdf_downsampled,pdf_center_only,pdf_blink_rejection ,pdf_outlier_rejection ,pdf_nan_rejection,pdf_smoothed],
                                             verbose=paramsDict['verbose'],
                                             downs     =paramsDict['downs'    ] , resampleRate=paramsDict['resRate'],
@@ -346,6 +362,11 @@ for subj in range(begID,endID+1):
                                             nanrmv    =paramsDict['nanrmv'   ] ,
                                             smth      =paramsDict['smth'     ] , smoothwin=paramsDict['smoothwin'], min_cluster_duration=paramsDict['maxcluslen'],max_gap_duration=paramsDict['mingaplen'])
             
+            ### All Story Checks:
+         
+
+            storyLengthsSubj.append(finalData['TimePoint'].iloc[-1] - finalData['TimePoint'].iloc[0])
+
             log_file.write("\n        Final Data Stats: \n")
             log_file.write(finalData.describe().to_string().replace('\n', '\n\t\t').join(['\t\t', ''])) # Adds two Tabulations!
             log_file.write("\n\n")
@@ -355,13 +376,18 @@ for subj in range(begID,endID+1):
             
 
             ### Compute mean of last 10s of the data
+            print("LENGHTS OF CUT AND UNCUT PROFILES")
+            print(len(finalData))
             if type( paramsDict['trialOffset'  ]) == int:
                 choice = finalData[(finalData['TimePoint'] >= finalData['TimePoint'].iloc[-1] - paramsDict['trialOffset'  ])]
-            elif  paramsDict['trialOffset'  ] == "all":
+            elif  paramsDict['trialOffset'  ] == "all": # Get ALl Data - SAVE some Initial Offset of 5000ms!!!!
                 choice = finalData[
                     (finalData['TimePoint'] >= finalData['TimePoint'].iloc[0] + paramsDict['begTrialOff']) &
                     (finalData['TimePoint'] <= finalData['TimePoint'].iloc[-1] - paramsDict['endTrialOff'])
                 ]
+
+            print(len(choice))
+
             meanPupilL = choice['LeftPupil']                
             meanPupilR = choice['RightPupil']
 
@@ -369,7 +395,6 @@ for subj in range(begID,endID+1):
             ### Gaze Difference:
 
             gazeDifference = np.mean(np.sqrt((choice['LeftX'] - choice['RightX'])**2 + (choice['LeftY'] - choice['RightY'])**2))
-
             gazeDispersion = np.mean(np.sqrt(np.diff(choice['LeftX'])**2 + np.diff(choice['LeftY'])**2))
 
 
@@ -382,16 +407,49 @@ for subj in range(begID,endID+1):
                 gaze_area = np.nan
             gazeConvexHull = gaze_area;
 
+            ### HL_IPA - Compute the Ratio between Low and High Freq of Pupil Diameter:
+            # WE need to preprocess this our selve with another dict: 
+            HLIPA_raw,interpDuration = interpolate_blinks(blinkDF=blinkDF, ScreenData=RawDF, inter=200,maxBlink = 1,verbose =1,logfile=log_file,interp_method=0)
+            ipa_value_L = lhipa(HLIPA_raw['LeftPupil'],HLIPA_raw['TimePoint'])
+            ipa_value_R = lhipa(HLIPA_raw['RightPupil'],HLIPA_raw['TimePoint'])
+
 
             ### Correct for Baseline if YOU want to
             if paramsDict['baseOffset']:
-                meanPupilL = meanPupilL - finalData[(finalData['TimePoint'] <= finalData['TimePoint'].iloc[0] +  paramsDict['baseOffset'  ])]['LeftPupil'].mean()
-                meanPupilR = meanPupilR - finalData[(finalData['TimePoint'] <= finalData['TimePoint'].iloc[0] +  paramsDict['baseOffset'  ])]['RightPupil'].mean()
+                if paramsDict['trialOffset'] == "all":
+                    print(finalData['TimePoint'].iloc[0] +  paramsDict['baseOffset'  ])
+                    print(choice['TimePoint'].iloc[0] +  paramsDict['baseOffset'  ])
+
+                    baseL = choice[(choice['TimePoint'] <= choice['TimePoint'].iloc[0] +  paramsDict['baseOffset'  ])]['LeftPupil'];
+                    baseR = choice[(choice['TimePoint'] <= choice['TimePoint'].iloc[0] +  paramsDict['baseOffset'  ])]['RightPupil'];
+
+
+                else: # If not a whole trial is computed we ought to compute our BASELINE from the Point BEFORE the computation Window WARNING ONLY FOR PUPIL DIAM COMP
+                    baseL = finalData[(choice['TimePoint'] >= finalData['TimePoint'].iloc[-1] -(paramsDict['trialOffset'] +  paramsDict['baseOffset'  ])) 
+                                                        & (finalData['TimePoint'] <= finalData['TimePoint'].iloc[-1] -paramsDict['trialOffset'] )]['LeftPupil']
+                    baseR =  finalData[(finalData['TimePoint'] >= finalData['TimePoint'].iloc[-1] -(paramsDict['trialOffset'] +  paramsDict['baseOffset'  ]))
+                                                         & (finalData['TimePoint'] <= finalData['TimePoint'].iloc[-1] -paramsDict['trialOffset'] )]['RightPupil']
+
+                if paramsDict['baseType'] == "mean":
+                
+                    meanPupilL = meanPupilL - baseL.mean()
+                    meanPupilR = meanPupilR - baseR.mean()
+
+
+                elif paramsDict['baseType'] == "median":
+                    meanPupilL = meanPupilL - baseL.median()
+                    meanPupilR = meanPupilR - baseR.median()
+                elif paramsDict['baseType'] == "percent":
+                    meanPupilL = (meanPupilL - baseL.mean())/ baseL.mean()
+                    meanPupilR = (meanPupilR - baseR.mean())/ baseL.mean()
+
 
             ### Compute Pupil Diamter based Measures, MW, and Gaze Based Measures 
-            resultsL[iterCounter,:] =  [meanPupilL.mean(), meanPupilL.std(),np.nanmean(np.diff(meanPupilL)), event_dfs[event_dfs["Part"] == part]['key'].values[0],gazeDifference,]
-            resultsR[iterCounter,:] =  [meanPupilR.mean(), meanPupilR.std(),np.nanmean(np.diff(meanPupilR)), event_dfs[event_dfs["Part"] == part]['key'].values[0],gazeDifference]
+            resultsL[iterCounter,:] =  [meanPupilL.mean(), np.nanvar(meanPupilL),np.nanmean(np.diff(meanPupilL)), event_dfs[event_dfs["Part"] == part]['key'].values[0],gazeDifference, np.trapz(meanPupilL[~np.isnan(meanPupilL)]) / np.sum(~np.isnan(meanPupilL)),ipa_value_L]
+            resultsR[iterCounter,:] =  [meanPupilR.mean(), np.nanvar(meanPupilR),np.nanmean(np.diff(meanPupilR)), event_dfs[event_dfs["Part"] == part]['key'].values[0],gazeDifference, np.trapz(meanPupilR[~np.isnan(meanPupilR)]) / np.sum(~np.isnan(meanPupilR)),ipa_value_R]
 
+
+    
             iterCounter+=1;
 
 
@@ -399,18 +457,18 @@ for subj in range(begID,endID+1):
             data[story][part]['Blinks']   =blinkDF;
             data[story][part]['Saccades'] =saccadesDF;
 
-            storyIndCheck[story]['saccadeRate'].append(len(saccadesDF)/(finalData['TimePoint'].iloc[-1] - finalData['TimePoint'].iloc[0])/1000)
-            storyIndCheck[story]['blinkRate'].append(len(blinkDF)/(finalData['TimePoint'].iloc[-1] - finalData['TimePoint'].iloc[0])/1000)
-            storyIndCheck[story]['goodRatioLeft'].append(len(finalData['LeftPupil'].dropna())/len(finalData))
+            storyIndCheck[story]['saccadeRate'].append(len(saccadesDF)/(finalData['TimePoint'].iloc[-1] - finalData['TimePoint'].iloc[0])*1000) #The Number of Saccades / The n S in the trial 
+            storyIndCheck[story]['blinkRate'].append(len(blinkDF)/(finalData['TimePoint'].iloc[-1] - finalData['TimePoint'].iloc[0])*1000)      # Number of the Blinks per Second
+            storyIndCheck[story]['goodRatioLeft'].append(len(finalData['LeftPupil'].dropna())/len(finalData))                                   # Rate of Non NAN data point to all
             storyIndCheck[story]['goodRatioRight'].append(len(finalData['RightPupil'].dropna())/len(finalData))
             storyIndCheck[story]['goodPupRatioLeft'].append(len( choice['LeftPupil'].dropna())/len( choice))
             storyIndCheck[story]['goodPupRatioRight'].append(len( choice['RightPupil'].dropna())/len( choice))
             
-            storyIndCheck[story]['gazeDiff'].append(np.mean(gazeD[0,:]))
+            storyIndCheck[story]['gazeDiff'].append(np.mean(gazeD[0,:]))                    # Mean Gaze Difference in a Trial 
             zeroPupil = RawDF.query("LeftPupil == 0 or RightPupil == 0")
-            storyIndCheck[story]['gazeRate'].append( len(zeroPupil) / len(RawDF))
-            storyIndCheck[story]['pupilDiff'].append(pupil_mean)
-            storyIndCheck[story]['meanEyeDiff'].append(mean_eye_diff)
+            storyIndCheck[story]['gazeRate'].append( len(zeroPupil) / len(RawDF))           # Maen Gaze rate (Times when the Pupil is Zero agains all)
+            storyIndCheck[story]['pupilDiff'].append(pupil_mean)                            # Mean Pupil Difference between the Eyes
+            storyIndCheck[story]['meanEyeDiff'].append(mean_eye_diff)                       # Mean Euclidean Distance BEtween The Eyes
 
     # Close PdfPages objects
     pdf_downsampled.close()
@@ -454,6 +512,10 @@ for subj in range(begID,endID+1):
         ('Pupil Diameter', 'Std', 'Right Eye'): resultsR[:, 1],
         ('Pupil Diameter', 'diff', 'Left Eye'): resultsL[:, 2],
         ('Pupil Diameter', 'diff', 'Right Eye'): resultsR[:, 2],
+        ('Pupil Diameter', 'auc', 'Left Eye'): resultsL[:, 5],
+        ('Pupil Diameter', 'auc', 'Right Eye'): resultsR[:, 5],
+        ('Pupil Diameter', 'lhipa', 'Left Eye'): resultsL[:, 6],
+        ('Pupil Diameter', 'lhipa', 'Right Eye'): resultsR[:, 6],
         ('Tracking','','') : ['TRACKED' if entityTracked in ent else 'UNTRACKED' for ent in event_dfs['Part']]
     }
     resultsDF = pd.DataFrame(tableData)
@@ -515,6 +577,8 @@ for subj in range(begID,endID+1):
         'pupilMW':      resultsDF,
         'statistics':   statsDF}
     
+    print("TRULY SAVED")
+
     with open(os.path.join(workingDir,experimentName,analysisName,'individuals',filename,filename+"_preprocessed.pickle"), 'wb') as handle:
         pickle.dump(finalData, handle, protocol=pickle.HIGHEST_PROTOCOL)
     log_fileSt.write(f"Saved pickle to {filename}_preprocessed.pickle ({os.path.getsize(os.path.join(workingDir,experimentName,analysisName,'individuals',filename,filename+'_preprocessed.pickle'))/1e6:.2f} MB)\n")
@@ -522,8 +586,16 @@ for subj in range(begID,endID+1):
     log_fileSt.close() # Closing the preprocessing log file)
 
     allList.append(finalData)
+    storyLengthsAll.append(storyLengthsSubj)
+    storyLengthsAll2.append(storyLengthsSubj2)
 
 
+### Save Stories Lengths as an excel file with rows from 1 to 40 and columns as a DataSubejct name
+storyLengthsDF = pd.DataFrame(storyLengthsAll, index=subjects[begID:endID+1],columns=[f"Part_{i+1}" for i in range(40)])
+storyLengthsDF.to_excel(os.path.join(workingDir,experimentName,analysisName,'individuals',"storyLengths.xlsx"))
+
+storyLengthsDF = pd.DataFrame(storyLengthsAll2, index=subjects[begID:endID+1],columns=[f"Part_{i+1}" for i in range(40)])
+storyLengthsDF.to_excel(os.path.join(workingDir,experimentName,analysisName,'individuals',"storyLengths_before.xlsx"))
 with open(os.path.join(workingDir,experimentName,analysisName,'individuals',"preprocessed.pickle"), 'wb') as handle:
     pickle.dump(allList, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
