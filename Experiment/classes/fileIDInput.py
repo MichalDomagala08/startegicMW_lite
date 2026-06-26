@@ -38,6 +38,7 @@ class createOutputs:
         if os.path.isdir(os.path.join(self.dataPath,user_input)):
             Warning("A Person With that exact Same ID has already been Processed!")
         else:
+            print(os.path.join(self.dataPath,user_input))
             os.mkdir(os.path.join(self.dataPath,user_input)) # Make a File when all will be Kept
 
         self.logfile =  open(os.path.join(self.dataPath,user_input,user_input+"_log.txt"),'w+')

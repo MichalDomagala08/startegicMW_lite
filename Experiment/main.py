@@ -8,7 +8,7 @@ from tests.testFunctions import testTiming,compareEyeTrackingWithBeh,prepareEyeT
 from classes.fileIDInput import createOutputs
 from classes.CalibrationGraphivs import CalibrationGraphics
 from classes.Audio import audioTrial
-from classes.Audio import storyTimeDict3,storyTimeDict3a,storyTimeDict3b,storyTimeDictTest
+from classes.Audio import storyTimeDict4,storyTimeDict4a,storyTimeDict4b,storyTimeDictTest
 from classes.recallTrial import recallTrial
 from classes.welcomeMessage import welcomeMessage
 from classes.welcomeMessage import generateMessages
@@ -41,7 +41,8 @@ outputControll.write(f"      Height: {disp.height}\n")
 
 width = disp.width
 height =disp.height
-screen = pygame.display.set_mode((width, height))
+screen = pygame.display.set_mode((width, height),
+                                 pygame.FULLSCREEN | pygame.HWSURFACE | pygame.DOUBLEBUF)
 tempInitialTime = 0; # For Gathering Realtive Timestamps
 # PyGame setups
 font = pygame.font.Font(None, 50)
@@ -51,12 +52,12 @@ pygame.display.set_caption("Strategic MW Experiment")
 # story Global parameters Setup:
 storyPart = "welcome1"  # Controlling the experiment flow
 dummyMode = False
-TestMode = False
+TestMode = True
 
 SCREEN_WIDTH_CM = 53 #Width
 SCREEN_HEIGHT_CM = 30 # Height 
 VIEWING_DISTANCE_CM = 93 # 
-entityName = [storyTimeDict3["partNames"][0][:-2], storyTimeDict3["partNames"][1][:-2]][int(choice([0, 1]))]
+entityName = [storyTimeDict4["partNames"][0][:-2], storyTimeDict4["partNames"][1][:-2]][int(choice([0, 1]))]
 outputControll.write(f"      Viewing Distance:  {VIEWING_DISTANCE_CM}\n")
 
 outputControll.write("  Experiment Config: ")
@@ -76,18 +77,30 @@ welcome2 = welcomeMessage([WelcomeMessage21alt],font,screen,"welcome2","story1")
 calib2 = welcomeMessage([WelcomeMessage4],font,screen,"calib_text","calibration2")
 exitMessage = welcomeMessage([exitMessage1],font,screen,"exit","")
 
+
+
+# Re-sample and Re-peat Trials! 
+trialNums = [];
+for i in range(len(storyTimeDict4['partNames'])):
+    trialNums.append(i)
+   
+
+
 # Audio File initialization:
+
+
+
 if TestMode:
-    Story_practice = audioTrial(r".\TextToSpeech\StoryTest_AI",storyTimeDictTest,font,screen,"practicerun","welcome_cal",outputControll,verbose=2,practice=True) # PracticeRun
+    Story_practice = audioTrial(r".\TextToSpeech\Story4_test",[0,1],storyTimeDictTest,font,screen,"practicerun","welcome_cal",outputControll,verbose=2,practice=True,testMode=True) # PracticeRun
 
-    Story1 = audioTrial(r".\TextToSpeech\Story3_AIpartTest1",storyTimeDict3a,font,screen,"story1","calib_text",outputControll,verbose=2)
-    Story2 = audioTrial(r".\TextToSpeech\Story3_AIpartTest2",storyTimeDict3b,font,screen,"story2","recall1",outputControll,verbose=2)
+    Story1 = audioTrial(r".\TextToSpeech\Story4_AIsegments1",trialNums[0:20],storyTimeDict4a,font,screen,"story1","calib_text",outputControll,verbose=2,testMode=True)
+    Story2 = audioTrial(r".\TextToSpeech\Story4_AIsegments1",trialNums[20:40],storyTimeDict4b,font,screen,"story2","recall1",outputControll,verbose=2,testMode=True)
 else:
-    Story_practice = audioTrial(r".\TextToSpeech\StoryTest_AI",storyTimeDictTest,font,screen,"practicerun","welcome_cal",outputControll,verbose=2,practice=True) #PracticeRun
+    Story_practice = audioTrial(r".\TextToSpeech\Story4_test",[0,1],storyTimeDictTest,font,screen,"practicerun","welcome_cal",outputControll,verbose=2,practice=True) #PracticeRun
 
 
-    Story1 = audioTrial(r".\TextToSpeech\Story3_AIpart1",storyTimeDict3a,font,screen,"story1","calib_text",outputControll,verbose=2)
-    Story2 = audioTrial(r".\TextToSpeech\Story3_AIpart2",storyTimeDict3b,font,screen,"story2","recall1",outputControll,verbose=2)
+    Story1 = audioTrial(r".\TextToSpeech\Story4_AIsegments1",trialNums[0:20],storyTimeDict4a,font,screen,"story1","calib_text",outputControll,verbose=2)
+    Story2 = audioTrial(r".\TextToSpeech\Story4_AIsegments1",trialNums[20:40],storyTimeDict4b,font,screen,"story2","recall1",outputControll,verbose=2)
 # Audio Recording Object Initialization:
 recall1 = recallTrial("story1.wav",font,screen,"recall1","exit",outputControll,entityName)
 
@@ -140,8 +153,8 @@ while running:
             outputControll.write(f"\nPractice Run Beginning ({time.time():.3f})\n")
 
             begBlockFlag = False
-        storyPart ="welcome_cal" # Story_practice.run()
 
+        storyPart =  Story_practice.run()
         if storyPart != "practicerun":
             outputControll.write(f"\nPractice Run Ending ({time.time():.3f})\n")
 

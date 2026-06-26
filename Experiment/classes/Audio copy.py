@@ -20,7 +20,7 @@ class audioTrial:
     
     """
 
-    def __init__(self, audioPath,audioChoice,storyTimeDict, font, screen,currentStage,nextStage, output_control,entity=0,chunk_size=1024,verbose=0,practice=False,testMode=False):
+    def __init__(self, audioPath,storyTimeDict, font, screen,currentStage,nextStage, output_control,entity=0,chunk_size=256,verbose=0,practice=False):
 
         ### Screen
         self.font = font
@@ -29,10 +29,9 @@ class audioTrial:
         self.screen = screen
         self.width = screen.get_size()[0]
         self.height = screen.get_size()[1]
-        self.testMode = testMode;
+
         ### Audio Stream
-        self.audio_folder = audioPath # Path to all audio files
-        self.audioChoice = audioChoice # a list of audio files to be played
+        self.audio_folder = audioPath
         self.audio_files = self.load_audio_files()
         self.p = pyaudio.PyAudio()
         self.currentStoryPart = 0; # track which story segment is playing
@@ -67,23 +66,13 @@ class audioTrial:
         self.entities = [storyTimeDict["partTimes"][0], storyTimeDict["partTimes"][0]] # Currently Tracked Entity
         self.state = "audio"  # Initial state
 
-        # Lightweight thread control for responsive stopping
-        self._stop_event = threading.Event()
-        self._audio_thread = None
-        self._audio_start_time = None
-        
-
     def load_audio_files(self):
             """ Load all WAV file as a path from the folder and sort them numerically. """
-            allfiles = [f for i,f in enumerate(os.listdir(self.audio_folder)) if f.endswith(".wav")]
-            allfiles.sort(key=lambda f: int(''.join(filter(str.isdigit, f))))  # Sort by segment number
-
-            files = [allfiles[f] for i,f in enumerate(self.audioChoice)]
-
+            files = [f for f in os.listdir(self.audio_folder) if f.endswith(".wav")]
             files.sort(key=lambda f: int(''.join(filter(str.isdigit, f))))  # Sort by segment number
             return [os.path.join(self.audio_folder, f) for f in files]
     
-    def log_keypress(self,key,msg):
+    def log_keypress(self,key):
             
         """    if key == pygame.K_1:
             keyname = "1"
@@ -101,8 +90,8 @@ class audioTrial:
         if self.practice == False:
             self.output_control.write(f"       Value Logged {key}  at: {self.pausedTime - self.initialTime:.3f}; Reaction Time: {(self.pausedTime - self.probeOnset):.3f}")
 
-            self.output_control.writeToEyeLink(message=f"\t{msg}\t{key}\t0")              # Write KeyPress to Eyelink                  
-            self.timingLog.append([f"{msg}",self.pausedTime  - self.initialTime ,(self.pausedTime - self.probeOnset),self.actual_duration])
+            self.output_control.writeToEyeLink(message=f"\tKEYPRESS\t{key}\t0")              # Write KeyPress to Eyelink                  
+            self.timingLog.append(["KEYPRESS",self.pausedTime  - self.initialTime ,(self.pausedTime - self.probeOnset),self.actual_duration])
             self.responsesTiming.append((key , self.pausedTime  - self.initialTime))
             
     def log_part_beg(self):
@@ -130,15 +119,9 @@ class audioTrial:
         """
         Displays a '+' symbol in the center of the screen.
         """
-
-
         self.screen.fill((255 / 2, 255 / 2, 255 / 2))  # Gray background
         text_surface = self.crossFont.render("+", True, (255, 255, 255))  # White "+"
         text_rect = text_surface.get_rect(center=(self.width // 2, self.height // 2))
-        if self.testMode:
-            text_surface2 = self.font.render(f"Current Fragment: {self.storyParts[self.currentStoryPart]}: {self.currentStoryPart} ", True, (255, 255, 255))  # White "+"
-            text_rect2 = text_surface2.get_rect(center=(self.width // 2, self.height // 3))
-            self.screen.blit(text_surface2 ,  text_rect2)
         self.screen.blit(text_surface, text_rect)
         pygame.display.flip()
 
@@ -164,10 +147,7 @@ class audioTrial:
                 self.point_x = mouse_pos[0]  # Update point position
                 self.point_y = mouse_pos[1]  # Update point position
                 # Calculate the attention value as a percentage (0 to 100)
-
                 relative_position = (self.point_x - self.scale_x) / self.scale_width
-                #print(f" Previous: {self.point_x} {relative_position}")
-
                 self.attention_value = int(relative_position * 100)
 
         # Check if the "DALEJ" button is clicked
@@ -178,16 +158,16 @@ class audioTrial:
                     return True
 
         return False
-    def display_linear_scale_probe(self, measure_value, scale_labels=["No distraction","Complete distraction"], button_text="CONTINUE",question="To what extent were you distracted from listening to the story at this moment?",marking_positions=None,center=True):
+    def display_linear_scale_probe(self, scale_labels=["Brak rozproszenia","Pełne rozproszenie"], button_text="DALEJ"):
         """
-        Draws the linear scale, draggable point, and "CONTINUE" button.
+        Draws the linear scale, draggable point, and "DALEJ" button.
 
         Parameters:
         scale_labels (list): A list of labels for the scale (e.g., ["Low", "High"]).
-        button_text (str): Text for the confirmation button (default is "CONTINUE").
+        button_text (str): Text for the confirmation button (default is "DALEJ").
         """
         # Colors
-        background_color = (255 / 2, 255 / 2, 255 / 2)  # Gray background
+        background_color = (128, 128, 128)  # Gray
         scale_color = (255, 255, 255)       # White
         point_color = (0, 0, 0)             # Black
         button_color = (200, 200, 200)      # White
@@ -211,38 +191,31 @@ class audioTrial:
         self.screen.fill(background_color)
 
         # Draw the centered text
-        center_text_surface = self.font.render(question, True, text_color)
+        center_text_surface = self.font.render("W jakim stopniu byłeś w tym momencie rozproszony podczas słuchania historii?", True, text_color)
         center_text_rect = center_text_surface.get_rect(center=(self.width // 2, self.height // 4))
         self.screen.blit(center_text_surface, center_text_rect)
 
         # Draw the reminder text
-        if measure_value is not None and self.testMode:
-            center_text_surface2 = self.font.render(f"(Zaznacz myszką na poniższej skali w dowolnym miejscu: {self.point_x})", True, text_color)
-        else:
-            center_text_surface2 = self.font.render(f"(Zaznacz myszką na poniższej skali w dowolnym miejscu", True, text_color)
-
+        center_text_surface2 = self.font.render("(Zaznacz myszką na poniższej skali w dowolnym miejscu)", True, text_color)
         center_text_rect2 = center_text_surface.get_rect(center=(self.width // 2, self.height // 3.3))
         self.screen.blit(center_text_surface2, center_text_rect2)
 
         # Draw the scale
         pygame.draw.rect(self.screen, scale_color, (self.scale_x, self.scale_y,  self.scale_width, self.scale_height))
         # Draw the draggable point
-        if measure_value is not None:
+        if self.attention_value is not None:
             point_y = self.scale_y + self.scale_height // 2
             pygame.draw.circle(self.screen, point_color, (self.point_x, point_y), self.point_radius)
 
         # Draw the scale markings
-        if marking_positions is None:
-            marking_positions = [
-                self.scale_x,  # Start of the scale
-                self.scale_x + self.scale_width // 2,  # Center of the scale
-                self.scale_x + self.scale_width  # End of the scale
-            ]
+        marking_positions = [
+            self.scale_x,  # Start of the scale
+            self.scale_x + self.scale_width // 2,  # Center of the scale
+            self.scale_x + self.scale_width  # End of the scale
+        ]
         for pos in marking_positions:
             pygame.draw.line(self.screen, (0,0,0), (pos, self.scale_y - 5), (pos, self.scale_y + self.scale_height + 5), 2)
 
-        if center:
-            pygame.draw.line(self.screen, (0,0,0), (self.scale_x + self.scale_width // 2, self.scale_y -7), (self.scale_x + self.scale_width // 2, self.scale_y + self.scale_height + 9), 3)
 
 
         # Draw the scale labels
@@ -308,8 +281,6 @@ class audioTrial:
         Starts/resumes playing the audio from each file
         """
 
-        # Clear any prior stop request
-        self._stop_event.clear()
         self.audio_playing = True
         self.paused_for_input = False  # Reset for next thought probe
 
@@ -317,18 +288,14 @@ class audioTrial:
         self.audio_file = wave.open(file_path, 'rb')
 
         if self.stream:
-            try:
-                self.stream.close()  # Close previous stream if it exists
-            except Exception:
-                pass
+            self.stream.close()  # Close previous stream if it exists
 
         # Open Stream for playing
         self.stream = self.p.open(
             format=self.p.get_format_from_width(self.audio_file.getsampwidth()),
             channels=self.audio_file.getnchannels(),
             rate=self.audio_file.getframerate(),
-            output=True,
-            frames_per_buffer=self.chunk_size
+            output=True
         )
         self.log_part_beg()
 
@@ -338,43 +305,33 @@ class audioTrial:
             Set the volume in decibels.
             """
             self.volume = 10 ** (dB / 20)
-            try:
-                self.output_control.write(f"Volume set to {dB} dB (linear scale: {self.volume:.2f})")
-            except Exception:
-                pass
-
+            self.output_control.write(f"Volume set to {dB} dB (linear scale: {self.volume:.2f})")
         def stream_audio():
-            # Record start time so skip handlers can use it
-            self._audio_start_time = time.perf_counter()
-            start_time = self._audio_start_time
-
-            while self.audio_playing and not self._stop_event.is_set():
+            start_time = time.perf_counter()  # Capture the actual start time
+            while self.audio_playing:
                 data = self.audio_file.readframes(self.chunk_size)
                 if data == b'':  # End of file
                     self.audio_playing = False
                     break
+                
+                   # Adjust volume
+               # audio_data = wave.struct.unpack("%dh" % (len(data) // 2), data)  # Unpack audio data
+               # adjusted_data = [int(sample * self.volume) for sample in audio_data]  # Scale by volume
+               # adjusted_data = wave.struct.pack("%dh" % len(adjusted_data), *adjusted_data)  # Pack back to bytes
 
-                # Write in small sub-chunks so stop requests are serviced quickly
-                subchunk = 1024
-                try:
-                    for pos in range(0, len(data), subchunk):
-                        if self._stop_event.is_set():
-                            break
-                        self.stream.write(data[pos:pos+subchunk])
-                except Exception:
-                    # If the stream is closed from another thread, stop gracefully
-                    self.audio_playing = False
-                    break
+
+
+                self.stream.write(data)
+                # Track the current position (in samples)
 
             self.audio_playing = False
-            try:
-                self.actual_duration = time.perf_counter() - start_time
-            except Exception:
-                self.actual_duration = 0.0
+            self.actual_duration = time.perf_counter() - start_time  # Calculate actual time taken
+            #self.output_control.write(f"        Actual playback duration: {self.actual_duration:.3f} sec")
 
-        # Play audio on a separate thread and keep the thread reference
-        self._audio_thread = threading.Thread(target=stream_audio, daemon=True)
-        self._audio_thread.start()
+        # Lof that the audio is beginning:
+
+        # Play audio on a separate thread
+        threading.Thread(target=stream_audio, daemon=True).start()
 
 
 
@@ -390,7 +347,7 @@ class audioTrial:
         - Displays 'Nagranie zapisane!' for 1s after saving
         - Exposes thoughtContentEstimation() → True when done
         """
-        def __init__(self, filename, font, screen, output_control, verbose=1,timer_threshold=20,record_duration=25,testMode=False):
+        def __init__(self, filename, font, screen, output_control, verbose=1):
             super().__init__(
                 filename=filename,
                 font=font,
@@ -400,17 +357,14 @@ class audioTrial:
                 output_control=output_control,
                 firstEntityName="",
                 verbose=verbose
-
             )
             self._done = False
             self.start_time = None
             self._should_save = False
-            self.timer_threshold = timer_threshold   # seconds to turn red
-            self.record_duration = record_duration   # max recording length
-            self.testMode = testMode
+            self.timer_threshold = 20.0    # seconds to turn red
+            self.record_duration = 25.0    # max recording length
 
-
-        def thoughtContentEstimation(self,firstMessage =None):
+        def thoughtContentEstimation(self):
             """
             Call each frame from audioTrial.run().
             Returns True once recording finished and saved.
@@ -419,14 +373,11 @@ class audioTrial:
 
             # 1) Welcome screen
             if self.welcome_screen:
-                if firstMessage is None:
-                    lines = [
-                        "Describe the course of your thoughts since the last interruption of the story.",   
-                        "",
-                        "Press SPACE to begin recording"
-                    ]
-                else:
-                    lines = firstMessage
+                lines = [
+                    "Opowiedz przebieg swoich myśli od ostatniego przerwania historii.",
+                    "",
+                    "Naciśnij SPACJĘ, aby rozpocząć nagranie"
+                ]
                 super().display_message(lines)
                 for evt in events:
                     if evt.type == pygame.KEYDOWN and evt.key == pygame.K_SPACE:
@@ -441,9 +392,10 @@ class audioTrial:
 
             # Draw prompt via parent
             lines = [
-                "Recording...",
+                "Nagrywanie...",
                 "",
-                "Press ENTER to finish recording"            ]
+                "Naciśnij ENTER, aby zakończyć nagrywanie"
+            ]
             self.display_message(lines)
 
             # Overlay timer on second line
@@ -458,13 +410,12 @@ class audioTrial:
             self.screen.blit(timer_surf, (tx+self.screen.get_width()*0.3, ty-self.screen.get_height()*0.3))
             pygame.display.flip()
 
-            # Check stop conditions Stop only in test mode!!! 
-
+            # Check stop conditions
             for evt in events:
-               if (evt.type == pygame.KEYDOWN and
-                   evt.key == pygame.K_RETURN and
-                   self.recording):
-                   self._should_save = True
+                if (evt.type == pygame.KEYDOWN and
+                    evt.key == pygame.K_RETURN and
+                    self.recording):
+                    self._should_save = True
 
             if elapsed >= self.record_duration and self.recording:
                 self._should_save = True
@@ -473,7 +424,7 @@ class audioTrial:
             if self._should_save:
                 super().stop_recording()
                 super().save_audio()
-                self._draw_and_flip(["Recording saved!"])
+                self._draw_and_flip(["Nagranie zapisane!"])
                 pygame.display.flip()
                 pygame.time.delay(1000)
                 self._done = True
@@ -487,7 +438,7 @@ class audioTrial:
             """
             Helper to clear screen, display lines, and flip.
             """
-            self.screen.fill((255 / 2, 255 / 2, 255 / 2))  # Gray background
+            self.screen.fill((128, 128, 128))
             super().display_message(lines, line_height)
             pygame.display.flip()
         def start_recording(self):
@@ -501,7 +452,6 @@ class audioTrial:
 
         def display_message(self, text_lines, line_height=40):
             super().display_message(text_lines, line_height)
-
 
     def run(self):
         """
@@ -523,18 +473,12 @@ class audioTrial:
    
             self.display_fixation_cross()
             pygame.mouse.set_visible(False)
-
+            
             # Drain/handle events safely to avoid crashes when participant clicks during playback
             # Quickly drop mouse events, then check only for quit/escape.
             pygame.event.clear((pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION))
             for evt in pygame.event.get((pygame.QUIT, pygame.KEYDOWN)):
-                
-                # Escape Event Handling 
-                if (evt.type == pygame.QUIT or (evt.type == pygame.KEYDOWN and evt.key == pygame.K_ESCAPE) ) and (self.testMode):
-                    try:
-                        self._stop_event.set()
-                    except Exception:
-                        pass
+                if evt.type == pygame.QUIT or (evt.type == pygame.KEYDOWN and evt.key == pygame.K_ESCAPE):
                     try:
                         if self.stream:
                             self.stream.stop_stream()
@@ -542,45 +486,6 @@ class audioTrial:
                     except Exception:
                         pass
                     return "exit"
-
-               
-
-                # In Test mode a key press (non-ESC) or the 'S' key skips the rest of the audio and advances to the probe
-                if evt.type == pygame.KEYDOWN and evt.key == pygame.K_s and (self.testMode):
-                    # signal stop and close resources
-                    try:
-                        self._stop_event.set()
-                    except Exception:
-                        pass
-                    try:
-                        if self.stream:
-                            self.stream.stop_stream()
-                            self.stream.close()
-                    except Exception:
-                        pass
-                    try:
-                        if hasattr(self, 'audio_file') and self.audio_file:
-                            self.audio_file.close()
-                    except Exception:
-                        pass
-                    # try to join audio thread briefly so it can update duration
-                    try:
-                        if self._audio_thread is not None:
-                            self._audio_thread.join(timeout=0.25)
-                    except Exception:
-                        pass
-                    # mark audio as finished so the normal transition logic runs below
-                    self.audio_playing = False
-                    if self._audio_start_time:
-                        self.actual_duration = time.perf_counter() - self._audio_start_time
-                    else:
-                        self.actual_duration = time.perf_counter() - self.initialTime
-                    if self.verbose:
-                        try:
-                            self.output_control.write("Audio skipped by key press (TestMode or 'S')")
-                        except Exception:
-                            pass
-                    break
 
             # Check if the audio has finished
             if not self.audio_playing:
@@ -593,7 +498,7 @@ class audioTrial:
         # ==== Thought Probe Part of a Trial =====
         elif self.state == "probe":
 
-            self.display_linear_scale_probe(self.attention_value)
+            self.display_linear_scale_probe()
 
             ### Waiting for KeyPress on Thought Probe
             for event in pygame.event.get():
@@ -607,10 +512,10 @@ class audioTrial:
                     #    if event.key == pygame.K_1 or event.key == pygame.K_2 or event.key == pygame.K_3 or event.key == pygame.K_4:
                     
                     currentKey = self.attention_value
-                    self.log_keypress(currentKey,msg="KEYPRESS") # Logs attention state value and moves on 
+                    self.log_keypress(currentKey) # Logs attention state value and moves on 
                         
                     pygame.mouse.set_visible(False)
-                    self.currentRecorder = self.Recording(f"recall_{self.storyParts[self.currentStoryPart]}.wav", self.font,self.screen, self.output_control, verbose=self.verbose , testMode=self.testMode) # Create a Recorder instance 
+                    self.currentRecorder = self.Recording(f"recall_{self.storyParts[self.currentStoryPart]}.wav", self.font,self.screen, self.output_control, verbose=self.verbose) # Create a Recorder instance 
 
                     self.state = "recall" # Change state to recall
 
@@ -623,7 +528,7 @@ class audioTrial:
                     self.output_control.write(f"        PART {self.storyParts[self.currentStoryPart]:12}: Thought Recording Ended:   (Duration: {time.time() - self.initialTime})")
 
                     # flash “saved” message for 1 s
-                    self.currentRecorder.display_message(["Recording saved!"])
+                    self.currentRecorder.display_message(["Nagranie zapisane!"])
                     pygame.time.delay(1000)
 
                     # set up for the next audio trial
@@ -632,8 +537,7 @@ class audioTrial:
                     self.audio_playing = True
                     self.attention_value = None
 
-                  
-                    self.state = "audio"  # Change to audio if we are not having two Trials!
+                    self.state = "audio"
                     pygame.mouse.set_visible(False)
 
 
@@ -644,7 +548,6 @@ class audioTrial:
             self.output_control.write("\nStory Ends.")
             return self.nextStage
         return self.currentStage
-
 
 # A list of Timings of story 1: Used to Clock the Onset of Each Fragment: (in seconds)
 storyTimeDict2 = data = {

@@ -77,119 +77,90 @@ def generateMessages(firstEntityName):
 
 
     WelcomeMessage1 =  [
-                                "#Witaj w procedurze eksperymentalnej!#",
+                        "#Welcome to the experimental procedure!#",
                         "",
-                        "Procedura ma na celu zbadanie efektów podtrzymania uwagi w zadaniu słuchowym",
-                        "",     
-                        "Badanie jest dobrowolne, a wszystkie dane są anonimowe i poufne.",
-                        "Możesz w każdej chwili wycofać się z badania bez podawania przyczyny.",
+                        "The purpose of this procedure is to investigate sustained attention during an auditory task.",
+                        "",
+                        "Participation is voluntary, and all data are anonymous and confidential.",
+                        "You may withdraw from the study at any time without providing a reason.",
                         " ",
-                                "#Naciśnij SPACJĘ, aby przejść dalej #"]
-    
-    WelcomeMessage11 = [ "Za chwilę usłyszysz historię trwającą ok. 40 min.",
-                        "W trakcie jej słuchania, prosimy o utrzymanie wzroku",
-                        "na krzyżyku wyświetlonym na ekranie.",
+                        "#Press SPACE to continue#"]
+   
+    WelcomeMessage11 = [ "In a moment, you will hear a story lasting approximately 40 minutes.",
+                        "While listening, please keep your gaze",
+                        "fixed on the cross displayed on the screen.",
                         " ",
-                        "Dodatkowo poprosimy Cię o zwracanie szczególnej uwagi na losy konkretnego bohatera.",
+                        "After listening, you will be asked to verbally",
+                        "recall ONLY the parts concerning selected story Character.",
                         " ",
-                        "Po odsłuchaniu, zostaniesz poproszony/a o ustne",
-                        "odpamiętanie JEDYNIE fragmentów dotyczących tego bohatera.",
-                        " ",
-                                "#Naciśnij SPACJĘ aby przejść dalej #"]
+                        "#Press SPACE to continue#"]
 
-    WelcomeMessage2 =  ["Historia będzie co jakis czas przerywana przez pytanie",
-                        "wyświetlone na środku ekranu:", 
+    WelcomeMessage2 =  ["The story will occasionally be interrupted by a question",
+                        "displayed in the center of the screen:",
                         " ",
-                                "#\"W jakim stopniu byłeś w tym momencie rozproszony podczas słuchania historii? \"#",
+                        "#\"To what extent were you distracted from listening to the story at this moment?\"#",
                         " ",
-                        "W odpowiedzi, będziesz musiał/a myszką wybrać punkt na liniowej skali w taki sposób, ", 
-                        "aby pokazywał twoją subiektywną ocenę rozproszenia od słuchania historii:",
+                        "In response, use the mouse to select a point on a continuous scale",
+                        "representing your subjective level of distraction from listening to the story:",
                         " ",
-                        "% Początek skali oznacza pełną uwagę na historii%",
-                        "% Koniec skali oznacza rozproszenie od słuchania historii%",
+                        "%The beginning of the scale indicates complete attention to the story%",
+                        "%The end of the scale indicates complete distraction from the story%",
                         " ",
-                        "Nasz eksperyment ma na celu badanie uważności, nie obawiaj się więc raportować rozproszenia.",
-                        "Postaraj się ocenić możliwie jak najbardziej szczerze swój stan uwagowy.",
+                        "Our experiment aims to study attention, so do not hesitate to report being distracted.",
+                        "Please evaluate your attentional state as honestly as possible.",
                         "",
-                                "#Naciśnij SPACJĘ aby przejść dalej#"] 
-    
-    WelcomeMessage2b =  ["Po udzieleniu odpowiedzi zostaniesz poproszony/a o zastanowienie się nad treścią", 
-                         "swoich myśli od momentu ostatniego przerwania historii w trakcie jej słuchania",
-                        " ",
-                        "Po naciśnięciu spacji, rozpocznie się nagrywanie. Dodatkowo, na ekranie wyświetlany",
-                         "będzie czas mówienia. Prosimy o ograniczenie się do wypowiedzi trwajcej 25 sekund.",
-                         "W przypadku przekroczenia czasu, procedura będzie kontynowana, a dotychczasowe ",
-                         "nagranie zapisane.",
-                        "", 
-                         "Nagranie jest całkowicie anonimowe. W przypadku prywatnych myśli, prosimy",
-                         "o wspomnienie o nich na takim poziomie jaki nie przekracza Twojego komfortu.",
-                         "",
-                         "Celem odpamiętania jest próba oszacowania myśli nie związanych z zadaniem, ",
-                         "więc nie obawiaj się o nich wspominać. Staraj się szczerze raportować swoje myśli.",
-                        "",
-                                "#Naciśnij SPACJĘ aby przejść dalej#"] 
-    
-    WelcomeMessage2c = ["Teraz przejdziemy do próbnego eksperymentu, by lepiej zaznajomić Cię z procedurą.",
-                        "Zostanie Ci przedstawiona historia niezwiązana z eksperymentem.",
-                        "",
-                        "Nałóż słuchawki i przygotuj się.",
-                        "",
-                        "Naciśnij SPACJĘ aby rozpocząć próbny eksperyment"]
+                        "#Press SPACE to continue#"]
 
-    WelcomeMessage3 =  [f"Za chwilę przejdziesz do kalibracji okulografu.",
-                        "Kieruj wzrok w stronę obiektów wyświetlanych na ekranie.",
+    WelcomeMessage2b =  ["After responding, you will be asked to verbally recall",
+                        "the content of your thoughts since the last interruption of the story.",
+                        " ",
+                        "After pressing SPACE, the recording will begin. Additionally,",
+                        "the speaking time will be displayed on the screen. Please limit your response to 25 seconds.",
+                        "If you exceed the time limit, the procedure will continue automatically,",
+                        "and your recording up to that point will be saved.",
                         "",
-                        "#Naciśnij SPACJĘ aby rozpocząć kalibrację#"]
+                        "The recording is completely anonymous. If your thoughts are private,",
+                        "please describe them only to the extent that you feel comfortable.",
+                        "",
+                        "Try to report your thoughts honestly, including those unrelated to the task,",
+                        "and be as detailed as possible about their course.",
+                        "",
+                        "#Press SPACE to continue#"]
+
+    WelcomeMessage2c = ["We will now begin a practice session to familiarize you with the procedure.",
+                        "You will hear a story unrelated to the main experiment.",
+                        "",
+                        "Put on your headphones and get ready.",
+                        "",
+                        "Press SPACE to begin the practice session"]
+
+    WelcomeMessage3 =  [f"In a moment, you will proceed to the eye tracker calibration.",
+                        "Direct your gaze toward the objects displayed on the screen.",
+                        "",
+                        "#Press SPACE to begin calibration#"]
 
 
-    WelcomeMessage21alt =  [f"Za chwilę usłyszysz właściwą historię. Nałóż słuchawki i przygotuj się.",
-                        "Postaraj się skupić i zapamiętać wszystkie fragmenty dotyczące"
-                        " bohatera imieniem:",
-                        "",
-                                            f"#{firstEntityName}#",
-                        "",
-                        "Pamiętaj, że po zakończeniu eksperymentu będziesz proszony o odpamiętanie",
-                         " szczegółów dotyczących tylko tego bohatera.",
-                         " ",
-                        "#Naciśnij SPACJĘ aby zacząć słuchać historii#"]
-
-    WelcomeMessage4 =  [f"Za chwilę przejdziesz do ponownej kalibracji okulografu.",
-                        "Tym razem, procedura będzie kontynuowana automatycznie po jej zakończeniu.",
-                        "Kieruj wzrok w stronę obiektów wyświetlanych na ekranie.",
-                        "",
-                        "#Naciśnij SPACJĘ aby rozpocząć kalibrację#"]
-  
-    exitMessage1 =          ["#Dziękujemy za udział w badaniu#",
+    WelcomeMessage21alt =  [f"In a moment, you will hear the main story. Put on your headphones and get ready.",
+                            "Please remember all parts concerning",
+                            "the character named:",
                             "",
-                            "Zapraszamy teraz do wypełnienia krótkiego",
-                            "kwestionariusza"]
+                            f"#{firstEntityName}#",
+                            "",
+                            "Remember that after the experiment, you will be asked to recall",
+                            "details concerning only this character.",
+                            " ",
+                            "#Press SPACE to begin listening to the story#"]
 
-    """
-
-      WelcomeMessage21 =  [f"Za chwilę usłyszysz pierwszą historię.",
-                        "Postaraj się zapamiętać jak najwięcej szczegółów.",
+    WelcomeMessage4 =  [f"In a moment, you will proceed to the eye tracker recalibration.",
+                        "This time, the procedure will continue automatically once calibration is complete.",
+                        "Direct your gaze toward the objects displayed on the screen.",
                         "",
-                        "#Naciśnij SPACJĘ aby zacząć słuchać historii#"]
-    
-    secondStoryMessage1 =  ["Odpocznij przez kilka minut.",
+                        "#Press SPACE to begin calibration#"]
+
+    exitMessage1 =          ["#Thank you for participating in the study#",
                             "",
-                            "Gdy będziesz gotowy aby przejsć dalej,",
-                            "Naciśnij SPACJĘ"]
+                            "You are now invited to complete a short",
+                            "questionnaire"]
 
-    secondStoryMessage2 =  [f"Za chwilę przejdziesz do kalibracji okulografu.",
-                        "Kieruj wzrok w stonę obiektów na ekranie",
-                        "",
-                        "#Wciśnij SPACJĘ aby rozpocząć kalibrację#"]
-
-    secondStoryMessage3 =  [f"Za chwilę usłyszysz drugą historię.",
-                            "Postaraj się skupić na wszystkich odniesieniach",
-                            " do bohatera imieniem:",
-                            "",
-                                        f"#{secondEntityName}#",
-                            "",
-                            "#Naciśnij SPACJĘ aby zacząć słuchać historii#"]
-
-
-    """
     
     return [WelcomeMessage1,WelcomeMessage11,WelcomeMessage2,WelcomeMessage2b,WelcomeMessage2c,WelcomeMessage3,WelcomeMessage21alt,WelcomeMessage4,exitMessage1]
