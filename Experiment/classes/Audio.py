@@ -396,8 +396,6 @@ class audioTrial:
                 "",
                 "Naciśnij ENTER, aby zakończyć nagrywanie"
             ]
-            self.display_message(lines)
-
             # Overlay timer on second line
             line_height = 40
             total_height = len(lines) * line_height
